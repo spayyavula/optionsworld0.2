@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { Save, RefreshCw, Download, Upload, AlertTriangle } from 'lucide-react'
+import { Save, RefreshCw, Download, Upload, AlertTriangle, Database, Activity } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
+import { HistoricalDataService } from '../services/historicalDataService'
 
 export default function Settings() {
   const { state, dispatch } = useTradingContext()
+  const [storageStats, setStorageStats] = useState<any>(null)
+  const [loadingStats, setLoadingStats] = useState(false)
   const [notifications, setNotifications] = useState({
     orderFills: true,
     priceAlerts: true,
@@ -85,6 +88,30 @@ export default function Settings() {
       displaySettings
     }))
     alert('Settings saved successfully!')
+  }
+
+  const loadStorageStats = async () => {
+    setLoadingStats(true)
+    try {
+      const stats = await HistoricalDataService.getStorageStats()
+      setStorageStats(stats)
+    } catch (error) {
+      console.error('Failed to load storage stats:', error)
+    } finally {
+      setLoadingStats(false)
+    }
+  }
+
+  const handleCleanupData = async () => {
+    if (window.confirm('Are you sure you want to clean up old historical data? This will remove data older than the retention period.')) {
+      try {
+        await HistoricalDataService.cleanupOldData()
+        alert('Old data cleaned up successfully!')
+        loadStorageStats() // Refresh stats
+      } catch (error) {
+        alert('Failed to cleanup old data. Please try again.')
+      }
+    }
   }
 
   return (
@@ -304,9 +331,47 @@ export default function Settings() {
       {/* Data Management */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Data Management</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">Data Management</h3>
+            <button
+              onClick={loadStorageStats}
+              disabled={loadingStats}
+              className="btn btn-secondary text-sm"
+            >
+              <Database className="h-4 w-4" />
+              {loadingStats ? 'Loading...' : 'Check Storage'}
+            </button>
+          </div>
         </div>
         <div className="card-body">
+          {/* Storage Statistics */}
+          {storageStats && (
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h4 className="font-medium text-gray-900 mb-3 flex items-center">
+                <Activity className="h-4 w-4 mr-2" />
+                Storage Statistics
+              </h4>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Stock Data Points:</span>
+                  <span className="ml-2 font-medium">{storageStats.stockDataPoints.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Options Data Points:</span>
+                  <span className="ml-2 font-medium">{storageStats.optionsDataPoints.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Oldest Data:</span>
+                  <span className="ml-2 font-medium">{storageStats.oldestDate || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Newest Data:</span>
+                  <span className="ml-2 font-medium">{storageStats.newestDate || 'N/A'}</span>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Export Data</h4>
@@ -330,6 +395,15 @@ export default function Settings() {
                   className="hidden"
                 />
               </label>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Cleanup Data</h4>
+              <p className="text-sm text-gray-500 mb-4">Remove old historical data</p>
+              <button onClick={handleCleanupData} className="btn btn-secondary">
+                <RefreshCw className="h-4 w-4" />
+                Cleanup Old Data
+              </button>
             </div>
             
             <div>

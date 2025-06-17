@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import { PolygonService } from '../services/polygonService'
+import { HistoricalDataService } from '../services/historicalDataService'
 
 export interface Stock {
   symbol: string
@@ -392,6 +394,18 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   // Load data on mount
   useEffect(() => {
     dispatch({ type: 'LOAD_DATA' })
+    
+    // Initialize historical data on first load
+    const initializeData = async () => {
+      try {
+        await PolygonService.initializeHistoricalData()
+        console.log('Historical data initialization completed')
+      } catch (error) {
+        console.error('Failed to initialize historical data:', error)
+      }
+    }
+    
+    initializeData()
   }, [])
   
   // Save data to localStorage whenever state changes
@@ -430,6 +444,20 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     
     return () => clearInterval(interval)
   }, [state.stocks])
+  
+  // Cleanup old data periodically (once per day)
+  useEffect(() => {
+    const cleanupInterval = setInterval(async () => {
+      try {
+        await HistoricalDataService.cleanupOldData()
+        console.log('Old historical data cleaned up')
+      } catch (error) {
+        console.error('Failed to cleanup old data:', error)
+      }
+    }, 24 * 60 * 60 * 1000) // Run once per day
+    
+    return () => clearInterval(cleanupInterval)
+  }, [])
   
   return (
     <TradingContext.Provider value={{ state, dispatch }}>

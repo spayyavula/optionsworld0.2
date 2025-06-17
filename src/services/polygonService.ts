@@ -1,4 +1,5 @@
 import { OptionsContract, OptionsChainData, HistoricalData } from '../types/options'
+import { HistoricalDataService } from './historicalDataService'
  
 const POLYGON_API_KEY = import.meta.env.VITE_POLYGON_API_KEY || 'demo_api_key'
 const BASE_URL = import.meta.env.VITE_POLYGON_BASE_URL || 'https://api.polygon.io'
@@ -101,8 +102,24 @@ export class OptionsService {
   }
 
   static async fetchHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
+    // First try to get data from Supabase
+    const storedData = await HistoricalDataService.getHistoricalData(ticker, days)
+    if (storedData.length > 0) {
+      console.log(`Retrieved ${storedData.length} historical data points from Supabase for ${ticker}`)
+      return storedData
+    }
+
     if (ENABLE_MOCK_DATA || !ENABLE_REAL_TIME_DATA) {
-      return this.generateSimulatedHistoricalData(ticker, days)
+      const simulatedData = this.generateSimulatedHistoricalData(ticker, days)
+      
+      // Store simulated data in Supabase for future use
+      try {
+        await HistoricalDataService.storeHistoricalData(ticker, simulatedData)
+      } catch (error) {
+        console.warn('Failed to store simulated data:', error)
+      }
+      
+      return simulatedData
     }
 
     // Real Polygon.io API call for historical data
@@ -120,10 +137,28 @@ export class OptionsService {
       }
       
       const data = await response.json()
-      return this.transformHistoricalData(data)
+      const transformedData = this.transformHistoricalData(data)
+      
+      // Store real data in Supabase
+      try {
+        await HistoricalDataService.storeHistoricalData(ticker, transformedData)
+      } catch (error) {
+        console.warn('Failed to store real data:', error)
+      }
+      
+      return transformedData
     } catch (error) {
       console.warn('Error fetching historical data, using simulated:', error)
-      return this.generateSimulatedHistoricalData(ticker, days)
+      const simulatedData = this.generateSimulatedHistoricalData(ticker, days)
+      
+      // Store simulated data as fallback
+      try {
+        await HistoricalDataService.storeHistoricalData(ticker, simulatedData)
+      } catch (error) {
+        console.warn('Failed to store fallback data:', error)
+      }
+      
+      return simulatedData
     }
   }
 
@@ -178,5 +213,73 @@ export class OptionsService {
     }
     
     return basePrices[ticker] || 100 // Default to 100 if ticker not found
+  }
+
+  /**
+   * Initialize historical data for all top liquid options
+   */
+  static async initializeHistoricalData(): Promise<void> {
+    console.log('Initializing historical data for top liquid options...')
+    
+    const tickers = [...new Set(TOP_LIQUID_OPTIONS.map(option => option.underlying_ticker))]
+    const optionTickers = TOP_LIQUID_OPTIONS.map(option => option.ticker)
+    
+    // Initialize underlying stock data
+    for (const ticker of tickers) {
+      try {
+        await this.fetchHistoricalData(ticker, 14)
+        console.log(`Initialized historical data for ${ticker}`)
+      } catch (error) {
+        console.error(`Failed to initialize data for ${ticker}:`, error)
+      }
+    }
+    
+    // Initialize options historical data
+    for (const option of TOP_LIQUID_OPTIONS) {
+      try {
+        const optionsData = this.generateSimulatedOptionsHistoricalData(option, 14)
+        await HistoricalDataService.storeOptionsHistoricalData(
+          option.ticker,
+          option.underlying_ticker,
+          optionsData
+        )
+        console.log(`Initialized options historical data for ${option.ticker}`)
+      } catch (error) {
+        console.error(`Failed to initialize options data for ${option.ticker}:`, error)
+      }
+    }
+    
+    console.log('Historical data initialization complete')
+  }
+
+  private static generateSimulatedOptionsHistoricalData(option: OptionsContract, days: number): any[] {
+    const data: any[] = []
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date()
+      date.setDate(date.getDate() - i)
+      
+      // Simulate options price movement
+      const dailyChange = (Math.random() - 0.5) * 0.1
+      const bid = option.bid * (1 + dailyChange)
+      const ask = option.ask * (1 + dailyChange)
+      const last = option.last * (1 + dailyChange)
+      
+      data.push({
+        date: date.toISOString().split('T')[0],
+        bid,
+        ask,
+        last,
+        volume: Math.floor(Math.random() * option.volume),
+        open_interest: option.open_interest + Math.floor((Math.random() - 0.5) * 1000),
+        implied_volatility: option.implied_volatility * (1 + (Math.random() - 0.5) * 0.1),
+        delta: option.delta * (1 + (Math.random() - 0.5) * 0.05),
+        gamma: option.gamma * (1 + (Math.random() - 0.5) * 0.1),
+        theta: option.theta * (1 + (Math.random() - 0.5) * 0.1),
+        vega: option.vega * (1 + (Math.random() - 0.5) * 0.1)
+      })
+    }
+    
+    return data
   }
 }
