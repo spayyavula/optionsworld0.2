@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react'
-import { PolygonService } from '../services/polygonService'
-import { HistoricalDataService } from '../services/historicalDataService'
 
 export interface Stock {
   symbol: string
@@ -398,6 +396,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     // Initialize historical data on first load
     const initializeData = async () => {
       try {
+        const { PolygonService } = await import('../services/polygonService')
         await PolygonService.initializeHistoricalData()
         console.log('Historical data initialization completed')
       } catch (error) {
@@ -449,6 +448,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const cleanupInterval = setInterval(async () => {
       try {
+        const { HistoricalDataService } = await import('../services/historicalDataService')
         await HistoricalDataService.cleanupOldData()
         console.log('Old historical data cleaned up')
       } catch (error) {

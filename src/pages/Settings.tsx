@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Save, RefreshCw, Download, Upload, AlertTriangle, Database, Activity } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
-import { HistoricalDataService } from '../services/historicalDataService'
 
 export default function Settings() {
   const { state, dispatch } = useTradingContext()
@@ -93,6 +92,7 @@ export default function Settings() {
   const loadStorageStats = async () => {
     setLoadingStats(true)
     try {
+      const { HistoricalDataService } = await import('../services/historicalDataService')
       const stats = await HistoricalDataService.getStorageStats()
       setStorageStats(stats)
     } catch (error) {
@@ -105,6 +105,7 @@ export default function Settings() {
   const handleCleanupData = async () => {
     if (window.confirm('Are you sure you want to clean up old historical data? This will remove data older than the retention period.')) {
       try {
+        const { HistoricalDataService } = await import('../services/historicalDataService')
         await HistoricalDataService.cleanupOldData()
         alert('Old data cleaned up successfully!')
         loadStorageStats() // Refresh stats

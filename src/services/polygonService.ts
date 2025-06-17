@@ -1,5 +1,4 @@
-import { OptionsContract, OptionsChainData, HistoricalData } from '../types/options'
-import { HistoricalDataService } from './historicalDataService'
+import type { OptionsContract, OptionsChainData, HistoricalData } from '../types/options'
  
 const POLYGON_API_KEY = import.meta.env.VITE_POLYGON_API_KEY || 'demo_api_key'
 const BASE_URL = import.meta.env.VITE_POLYGON_BASE_URL || 'https://api.polygon.io'
@@ -31,7 +30,7 @@ const TOP_LIQUID_OPTIONS: OptionsContract[] = [
   }
 ]
 
-export class OptionsService {
+export class PolygonService {
   static async fetchOptionsChain(underlying: string): Promise<OptionsChainData> {
     if (ENABLE_MOCK_DATA || !ENABLE_REAL_TIME_DATA) {
       // Use simulated data for demo/development
@@ -102,11 +101,18 @@ export class OptionsService {
   }
 
   static async fetchHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
-    // First try to get data from Supabase
-    const storedData = await HistoricalDataService.getHistoricalData(ticker, days)
-    if (storedData.length > 0) {
-      console.log(`Retrieved ${storedData.length} historical data points from Supabase for ${ticker}`)
-      return storedData
+    // Import HistoricalDataService dynamically to avoid circular dependencies
+    const { HistoricalDataService } = await import('./historicalDataService')
+    
+    try {
+      // First try to get data from Supabase
+      const storedData = await HistoricalDataService.getHistoricalData(ticker, days)
+      if (storedData.length > 0) {
+        console.log(`Retrieved ${storedData.length} historical data points from Supabase for ${ticker}`)
+        return storedData
+      }
+    } catch (error) {
+      console.warn('Failed to fetch stored data, using simulated data:', error)
     }
 
     if (ENABLE_MOCK_DATA || !ENABLE_REAL_TIME_DATA) {
@@ -114,6 +120,7 @@ export class OptionsService {
       
       // Store simulated data in Supabase for future use
       try {
+        const { HistoricalDataService } = await import('./historicalDataService')
         await HistoricalDataService.storeHistoricalData(ticker, simulatedData)
       } catch (error) {
         console.warn('Failed to store simulated data:', error)
@@ -141,6 +148,7 @@ export class OptionsService {
       
       // Store real data in Supabase
       try {
+        const { HistoricalDataService } = await import('./historicalDataService')
         await HistoricalDataService.storeHistoricalData(ticker, transformedData)
       } catch (error) {
         console.warn('Failed to store real data:', error)
@@ -153,6 +161,7 @@ export class OptionsService {
       
       // Store simulated data as fallback
       try {
+        const { HistoricalDataService } = await import('./historicalDataService')
         await HistoricalDataService.storeHistoricalData(ticker, simulatedData)
       } catch (error) {
         console.warn('Failed to store fallback data:', error)
@@ -237,6 +246,7 @@ export class OptionsService {
     // Initialize options historical data
     for (const option of TOP_LIQUID_OPTIONS) {
       try {
+        const { HistoricalDataService } = await import('./historicalDataService')
         const optionsData = this.generateSimulatedOptionsHistoricalData(option, 14)
         await HistoricalDataService.storeOptionsHistoricalData(
           option.ticker,
