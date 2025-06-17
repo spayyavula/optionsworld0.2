@@ -393,14 +393,20 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     dispatch({ type: 'LOAD_DATA' })
     
-    // Initialize historical data on first load
+    // Initialize historical data on first load (only if services are available)
     const initializeData = async () => {
       try {
+        const enableMockData = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true'
+        if (enableMockData) {
+          console.log('Mock data enabled, skipping Polygon service initialization')
+          return
+        }
+        
         const { PolygonService } = await import('../services/polygonService')
         await PolygonService.initializeHistoricalData()
         console.log('Historical data initialization completed')
       } catch (error) {
-        console.error('Failed to initialize historical data:', error)
+        console.warn('Failed to initialize historical data:', error)
       }
     }
     
@@ -444,15 +450,20 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval)
   }, [state.stocks])
   
-  // Cleanup old data periodically (once per day)
+  // Cleanup old data periodically (once per day) - only if services are available
   useEffect(() => {
     const cleanupInterval = setInterval(async () => {
       try {
+        const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
+        if (!enableDataPersistence) {
+          return
+        }
+        
         const historicalModule = await import('../services/historicalDataService')
         await historicalModule.HistoricalDataService.cleanupOldData()
         console.log('Old historical data cleaned up')
       } catch (error) {
-        console.error('Failed to cleanup old data:', error)
+        console.warn('Failed to cleanup old data:', error)
       }
     }, 24 * 60 * 60 * 1000) // Run once per day
     

@@ -8,10 +8,12 @@ const isSupabaseConfigured = supabaseUrl &&
   supabaseAnonKey && 
   supabaseUrl !== 'your_supabase_project_url_here' && 
   supabaseAnonKey !== 'your_supabase_anon_key_here' &&
-  supabaseUrl.startsWith('https://')
+  supabaseUrl.startsWith('https://') &&
+  supabaseUrl !== 'https://demo.supabase.co' &&
+  supabaseAnonKey !== 'demo_anon_key'
 
 if (!isSupabaseConfigured) {
-  console.warn('Supabase configuration missing or invalid. Using local storage fallback.')
+  console.warn('Supabase configuration missing or using demo values. Using local storage fallback.')
 }
 
 export const supabase: SupabaseClient | null = isSupabaseConfigured

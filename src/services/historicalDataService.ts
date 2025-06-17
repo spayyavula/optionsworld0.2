@@ -39,7 +39,8 @@ export class HistoricalDataService {
       const { supabase } = await import('../lib/supabase')
       
       if (!supabase) {
-        console.log('Supabase not configured, skipping data storage')
+        console.log('Supabase not configured, using local storage fallback')
+        this.storeInLocalStorage(`historical_${ticker}`, data)
         return
       }
 
@@ -64,13 +65,16 @@ export class HistoricalDataService {
 
       if (error) {
         console.error('Error storing historical data:', error)
-        throw error
+        // Fallback to local storage
+        this.storeInLocalStorage(`historical_${ticker}`, data)
+        return
       }
 
       console.log(`Stored ${data.length} historical data points for ${ticker}`)
     } catch (error) {
       console.error('Failed to store historical data:', error)
-      throw error
+      // Fallback to local storage
+      this.storeInLocalStorage(`historical_${ticker}`, data)
     }
   }
 
@@ -88,8 +92,8 @@ export class HistoricalDataService {
       const { supabase } = await import('../lib/supabase')
       
       if (!supabase) {
-        console.log('Supabase not configured, returning empty data')
-        return []
+        console.log('Supabase not configured, checking local storage')
+        return this.getFromLocalStorage(`historical_${ticker}`) || []
       }
 
       const startDate = new Date()
@@ -104,7 +108,8 @@ export class HistoricalDataService {
 
       if (error) {
         console.error('Error fetching historical data:', error)
-        return []
+        // Fallback to local storage
+        return this.getFromLocalStorage(`historical_${ticker}`) || []
       }
 
       return data?.map(item => ({
@@ -117,7 +122,8 @@ export class HistoricalDataService {
       })) || []
     } catch (error) {
       console.error('Failed to fetch historical data:', error)
-      return []
+      // Fallback to local storage
+      return this.getFromLocalStorage(`historical_${ticker}`) || []
     }
   }
 
@@ -139,7 +145,8 @@ export class HistoricalDataService {
       const { supabase } = await import('../lib/supabase')
       
       if (!supabase) {
-        console.log('Supabase not configured, skipping options data storage')
+        console.log('Supabase not configured, using local storage fallback')
+        this.storeInLocalStorage(`options_${contractTicker}`, data)
         return
       }
 
@@ -168,13 +175,14 @@ export class HistoricalDataService {
 
       if (error) {
         console.error('Error storing options historical data:', error)
-        throw error
+        this.storeInLocalStorage(`options_${contractTicker}`, data)
+        return
       }
 
       console.log(`Stored ${data.length} options historical data points for ${contractTicker}`)
     } catch (error) {
       console.error('Failed to store options historical data:', error)
-      throw error
+      this.storeInLocalStorage(`options_${contractTicker}`, data)
     }
   }
 
@@ -195,8 +203,8 @@ export class HistoricalDataService {
       const { supabase } = await import('../lib/supabase')
       
       if (!supabase) {
-        console.log('Supabase not configured, returning empty options data')
-        return []
+        console.log('Supabase not configured, checking local storage')
+        return this.getFromLocalStorage(`options_${contractTicker}`) || []
       }
 
       const startDate = new Date()
@@ -211,7 +219,7 @@ export class HistoricalDataService {
 
       if (error) {
         console.error('Error fetching options historical data:', error)
-        return []
+        return this.getFromLocalStorage(`options_${contractTicker}`) || []
       }
 
       return data?.map(item => ({
@@ -229,7 +237,7 @@ export class HistoricalDataService {
       })) || []
     } catch (error) {
       console.error('Failed to fetch options historical data:', error)
-      return []
+      return this.getFromLocalStorage(`options_${contractTicker}`) || []
     }
   }
 
@@ -246,6 +254,7 @@ export class HistoricalDataService {
       const { supabase } = await import('../lib/supabase')
       
       if (!supabase) {
+        console.log('Supabase not configured, skipping cleanup')
         return
       }
 
@@ -297,12 +306,8 @@ export class HistoricalDataService {
       const supabase = supabaseModule.supabase
       
       if (!supabase) {
-        return {
-          stockDataPoints: 0,
-          optionsDataPoints: 0,
-          oldestDate: null,
-          newestDate: null
-        }
+        // Return local storage stats
+        return this.getLocalStorageStats()
       }
 
       // Get stock data count
@@ -336,12 +341,60 @@ export class HistoricalDataService {
       }
     } catch (error) {
       console.error('Failed to get storage stats:', error)
-      return {
-        stockDataPoints: 0,
-        optionsDataPoints: 0,
-        oldestDate: null,
-        newestDate: null
+      return this.getLocalStorageStats()
+    }
+  }
+
+  // Local storage fallback methods
+  private static storeInLocalStorage(key: string, data: any): void {
+    try {
+      localStorage.setItem(key, JSON.stringify(data))
+    } catch (error) {
+      console.error('Failed to store in local storage:', error)
+    }
+  }
+
+  private static getFromLocalStorage(key: string): any {
+    try {
+      const data = localStorage.getItem(key)
+      return data ? JSON.parse(data) : null
+    } catch (error) {
+      console.error('Failed to get from local storage:', error)
+      return null
+    }
+  }
+
+  private static getLocalStorageStats(): StorageStats {
+    let stockDataPoints = 0
+    let optionsDataPoints = 0
+    let oldestDate: string | null = null
+    let newestDate: string | null = null
+
+    try {
+      // Count local storage items
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key?.startsWith('historical_')) {
+          const data = this.getFromLocalStorage(key)
+          if (data && Array.isArray(data)) {
+            stockDataPoints += data.length
+          }
+        } else if (key?.startsWith('options_')) {
+          const data = this.getFromLocalStorage(key)
+          if (data && Array.isArray(data)) {
+            optionsDataPoints += data.length
+          }
+        }
       }
+    } catch (error) {
+      console.error('Failed to get local storage stats:', error)
+    }
+
+    return {
+      stockDataPoints,
+      optionsDataPoints,
+      oldestDate,
+      newestDate
     }
   }
 }

@@ -92,11 +92,30 @@ export default function Settings() {
   const loadStorageStats = async () => {
     setLoadingStats(true)
     try {
+      const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
+      if (!enableDataPersistence) {
+        setStorageStats({
+          stockDataPoints: 0,
+          optionsDataPoints: 0,
+          oldestDate: null,
+          newestDate: null,
+          message: 'Data persistence is disabled'
+        })
+        return
+      }
+      
       const historicalModule = await import('../services/historicalDataService')
       const stats = await historicalModule.HistoricalDataService.getStorageStats()
       setStorageStats(stats)
     } catch (error) {
       console.error('Failed to load storage stats:', error)
+      setStorageStats({
+        stockDataPoints: 0,
+        optionsDataPoints: 0,
+        oldestDate: null,
+        newestDate: null,
+        error: 'Failed to load stats'
+      })
     } finally {
       setLoadingStats(false)
     }
@@ -105,6 +124,12 @@ export default function Settings() {
   const handleCleanupData = async () => {
     if (window.confirm('Are you sure you want to clean up old historical data? This will remove data older than the retention period.')) {
       try {
+        const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
+        if (!enableDataPersistence) {
+          alert('Data persistence is disabled. No cleanup needed.')
+          return
+        }
+        
         const historicalModule = await import('../services/historicalDataService')
         await historicalModule.HistoricalDataService.cleanupOldData()
         alert('Old data cleaned up successfully!')
@@ -352,24 +377,30 @@ export default function Settings() {
                 <Activity className="h-4 w-4 mr-2" />
                 Storage Statistics
               </h4>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500">Stock Data Points:</span>
-                  <span className="ml-2 font-medium">{storageStats.stockDataPoints.toLocaleString()}</span>
+              {storageStats.message || storageStats.error ? (
+                <p className="text-sm text-gray-600">
+                  {storageStats.message || storageStats.error}
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-500">Stock Data Points:</span>
+                    <span className="ml-2 font-medium">{storageStats.stockDataPoints.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Options Data Points:</span>
+                    <span className="ml-2 font-medium">{storageStats.optionsDataPoints.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Oldest Data:</span>
+                    <span className="ml-2 font-medium">{storageStats.oldestDate || 'N/A'}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Newest Data:</span>
+                    <span className="ml-2 font-medium">{storageStats.newestDate || 'N/A'}</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-gray-500">Options Data Points:</span>
-                  <span className="ml-2 font-medium">{storageStats.optionsDataPoints.toLocaleString()}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Oldest Data:</span>
-                  <span className="ml-2 font-medium">{storageStats.oldestDate || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Newest Data:</span>
-                  <span className="ml-2 font-medium">{storageStats.newestDate || 'N/A'}</span>
-                </div>
-              </div>
+              )}
             </div>
           )}
           
