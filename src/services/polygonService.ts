@@ -15,9 +15,9 @@ const TOP_LIQUID_OPTIONS: OptionsContract[] = [
     strike_price: 580,
     ticker: 'SPY240315C00580000',
     underlying_ticker: 'SPY',
-    bid: 28.5,
-    ask: 28.7,
-    last: 28.6,
+    bid: 29.05,
+    ask: 29.15,
+    last: 29.10,
     volume: 15234,
     open_interest: 45678,
     implied_volatility: 0.25,
@@ -26,11 +26,11 @@ const TOP_LIQUID_OPTIONS: OptionsContract[] = [
     theta: -0.15,
     vega: 0.30,
     intrinsic_value: 0,
-    time_value: 28.6
+    time_value: 29.10
   }
 ]
 
-export class OptionsDataService {
+export class OptionsService {
   static async fetchOptionsChain(underlying: string): Promise<OptionsChainData> {
     if (ENABLE_MOCK_DATA || !ENABLE_REAL_TIME_DATA) {
       // Use simulated data for demo/development
@@ -131,23 +131,24 @@ export class OptionsDataService {
     // Generate simulated historical data for the last 'days' days
     const data: HistoricalData[] = []
     const basePrice = this.getBasePriceForTicker(ticker)
-    let currentPrice = basePrice
-
+    
     for (let i = days - 1; i >= 0; i--) {
       const date = new Date()
       date.setDate(date.getDate() - i)
       
-      // Simulate daily price movement with some randomness
-      const dailyChange = (Math.random() - 0.5) * basePrice * 0.02
-      currentPrice += dailyChange
+      const dailyChange = (Math.random() - 0.5) * 2 // Random price movement
+      const open = basePrice * (1 + dailyChange * 0.01)
+      const close = open * (1 + (Math.random() - 0.5) * 0.02)
+      const high = Math.max(open, close) * (1 + Math.random() * 0.01)
+      const low = Math.min(open, close) * (1 - Math.random() * 0.01)
       
       data.push({
         date: date.toISOString().split('T')[0],
-        open: currentPrice - dailyChange * Math.random(),
-        high: currentPrice + Math.abs(dailyChange),
-        low: currentPrice - Math.abs(dailyChange),
-        close: currentPrice,
-        volume: Math.floor(Math.random() * 1000000) + 500000
+        open,
+        high,
+        low,
+        close,
+        volume: Math.floor(Math.random() * 1000000)
       })
     }
     
@@ -173,11 +174,9 @@ export class OptionsDataService {
       'MSFT': 420,
       'GOOGL': 150,
       'AMZN': 175,
-      'TSLA': 190,
-      'META': 485,
-      'NVDA': 850
+      'TSLA': 190
     }
     
-    return basePrices[ticker] || 100
+    return basePrices[ticker] || 100 // Default to 100 if ticker not found
   }
 }
