@@ -8,15 +8,20 @@ export class HistoricalDataService {
    * Store historical data for a ticker in Supabase
    */
   static async storeHistoricalData(ticker: string, data: HistoricalData[]): Promise<void> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
-      console.log('Supabase not configured or persistence disabled, skipping data storage')
+    if (!ENABLE_DATA_PERSISTENCE) {
+      console.log('Data persistence disabled, skipping data storage')
       return
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        console.log('Supabase not configured, skipping data storage')
+        return
+      }
+
       // Prepare data for insertion
       const insertData = data.map(item => ({
         ticker,
@@ -52,15 +57,20 @@ export class HistoricalDataService {
    * Retrieve historical data for a ticker from Supabase
    */
   static async getHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
-      console.log('Supabase not configured or persistence disabled, returning empty data')
+    if (!ENABLE_DATA_PERSISTENCE) {
+      console.log('Data persistence disabled, returning empty data')
       return []
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        console.log('Supabase not configured, returning empty data')
+        return []
+      }
+
       const startDate = new Date()
       startDate.setDate(startDate.getDate() - days)
 
@@ -98,15 +108,20 @@ export class HistoricalDataService {
     underlyingTicker: string, 
     data: any[]
   ): Promise<void> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
-      console.log('Supabase not configured or persistence disabled, skipping options data storage')
+    if (!ENABLE_DATA_PERSISTENCE) {
+      console.log('Data persistence disabled, skipping options data storage')
       return
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        console.log('Supabase not configured, skipping options data storage')
+        return
+      }
+
       const insertData = data.map(item => ({
         contract_ticker: contractTicker,
         underlying_ticker: underlyingTicker,
@@ -149,15 +164,20 @@ export class HistoricalDataService {
     contractTicker: string, 
     days: number = 14
   ): Promise<any[]> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
-      console.log('Supabase not configured or persistence disabled, returning empty options data')
+    if (!ENABLE_DATA_PERSISTENCE) {
+      console.log('Data persistence disabled, returning empty options data')
       return []
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        console.log('Supabase not configured, returning empty options data')
+        return []
+      }
+
       const startDate = new Date()
       startDate.setDate(startDate.getDate() - days)
 
@@ -184,14 +204,18 @@ export class HistoricalDataService {
    * Clean up old historical data based on retention policy
    */
   static async cleanupOldData(): Promise<void> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
+    if (!ENABLE_DATA_PERSISTENCE) {
       return
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        return
+      }
+
       const cutoffDate = new Date()
       cutoffDate.setDate(cutoffDate.getDate() - RETENTION_DAYS)
 
@@ -230,10 +254,7 @@ export class HistoricalDataService {
     oldestDate: string | null
     newestDate: string | null
   }> {
-    // Import supabase dynamically to avoid build issues
-    const { supabase } = await import('../lib/supabase')
-    
-    if (!supabase || !ENABLE_DATA_PERSISTENCE) {
+    if (!ENABLE_DATA_PERSISTENCE) {
       return {
         stockDataPoints: 0,
         optionsDataPoints: 0,
@@ -243,6 +264,18 @@ export class HistoricalDataService {
     }
 
     try {
+      // Import supabase dynamically to avoid build issues
+      const { supabase } = await import('../lib/supabase')
+      
+      if (!supabase) {
+        return {
+          stockDataPoints: 0,
+          optionsDataPoints: 0,
+          oldestDate: null,
+          newestDate: null
+        }
+      }
+
       // Get stock data count
       const { count: stockCount } = await supabase
         .from('historical_data')
