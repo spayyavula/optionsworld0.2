@@ -336,9 +336,9 @@ export class PolygonService {
     // Initialize options historical data
     for (const option of TOP_LIQUID_OPTIONS) {
       try {
-        const { HistoricalDataService } = await import('./historicalDataService')
+        const historicalModule = await import('./historicalDataService')
         const optionsData = this.generateSimulatedOptionsHistoricalData(option, 14)
-        await HistoricalDataService.storeOptionsHistoricalData(
+        await historicalModule.HistoricalDataService.storeOptionsHistoricalData(
           option.ticker,
           option.underlying_ticker,
           optionsData

@@ -448,8 +448,8 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const cleanupInterval = setInterval(async () => {
       try {
-        const { HistoricalDataService } = await import('../services/historicalDataService')
-        await HistoricalDataService.cleanupOldData()
+        const historicalModule = await import('../services/historicalDataService')
+        await historicalModule.HistoricalDataService.cleanupOldData()
         console.log('Old historical data cleaned up')
       } catch (error) {
         console.error('Failed to cleanup old data:', error)

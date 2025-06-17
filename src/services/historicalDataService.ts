@@ -293,7 +293,8 @@ export class HistoricalDataService {
 
     try {
       // Import supabase dynamically to avoid build issues
-      const { supabase } = await import('../lib/supabase')
+      const supabaseModule = await import('../lib/supabase')
+      const supabase = supabaseModule.supabase
       
       if (!supabase) {
         return {

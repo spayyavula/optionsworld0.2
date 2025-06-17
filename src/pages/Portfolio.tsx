@@ -167,7 +167,7 @@ export default function Portfolio() {
                   />
                   <Bar 
                     dataKey="unrealizedPnLPercent" 
-                    fill={(entry: any) => entry.unrealizedPnLPercent >= 0 ? '#10b981' : '#ef4444'}
+                    fill="#2563eb"
                   />
                 </BarChart>
               </ResponsiveContainer>

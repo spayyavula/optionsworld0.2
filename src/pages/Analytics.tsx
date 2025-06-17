@@ -256,7 +256,7 @@ export default function Analytics() {
                   />
                   <Bar 
                     dataKey="profit" 
-                    fill={(entry: any) => entry.profit >= 0 ? '#10b981' : '#ef4444'}
+                    fill="#2563eb"
                   />
                 </BarChart>
               </ResponsiveContainer>

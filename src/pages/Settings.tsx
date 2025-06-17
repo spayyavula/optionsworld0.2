@@ -92,8 +92,8 @@ export default function Settings() {
   const loadStorageStats = async () => {
     setLoadingStats(true)
     try {
-      const { HistoricalDataService } = await import('../services/historicalDataService')
-      const stats = await HistoricalDataService.getStorageStats()
+      const historicalModule = await import('../services/historicalDataService')
+      const stats = await historicalModule.HistoricalDataService.getStorageStats()
       setStorageStats(stats)
     } catch (error) {
       console.error('Failed to load storage stats:', error)
@@ -105,8 +105,8 @@ export default function Settings() {
   const handleCleanupData = async () => {
     if (window.confirm('Are you sure you want to clean up old historical data? This will remove data older than the retention period.')) {
       try {
-        const { HistoricalDataService } = await import('../services/historicalDataService')
-        await HistoricalDataService.cleanupOldData()
+        const historicalModule = await import('../services/historicalDataService')
+        await historicalModule.HistoricalDataService.cleanupOldData()
         alert('Old data cleaned up successfully!')
         loadStorageStats() // Refresh stats
       } catch (error) {
