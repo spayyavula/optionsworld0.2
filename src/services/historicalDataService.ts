@@ -3,6 +3,27 @@ import type { HistoricalData } from '../types/options'
 const ENABLE_DATA_PERSISTENCE = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
 const RETENTION_DAYS = parseInt(import.meta.env.VITE_HISTORICAL_DATA_RETENTION_DAYS || '30')
 
+interface StorageStats {
+  stockDataPoints: number
+  optionsDataPoints: number
+  oldestDate: string | null
+  newestDate: string | null
+}
+
+interface OptionsHistoricalDataPoint {
+  date: string
+  bid: number
+  ask: number
+  last: number
+  volume: number
+  open_interest: number
+  implied_volatility: number
+  delta: number
+  gamma: number
+  theta: number
+  vega: number
+}
+
 export class HistoricalDataService {
   /**
    * Store historical data for a ticker in Supabase
@@ -106,7 +127,7 @@ export class HistoricalDataService {
   static async storeOptionsHistoricalData(
     contractTicker: string, 
     underlyingTicker: string, 
-    data: any[]
+    data: OptionsHistoricalDataPoint[]
   ): Promise<void> {
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, skipping options data storage')
@@ -163,7 +184,7 @@ export class HistoricalDataService {
   static async getOptionsHistoricalData(
     contractTicker: string, 
     days: number = 14
-  ): Promise<any[]> {
+  ): Promise<OptionsHistoricalDataPoint[]> {
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, returning empty options data')
       return []
@@ -193,7 +214,19 @@ export class HistoricalDataService {
         return []
       }
 
-      return data || []
+      return data?.map(item => ({
+        date: item.date,
+        bid: item.bid,
+        ask: item.ask,
+        last: item.last,
+        volume: item.volume,
+        open_interest: item.open_interest,
+        implied_volatility: item.implied_volatility,
+        delta: item.delta,
+        gamma: item.gamma,
+        theta: item.theta,
+        vega: item.vega
+      })) || []
     } catch (error) {
       console.error('Failed to fetch options historical data:', error)
       return []
@@ -248,12 +281,7 @@ export class HistoricalDataService {
   /**
    * Get data storage statistics
    */
-  static async getStorageStats(): Promise<{
-    stockDataPoints: number
-    optionsDataPoints: number
-    oldestDate: string | null
-    newestDate: string | null
-  }> {
+  static async getStorageStats(): Promise<StorageStats> {
     if (!ENABLE_DATA_PERSISTENCE) {
       return {
         stockDataPoints: 0,

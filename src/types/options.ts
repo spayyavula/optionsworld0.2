@@ -69,3 +69,36 @@ export interface OptionsOrder {
   filledPrice?: number
   filledQuantity?: number
 }
+
+// Database types for Supabase integration
+export interface DatabaseHistoricalData {
+  id: string
+  ticker: string
+  date: string
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+  created_at: string
+  updated_at: string
+}
+
+export interface DatabaseOptionsHistoricalData {
+  id: string
+  contract_ticker: string
+  underlying_ticker: string
+  date: string
+  bid: number
+  ask: number
+  last: number
+  volume: number
+  open_interest: number
+  implied_volatility: number
+  delta: number
+  gamma: number
+  theta: number
+  vega: number
+  created_at: string
+  updated_at: string
+}

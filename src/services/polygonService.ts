@@ -27,6 +27,90 @@ const TOP_LIQUID_OPTIONS: OptionsContract[] = [
     vega: 0.30,
     intrinsic_value: 0,
     time_value: 29.10
+  },
+  {
+    contract_type: 'call',
+    exercise_style: 'american',
+    expiration_date: '2024-03-15',
+    shares_per_contract: 100,
+    strike_price: 500,
+    ticker: 'QQQ240315C00500000',
+    underlying_ticker: 'QQQ',
+    bid: 15.20,
+    ask: 15.30,
+    last: 15.25,
+    volume: 12456,
+    open_interest: 38901,
+    implied_volatility: 0.28,
+    delta: 0.58,
+    gamma: 0.025,
+    theta: -0.12,
+    vega: 0.35,
+    intrinsic_value: 0,
+    time_value: 15.25
+  },
+  {
+    contract_type: 'call',
+    exercise_style: 'american',
+    expiration_date: '2024-03-15',
+    shares_per_contract: 100,
+    strike_price: 230,
+    ticker: 'AAPL240315C00230000',
+    underlying_ticker: 'AAPL',
+    bid: 8.45,
+    ask: 8.55,
+    last: 8.50,
+    volume: 9876,
+    open_interest: 25432,
+    implied_volatility: 0.32,
+    delta: 0.42,
+    gamma: 0.03,
+    theta: -0.08,
+    vega: 0.28,
+    intrinsic_value: 0,
+    time_value: 8.50
+  },
+  {
+    contract_type: 'call',
+    exercise_style: 'american',
+    expiration_date: '2024-03-15',
+    shares_per_contract: 100,
+    strike_price: 1000,
+    ticker: 'TSLA240315C01000000',
+    underlying_ticker: 'TSLA',
+    bid: 45.80,
+    ask: 46.20,
+    last: 46.00,
+    volume: 7654,
+    open_interest: 18765,
+    implied_volatility: 0.55,
+    delta: 0.35,
+    gamma: 0.015,
+    theta: -0.25,
+    vega: 0.45,
+    intrinsic_value: 0,
+    time_value: 46.00
+  },
+  {
+    contract_type: 'call',
+    exercise_style: 'american',
+    expiration_date: '2024-03-15',
+    shares_per_contract: 100,
+    strike_price: 1400,
+    ticker: 'NVDA240315C01400000',
+    underlying_ticker: 'NVDA',
+    bid: 125.50,
+    ask: 126.50,
+    last: 126.00,
+    volume: 5432,
+    open_interest: 12345,
+    implied_volatility: 0.48,
+    delta: 0.68,
+    gamma: 0.008,
+    theta: -0.35,
+    vega: 0.52,
+    intrinsic_value: 0,
+    time_value: 126.00
   }
 ]
 
@@ -94,7 +178,7 @@ export class PolygonService {
     })) || []
 
     return {
-      underlying: polygonData.underlying,
+      underlying: polygonData.underlying || 'UNKNOWN',
       contracts,
       lastUpdated: new Date()
     }
@@ -212,14 +296,23 @@ export class PolygonService {
     // Base prices for our simulated options
     const basePrices: { [key: string]: number } = {
       'SPY': 580,
+      'QQQ': 500,
       'AAPL': 185,
       'MSFT': 420,
       'GOOGL': 150,
       'AMZN': 175,
-      'TSLA': 190
+      'TSLA': 190,
+      'NVDA': 1400
     }
     
     return basePrices[ticker] || 100 // Default to 100 if ticker not found
+  }
+
+  /**
+   * Get all available options contracts
+   */
+  static getTopLiquidOptions(): OptionsContract[] {
+    return [...TOP_LIQUID_OPTIONS]
   }
 
   /**
