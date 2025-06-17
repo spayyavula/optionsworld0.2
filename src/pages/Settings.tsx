@@ -1,0 +1,356 @@
+import React, { useState } from 'react'
+import { Save, RefreshCw, Download, Upload, AlertTriangle } from 'lucide-react'
+import { useTradingContext } from '../context/TradingContext'
+
+export default function Settings() {
+  const { state, dispatch } = useTradingContext()
+  const [notifications, setNotifications] = useState({
+    orderFills: true,
+    priceAlerts: true,
+    dailySummary: false,
+    marketNews: true
+  })
+  const [riskSettings, setRiskSettings] = useState({
+    maxPositionSize: 10000,
+    maxDailyLoss: 5000,
+    stopLossPercent: 10,
+    takeProfitPercent: 20
+  })
+  const [displaySettings, setDisplaySettings] = useState({
+    theme: 'light',
+    currency: 'USD',
+    timeZone: 'America/New_York',
+    chartType: 'candlestick'
+  })
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount)
+  }
+
+  const handleResetAccount = () => {
+    if (window.confirm('Are you sure you want to reset your account? This will delete all positions, orders, and trading history. This action cannot be undone.')) {
+      localStorage.removeItem('paperTradingData')
+      window.location.reload()
+    }
+  }
+
+  const handleExportData = () => {
+    const dataToExport = {
+      balance: state.balance,
+      buyingPower: state.buyingPower,
+      totalValue: state.totalValue,
+      positions: state.positions,
+      orders: state.orders,
+      watchlist: state.watchlist,
+      exportDate: new Date().toISOString()
+    }
+
+    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `paper-trading-data-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target?.result as string)
+        localStorage.setItem('paperTradingData', JSON.stringify(data))
+        alert('Data imported successfully! The page will reload to apply changes.')
+        window.location.reload()
+      } catch (error) {
+        alert('Error importing data. Please check the file format.')
+      }
+    }
+    reader.readAsText(file)
+  }
+
+  const saveSettings = () => {
+    // In a real app, these would be saved to a backend
+    localStorage.setItem('tradingSettings', JSON.stringify({
+      notifications,
+      riskSettings,
+      displaySettings
+    }))
+    alert('Settings saved successfully!')
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Account Overview */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Account Overview</h3>
+        </div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <p className="text-sm font-medium text-gray-500">Account Balance</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.balance)}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500">Total Value</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.totalValue)}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500">Active Positions</p>
+              <p className="text-2xl font-bold text-gray-900">{state.positions.length}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500">Total Orders</p>
+              <p className="text-2xl font-bold text-gray-900">{state.orders.length}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Notification Settings */}
+        <div className="card">
+          <div className="card-header">
+            <h3 className="text-lg font-medium text-gray-900">Notifications</h3>
+          </div>
+          <div className="card-body">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Order Fills</p>
+                  <p className="text-sm text-gray-500">Get notified when orders are executed</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notifications.orderFills}
+                  onChange={(e) => setNotifications({...notifications, orderFills: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Price Alerts</p>
+                  <p className="text-sm text-gray-500">Alerts for watchlist price movements</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notifications.priceAlerts}
+                  onChange={(e) => setNotifications({...notifications, priceAlerts: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Daily Summary</p>
+                  <p className="text-sm text-gray-500">Daily portfolio performance summary</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notifications.dailySummary}
+                  onChange={(e) => setNotifications({...notifications, dailySummary: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Market News</p>
+                  <p className="text-sm text-gray-500">Important market news and updates</p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notifications.marketNews}
+                  onChange={(e) => setNotifications({...notifications, marketNews: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Risk Management */}
+        <div className="card">
+          <div className="card-header">
+            <h3 className="text-lg font-medium text-gray-900">Risk Management</h3>
+          </div>
+          <div className="card-body">
+            <div className="space-y-4">
+              <div className="form-group">
+                <label className="form-label">Max Position Size</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  value={riskSettings.maxPositionSize}
+                  onChange={(e) => setRiskSettings({...riskSettings, maxPositionSize: parseInt(e.target.value)})}
+                />
+                <p className="text-sm text-gray-500 mt-1">Maximum amount per single position</p>
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Max Daily Loss</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  value={riskSettings.maxDailyLoss}
+                  onChange={(e) => setRiskSettings({...riskSettings, maxDailyLoss: parseInt(e.target.value)})}
+                />
+                <p className="text-sm text-gray-500 mt-1">Stop trading if daily loss exceeds this amount</p>
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Default Stop Loss (%)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  value={riskSettings.stopLossPercent}
+                  onChange={(e) => setRiskSettings({...riskSettings, stopLossPercent: parseInt(e.target.value)})}
+                />
+                <p className="text-sm text-gray-500 mt-1">Automatic stop loss percentage</p>
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Default Take Profit (%)</label>
+                <input
+                  type="number"
+                  className="form-input"
+                  value={riskSettings.takeProfitPercent}
+                  onChange={(e) => setRiskSettings({...riskSettings, takeProfitPercent: parseInt(e.target.value)})}
+                />
+                <p className="text-sm text-gray-500 mt-1">Automatic take profit percentage</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Display Settings */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Display Settings</h3>
+        </div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="form-group">
+              <label className="form-label">Theme</label>
+              <select
+                className="form-select"
+                value={displaySettings.theme}
+                onChange={(e) => setDisplaySettings({...displaySettings, theme: e.target.value})}
+              >
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="auto">Auto</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Currency</label>
+              <select
+                className="form-select"
+                value={displaySettings.currency}
+                onChange={(e) => setDisplaySettings({...displaySettings, currency: e.target.value})}
+              >
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Time Zone</label>
+              <select
+                className="form-select"
+                value={displaySettings.timeZone}
+                onChange={(e) => setDisplaySettings({...displaySettings, timeZone: e.target.value})}
+              >
+                <option value="America/New_York">Eastern Time</option>
+                <option value="America/Chicago">Central Time</option>
+                <option value="America/Denver">Mountain Time</option>
+                <option value="America/Los_Angeles">Pacific Time</option>
+                <option value="UTC">UTC</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label className="form-label">Chart Type</label>
+              <select
+                className="form-select"
+                value={displaySettings.chartType}
+                onChange={(e) => setDisplaySettings({...displaySettings, chartType: e.target.value})}
+              >
+                <option value="candlestick">Candlestick</option>
+                <option value="line">Line</option>
+                <option value="area">Area</option>
+                <option value="bar">Bar</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Data Management */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Data Management</h3>
+        </div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Export Data</h4>
+              <p className="text-sm text-gray-500 mb-4">Download your trading data as JSON</p>
+              <button onClick={handleExportData} className="btn btn-secondary">
+                <Download className="h-4 w-4" />
+                Export Data
+              </button>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Import Data</h4>
+              <p className="text-sm text-gray-500 mb-4">Upload previously exported data</p>
+              <label className="btn btn-secondary cursor-pointer">
+                <Upload className="h-4 w-4" />
+                Import Data
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImportData}
+                  className="hidden"
+                />
+              </label>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-gray-900 mb-2">Reset Account</h4>
+              <p className="text-sm text-gray-500 mb-4">Start fresh with a new account</p>
+              <button onClick={handleResetAccount} className="btn btn-danger">
+                <AlertTriangle className="h-4 w-4" />
+                Reset Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Settings */}
+      <div className="flex justify-end">
+        <button onClick={saveSettings} className="btn btn-primary">
+          <Save className="h-4 w-4" />
+          Save Settings
+        </button>
+      </div>
+    </div>
+  )
+}
