@@ -3,7 +3,7 @@ import { Save, RefreshCw, Download, Upload, AlertTriangle, Database, Activity } 
 import { useTradingContext } from '../context/TradingContext'
 
 export default function Settings() {
-  const { state, dispatch } = useTradingContext()
+  const { state } = useTradingContext()
   const [storageStats, setStorageStats] = useState<any>(null)
   const [loadingStats, setLoadingStats] = useState(false)
   const [notifications, setNotifications] = useState({

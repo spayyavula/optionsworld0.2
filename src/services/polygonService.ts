@@ -101,11 +101,9 @@ export class PolygonService {
   }
 
   static async fetchHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
-    // Import HistoricalDataService dynamically to avoid circular dependencies
-    const { HistoricalDataService } = await import('./historicalDataService')
-    
     try {
       // First try to get data from Supabase
+      const { HistoricalDataService } = await import('./historicalDataService')
       const storedData = await HistoricalDataService.getHistoricalData(ticker, days)
       if (storedData.length > 0) {
         console.log(`Retrieved ${storedData.length} historical data points from Supabase for ${ticker}`)
@@ -231,7 +229,6 @@ export class PolygonService {
     console.log('Initializing historical data for top liquid options...')
     
     const tickers = [...new Set(TOP_LIQUID_OPTIONS.map(option => option.underlying_ticker))]
-    const optionTickers = TOP_LIQUID_OPTIONS.map(option => option.ticker)
     
     // Initialize underlying stock data
     for (const ticker of tickers) {
