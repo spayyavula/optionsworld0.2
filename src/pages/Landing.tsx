@@ -211,6 +211,105 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Master Market Regimes & Trading Strategies
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Learn to identify different market conditions and apply the right strategies for each regime.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center p-6 bg-green-50 rounded-xl">
+              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Bull Markets</h3>
+              <p className="text-gray-600 mb-4">
+                Learn to ride uptrends with call strategies, bull spreads, and momentum plays.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Bull call spreads</li>
+                <li>• Covered calls</li>
+                <li>• Long calls on dips</li>
+              </ul>
+            </div>
+
+            <div className="text-center p-6 bg-red-50 rounded-xl">
+              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingDown className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Bear Markets</h3>
+              <p className="text-gray-600 mb-4">
+                Protect capital and profit from downtrends with put strategies and hedging.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Bear put spreads</li>
+                <li>• Protective puts</li>
+                <li>• Cash preservation</li>
+              </ul>
+            </div>
+
+            <div className="text-center p-6 bg-blue-50 rounded-xl">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Activity className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Sideways Markets</h3>
+              <p className="text-gray-600 mb-4">
+                Generate income from range-bound markets with time decay strategies.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Iron condors</li>
+                <li>• Short strangles</li>
+                <li>• Range trading</li>
+              </ul>
+            </div>
+
+            <div className="text-center p-6 bg-purple-50 rounded-xl">
+              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">High Volatility</h3>
+              <p className="text-gray-600 mb-4">
+                Capitalize on big moves and volatility spikes with advanced strategies.
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Long straddles</li>
+                <li>• Volatility plays</li>
+                <li>• Event trading</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-xl">
+              <h3 className="text-2xl font-bold mb-4">What is a Market Regime?</h3>
+              <p className="text-lg mb-6 max-w-3xl mx-auto">
+                A market regime is a persistent state of market behavior characterized by specific patterns in price movement, 
+                volatility, and trading volume. Understanding regimes helps you:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <div className="bg-white bg-opacity-10 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2">Choose Right Strategies</h4>
+                  <p className="text-sm">Match your trading approach to current market conditions for better results.</p>
+                </div>
+                <div className="bg-white bg-opacity-10 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2">Manage Risk Better</h4>
+                  <p className="text-sm">Adjust position sizes and risk management based on regime characteristics.</p>
+                </div>
+                <div className="bg-white bg-opacity-10 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2">Time Your Trades</h4>
+                  <p className="text-sm">Enter and exit positions when regime conditions are most favorable.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">

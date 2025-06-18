@@ -7,6 +7,7 @@ import OptionsPortfolio from './pages/OptionsPortfolio'
 import OptionsTrading from './pages/OptionsTrading'
 import Orders from './pages/Orders'
 import OptionsChain from './pages/OptionsChain'
+import RegimeAnalysis from './pages/RegimeAnalysis'
 import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
 import { OptionsProvider } from './context/OptionsContext'
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/trading" element={<OptionsTrading />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/watchlist" element={<OptionsChain />} />
+                <Route path="/regime" element={<RegimeAnalysis />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/settings" element={<Settings />} />
               </Routes>

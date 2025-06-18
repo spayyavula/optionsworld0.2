@@ -18,6 +18,7 @@ const navigation = [
   { name: 'Options Trading', href: '/app/trading', icon: TrendingUp },
   { name: 'Orders', href: '/app/orders', icon: FileText },
   { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
+  { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
   { name: 'Analytics', href: '/app/analytics', icon: PieChart },
   { name: 'Settings', href: '/app/settings', icon: Settings },
 ]
