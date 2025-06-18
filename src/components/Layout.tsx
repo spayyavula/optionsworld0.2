@@ -14,10 +14,10 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
-  { name: 'Portfolio', href: '/portfolio', icon: Briefcase },
-  { name: 'Trading', href: '/trading', icon: TrendingUp },
+  { name: 'Options Portfolio', href: '/portfolio', icon: Briefcase },
+  { name: 'Options Trading', href: '/trading', icon: TrendingUp },
   { name: 'Orders', href: '/orders', icon: FileText },
-  { name: 'Watchlist', href: '/watchlist', icon: Eye },
+  { name: 'Options Chain', href: '/watchlist', icon: Eye },
   { name: 'Analytics', href: '/analytics', icon: PieChart },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
