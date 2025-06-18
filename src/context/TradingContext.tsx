@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react'
 
 export interface Stock {
   symbol: string
@@ -388,6 +388,12 @@ function fillOrder(state: TradingState, orderId: string, filledPrice: number): T
 
 export function TradingProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(tradingReducer, initialState)
+  const stateRef = useRef(state)
+  
+  // Update ref whenever state changes
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
   
   // Load data on mount
   useEffect(() => {
@@ -428,10 +434,11 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('paperTradingData', JSON.stringify(dataToSave))
   }, [state])
   
-  // Simulate real-time price updates
+  // Simulate real-time price updates - set up once on mount
   useEffect(() => {
     const interval = setInterval(() => {
-      const updatedStocks = state.stocks.map(stock => {
+      const currentState = stateRef.current
+      const updatedStocks = currentState.stocks.map(stock => {
         const changePercent = (Math.random() - 0.5) * 0.1 // Random change between -5% and +5%
         const newPrice = stock.price * (1 + changePercent)
         const change = newPrice - stock.price
@@ -448,7 +455,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     }, 5000) // Update every 5 seconds
     
     return () => clearInterval(interval)
-  }, [state.stocks])
+  }, []) // Empty dependency array - only set up once
   
   // Cleanup old data periodically (once per day) - only if services are available
   useEffect(() => {

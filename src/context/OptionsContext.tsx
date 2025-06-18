@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react'
 import type { OptionsContract, OptionsPosition, OptionsOrder } from '../types/options'
 
 interface OptionsState {
@@ -101,6 +101,12 @@ function optionsReducer(state: OptionsState, action: OptionsAction): OptionsStat
 
 export function OptionsProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(optionsReducer, initialState)
+  const stateRef = useRef(state)
+  
+  // Update ref whenever state changes
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
   
   // Load data on mount
   useEffect(() => {
@@ -127,12 +133,15 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('optionsTradingData', JSON.stringify(dataToSave))
   }, [state])
 
-  // Simulate real-time price updates for options
+  // Simulate real-time price updates for options - set up once on mount
   useEffect(() => {
     const updateInterval = parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000')
     
     const interval = setInterval(() => {
-      const updatedContracts = state.contracts.map(contract => {
+      const currentState = stateRef.current
+      if (currentState.contracts.length === 0) return
+      
+      const updatedContracts = currentState.contracts.map(contract => {
         // Simulate price movement based on implied volatility
         const priceChange = (Math.random() - 0.5) * contract.implied_volatility * 0.1
         const newLast = Math.max(0.01, contract.last * (1 + priceChange))
@@ -151,7 +160,7 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
     }, updateInterval)
     
     return () => clearInterval(interval)
-  }, [state.contracts])
+  }, []) // Empty dependency array - only set up once
 
   return (
     <OptionsContext.Provider value={{ state, dispatch }}>
