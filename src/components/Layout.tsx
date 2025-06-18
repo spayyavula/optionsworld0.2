@@ -13,13 +13,13 @@ import {
 } from 'lucide-react'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: BarChart3 },
-  { name: 'Options Portfolio', href: '/portfolio', icon: Briefcase },
-  { name: 'Options Trading', href: '/trading', icon: TrendingUp },
-  { name: 'Orders', href: '/orders', icon: FileText },
-  { name: 'Options Chain', href: '/watchlist', icon: Eye },
-  { name: 'Analytics', href: '/analytics', icon: PieChart },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Dashboard', href: '/app', icon: BarChart3 },
+  { name: 'Options Portfolio', href: '/app/portfolio', icon: Briefcase },
+  { name: 'Options Trading', href: '/app/trading', icon: TrendingUp },
+  { name: 'Orders', href: '/app/orders', icon: FileText },
+  { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
+  { name: 'Analytics', href: '/app/analytics', icon: PieChart },
+  { name: 'Settings', href: '/app/settings', icon: Settings },
 ]
 
 interface LayoutProps {
