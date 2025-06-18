@@ -8,6 +8,7 @@ import {
   Eye, 
   PieChart, 
   Settings,
+  Users,
   Menu,
   X
 } from 'lucide-react'
@@ -20,6 +21,7 @@ const navigation = [
   { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
   { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
   { name: 'Analytics', href: '/app/analytics', icon: PieChart },
+  { name: 'Community', href: '/app/community', icon: Users },
   { name: 'Settings', href: '/app/settings', icon: Settings },
 ]
 

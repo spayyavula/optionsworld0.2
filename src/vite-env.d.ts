@@ -26,6 +26,13 @@ interface ImportMetaEnv {
   readonly VITE_CONSTANT_CONTACT_LIST_ID: string
   readonly VITE_BUY_ME_COFFEE_USERNAME: string
   readonly VITE_BUY_ME_COFFEE_WIDGET_ID: string
+  readonly VITE_SLACK_WEBHOOK_URL: string
+  readonly VITE_DISCORD_WEBHOOK_URL: string
+  readonly VITE_TELEGRAM_BOT_TOKEN: string
+  readonly VITE_TELEGRAM_CHAT_ID: string
+  readonly VITE_TELEGRAM_CHANNEL: string
+  readonly VITE_WHATSAPP_GROUP_INVITE: string
+  readonly VITE_FACEBOOK_GROUP_ID: string
 }
 
 interface ImportMeta {

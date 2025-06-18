@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight, Users } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
+import { CommunityService } from '../services/communityService'
 import TradingViewWidget from '../components/TradingViewWidget'
 import TradingViewTicker from '../components/TradingViewTicker'
 import { format } from 'date-fns'
@@ -20,6 +21,8 @@ const tickerSymbols = [
 
 export default function Dashboard() {
   const { state } = useTradingContext()
+  const communityStats = CommunityService.getCommunityStats()
+  const recentMessages = CommunityService.getRecentMessages().slice(0, 3)
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -266,13 +269,62 @@ export default function Dashboard() {
               <Activity className="h-4 w-4" />
               Manage Watchlist
             </Link>
-            <Link to="/analytics" className="btn btn-secondary">
-              <TrendingUp className="h-4 w-4" />
-              View Analytics
+            <Link to="/community" className="btn btn-secondary">
+              <Users className="h-4 w-4" />
+              Join Community
             </Link>
           </div>
         </div>
       </div>
+      
+      {/* Community Preview */}
+      {CommunityService.hasConfiguredPlatforms() && (
+        <div className="card">
+          <div className="card-header flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900 flex items-center">
+              <Users className="h-5 w-5 mr-2" />
+              Community Activity
+            </h3>
+            <Link to="/community" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
+              View all
+              <ArrowUpRight className="ml-1 h-4 w-4" />
+            </Link>
+          </div>
+          <div className="card-body">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{communityStats.totalMembers.toLocaleString()}</div>
+                <div className="text-sm text-gray-500">Total Members</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{communityStats.activeToday}</div>
+                <div className="text-sm text-gray-500">Active Today</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600">{communityStats.tradesShared}</div>
+                <div className="text-sm text-gray-500">Trades Shared</div>
+              </div>
+            </div>
+            
+            {recentMessages.length > 0 && (
+              <div className="space-y-3">
+                <h4 className="font-medium text-gray-900">Recent Messages</h4>
+                {recentMessages.map((message) => (
+                  <div key={message.id} className="border-l-4 border-blue-500 pl-3 py-2">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className="font-medium text-gray-900 text-sm">{message.author}</span>
+                      <span className="text-xs text-gray-500">
+                        {format(message.timestamp, 'HH:mm')}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 text-sm">{message.content}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

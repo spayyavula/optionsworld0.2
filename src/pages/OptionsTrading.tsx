@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator } from 'lucide-react'
+import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2 } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
+import { CommunityService } from '../services/communityService'
 import TradingViewMiniChart from '../components/TradingViewMiniChart'
 import type { OptionsContract } from '../types/options'
 
@@ -90,6 +91,36 @@ export default function OptionsTrading() {
     setQuantity('')
     setLimitPrice('')
     alert(`${tradeType.replace('_', ' ').toUpperCase()} order placed for ${orderQuantity} contracts of ${selectedContract}`)
+    
+    // Offer to share trade with community
+    if (CommunityService.hasConfiguredPlatforms()) {
+      const shouldShare = confirm('Would you like to share this trade with the community?')
+      if (shouldShare) {
+        handleShareTrade(contract, orderQuantity, price, tradeType)
+      }
+    }
+  }
+  
+  const handleShareTrade = async (
+    contract: OptionsContract, 
+    quantity: number, 
+    price: number, 
+    type: string
+  ) => {
+    const alert = {
+      symbol: contract.underlying_ticker,
+      action: type.includes('buy') ? 'buy' as const : 'sell' as const,
+      price,
+      quantity,
+      strategy: `${contract.contract_type.toUpperCase()} ${contract.strike_price} ${contract.expiration_date}`,
+      reasoning: `Options trade: ${type.replace('_', ' ')} ${quantity} contracts of ${contract.ticker} at $${price.toFixed(2)}`
+    }
+    
+    try {
+      await CommunityService.shareTradingAlert(alert)
+    } catch (error) {
+      console.error('Failed to share trade:', error)
+    }
   }
 
   const estimatedCost = selectedContractData && quantity 
@@ -340,6 +371,13 @@ export default function OptionsTrading() {
                 >
                   Place {tradeType.replace('_', ' ').toUpperCase()} Order
                 </button>
+                
+                {CommunityService.hasConfiguredPlatforms() && (
+                  <div className="text-xs text-gray-500 text-center mt-2">
+                    <Share2 className="h-3 w-3 inline mr-1" />
+                    Share trades with community after placing orders
+                  </div>
+                )}
               </div>
             )}
           </div>

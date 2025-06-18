@@ -24,6 +24,7 @@ A comprehensive paper trading platform built with React, TypeScript, and Vite, f
 ### Data Integration
 - Polygon.io API integration for real market data
 - TradingView charts integration for advanced technical analysis
+- Community integration with Slack, Discord, Telegram, WhatsApp, and Facebook
 - Fallback to simulated data for development
 - Historical data storage and retrieval
 - Real-time price updates
@@ -70,6 +71,18 @@ npm run dev
 | `VITE_MAX_HISTORICAL_DAYS` | Historical data range | `14` |
 | `VITE_DEFAULT_PORTFOLIO_VALUE` | Starting portfolio value | `100000` |
 
+### Community Platform Variables
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_SLACK_WEBHOOK_URL` | Slack webhook for community alerts | `https://hooks.slack.com/services/...` |
+| `VITE_DISCORD_WEBHOOK_URL` | Discord webhook for community alerts | `https://discord.com/api/webhooks/...` |
+| `VITE_TELEGRAM_BOT_TOKEN` | Telegram bot token | `123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11` |
+| `VITE_TELEGRAM_CHAT_ID` | Telegram chat/channel ID | `-1001234567890` |
+| `VITE_TELEGRAM_CHANNEL` | Telegram channel username | `optionsworld` |
+| `VITE_WHATSAPP_GROUP_INVITE` | WhatsApp group invite code | `ABC123DEF456` |
+| `VITE_FACEBOOK_GROUP_ID` | Facebook group ID | `1234567890` |
+
 ## 🧪 Testing
 
 ### Unit Tests
@@ -108,6 +121,14 @@ npx playwright test tests/options-portfolio.spec.ts
 - **Multiple Timeframes**: From 1-minute to monthly charts
 - **Drawing Tools**: Trend lines, support/resistance levels, and annotations
 - **Custom Studies**: Create and save custom technical analysis studies
+
+### Community Features
+- **Multi-Platform Integration**: Connect with Slack, Discord, Telegram, WhatsApp, and Facebook
+- **Trade Sharing**: Share your successful trades and strategies with the community
+- **Real-time Alerts**: Get notified of important market moves and community discussions
+- **Educational Content**: Share and receive market analysis and trading insights
+- **Community Guidelines**: Built-in moderation and educational disclaimers
+- **Activity Feed**: See recent community messages and trading alerts
 
 ### Supported Options Contracts
 1. **SPY $580 Call** - Dec 20, 2024 (High liquidity)
