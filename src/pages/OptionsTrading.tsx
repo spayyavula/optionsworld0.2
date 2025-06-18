@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
+import TradingViewMiniChart from '../components/TradingViewMiniChart'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsTrading() {
@@ -398,6 +399,26 @@ export default function OptionsTrading() {
                   </span>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Underlying Chart */}
+        {selectedContract && selectedContractData && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="text-lg font-medium text-gray-900">
+                {selectedContractData.underlying_ticker} Chart
+              </h3>
+            </div>
+            <div className="card-body">
+              <TradingViewMiniChart
+                symbol={`NASDAQ:${selectedContractData.underlying_ticker}`}
+                width="100%"
+                height={300}
+                theme="light"
+                autosize={true}
+              />
             </div>
           </div>
         )}

@@ -1,19 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight } from 'lucide-react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { useTradingContext } from '../context/TradingContext'
+import TradingViewWidget from '../components/TradingViewWidget'
+import TradingViewTicker from '../components/TradingViewTicker'
 import { format } from 'date-fns'
 
-// Mock data for portfolio performance chart
-const portfolioData = [
-  { date: '2024-01-01', value: 100000 },
-  { date: '2024-01-02', value: 101200 },
-  { date: '2024-01-03', value: 99800 },
-  { date: '2024-01-04', value: 102500 },
-  { date: '2024-01-05', value: 104300 },
-  { date: '2024-01-06', value: 103900 },
-  { date: '2024-01-07', value: 105600 },
+// TradingView ticker symbols
+const tickerSymbols = [
+  { proName: 'NASDAQ:AAPL', title: 'Apple Inc.' },
+  { proName: 'NASDAQ:GOOGL', title: 'Alphabet Inc.' },
+  { proName: 'NASDAQ:MSFT', title: 'Microsoft Corporation' },
+  { proName: 'NASDAQ:TSLA', title: 'Tesla, Inc.' },
+  { proName: 'NASDAQ:AMZN', title: 'Amazon.com, Inc.' },
+  { proName: 'AMEX:SPY', title: 'SPDR S&P 500 ETF' },
+  { proName: 'NASDAQ:QQQ', title: 'Invesco QQQ Trust' },
+  { proName: 'NASDAQ:NVDA', title: 'NVIDIA Corporation' }
 ]
 
 export default function Dashboard() {
@@ -110,37 +112,38 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Market Ticker */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
+        </div>
+        <div className="card-body">
+          <TradingViewTicker 
+            symbols={tickerSymbols}
+            showSymbolLogo={true}
+            colorTheme="light"
+            displayMode="adaptive"
+          />
+        </div>
+      </div>
+
       {/* Portfolio Performance Chart */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Portfolio Performance</h3>
+          <h3 className="text-lg font-medium text-gray-900">SPY Chart - Market Overview</h3>
         </div>
         <div className="card-body">
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={portfolioData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="date" 
-                  tickFormatter={(value) => format(new Date(value), 'MMM dd')}
-                />
-                <YAxis 
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip 
-                  formatter={(value: number) => [formatCurrency(value), 'Portfolio Value']}
-                  labelFormatter={(value) => format(new Date(value), 'MMM dd, yyyy')}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="value" 
-                  stroke="#2563eb" 
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          <TradingViewWidget
+            symbol="AMEX:SPY"
+            width="100%"
+            height={400}
+            interval="D"
+            theme="light"
+            style="candles"
+            toolbar_bg="#f1f3f6"
+            enable_publishing={false}
+            allow_symbol_change={true}
+          />
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Search, TrendingUp, TrendingDown, Calculator, Eye } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
+import TradingViewWidget from '../components/TradingViewWidget'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsChain() {
@@ -292,6 +293,30 @@ export default function OptionsChain() {
           </div>
         </div>
       </div>
+
+      {/* Chart for Selected Underlying */}
+      {selectedUnderlying && selectedUnderlying !== 'ALL' && (
+        <div className="card">
+          <div className="card-header">
+            <h3 className="text-lg font-medium text-gray-900">
+              {selectedUnderlying} Chart Analysis
+            </h3>
+          </div>
+          <div className="card-body">
+            <TradingViewWidget
+              symbol={`NASDAQ:${selectedUnderlying}`}
+              width="100%"
+              height={500}
+              interval="D"
+              theme="light"
+              style="candles"
+              toolbar_bg="#f1f3f6"
+              enable_publishing={false}
+              allow_symbol_change={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
