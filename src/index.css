@@ -118,3 +118,37 @@ body {
 .text-muted {
   @apply text-gray-500;
 }
+
+/* TradingView Widget Styles */
+.tradingview-widget-container {
+  position: relative;
+  width: 100%;
+}
+
+.tradingview-widget-container__widget {
+  width: 100%;
+  height: 100%;
+}
+
+.tradingview-widget-copyright {
+  font-size: 13px !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif !important;
+  color: #9db2bd !important;
+}
+
+.tradingview-widget-copyright .blue-text {
+  color: #2962ff !important;
+  text-decoration: none !important;
+}
+
+.tradingview-widget-copyright .blue-text:hover {
+  color: #1e53e5 !important;
+}
+
+/* Hide TradingView copyright for cleaner look (optional) */
+.tradingview-widget-copyright {
+  display: none;
+}

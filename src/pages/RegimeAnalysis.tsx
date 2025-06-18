@@ -13,6 +13,7 @@ import {
   Zap
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
+import TradingViewWidget from '../components/TradingViewWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 
 export default function RegimeAnalysisPage() {
@@ -415,6 +416,26 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
       )}
+
+      {/* Market Chart Analysis */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
+        </div>
+        <div className="card-body">
+          <TradingViewWidget
+            symbol="AMEX:SPY"
+            width="100%"
+            height={600}
+            interval="D"
+            theme="light"
+            style="candles"
+            toolbar_bg="#f1f3f6"
+            enable_publishing={false}
+            allow_symbol_change={true}
+          />
+        </div>
+      </div>
 
       {/* Educational Content */}
       <div className="card">

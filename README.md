@@ -23,6 +23,7 @@ A comprehensive paper trading platform built with React, TypeScript, and Vite, f
 
 ### Data Integration
 - Polygon.io API integration for real market data
+- TradingView charts integration for advanced technical analysis
 - Fallback to simulated data for development
 - Historical data storage and retrieval
 - Real-time price updates
@@ -100,6 +101,14 @@ npx playwright test tests/options-portfolio.spec.ts
 
 ## 📊 Options Trading Features
 
+### TradingView Integration
+- **Advanced Charts**: Professional-grade charting with technical indicators
+- **Real-time Data**: Live market data and price updates
+- **Technical Analysis**: RSI, MACD, Bollinger Bands, and 100+ indicators
+- **Multiple Timeframes**: From 1-minute to monthly charts
+- **Drawing Tools**: Trend lines, support/resistance levels, and annotations
+- **Custom Studies**: Create and save custom technical analysis studies
+
 ### Supported Options Contracts
 1. **SPY $580 Call** - Dec 20, 2024 (High liquidity)
 2. **QQQ $500 Call** - Dec 20, 2024 (Tech sector exposure)
@@ -141,6 +150,7 @@ src/
 - **Vite** - Build tool and dev server
 - **React Router** - Client-side routing
 - **Recharts** - Data visualization
+- **TradingView** - Advanced charting and technical analysis
 - **Playwright** - E2E testing
 - **Polygon.io** - Market data API
 
