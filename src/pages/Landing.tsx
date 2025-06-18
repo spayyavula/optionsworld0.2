@@ -42,7 +42,7 @@ export default function Landing() {
     setLoading(true)
     
     try {
-      await ConstantContactService.addContact(email)
+      await ConstantContactService.subscribeEmail(email)
       setIsSubscribed(true)
     } catch (error) {
       console.error('Failed to subscribe:', error)
