@@ -71,8 +71,7 @@ export default function Landing() {
 
   const handleDonate = async (amount: number) => {
     try {
-      const { url } = await BuyMeCoffeeService.createDonation(amount)
-      window.location.href = url
+      await StripeService.redirectToCoffeeCheckout()
     } catch (error) {
       console.error('Failed to create donation:', error)
     }
