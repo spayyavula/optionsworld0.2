@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Save, RefreshCw, Download, Upload, AlertTriangle, Database, Activity } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
+import SubscriptionStatus from '../components/SubscriptionStatus'
 
 export default function Settings() {
   const { state } = useTradingContext()
@@ -142,6 +143,16 @@ export default function Settings() {
 
   return (
     <div className="space-y-6">
+      {/* Subscription Status */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Subscription</h3>
+        </div>
+        <div className="card-body">
+          <SubscriptionStatus />
+        </div>
+      </div>
+
       {/* Account Overview */}
       <div className="card">
         <div className="card-header">

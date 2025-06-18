@@ -18,6 +18,14 @@ interface ImportMetaEnv {
   readonly VITE_STRIPE_PUBLISHABLE_KEY: string
   readonly VITE_ENABLE_DATA_PERSISTENCE: string
   readonly VITE_HISTORICAL_DATA_RETENTION_DAYS: string
+  readonly VITE_STRIPE_MONTHLY_PRICE_ID: string
+  readonly VITE_STRIPE_YEARLY_PRICE_ID: string
+  readonly VITE_STRIPE_COFFEE_PRICE_ID: string
+  readonly VITE_CONSTANT_CONTACT_API_KEY: string
+  readonly VITE_CONSTANT_CONTACT_ACCESS_TOKEN: string
+  readonly VITE_CONSTANT_CONTACT_LIST_ID: string
+  readonly VITE_BUY_ME_COFFEE_USERNAME: string
+  readonly VITE_BUY_ME_COFFEE_WIDGET_ID: string
 }
 
 interface ImportMeta {

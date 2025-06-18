@@ -16,51 +16,134 @@ import {
   Mail,
   CreditCard
 } from 'lucide-react'
+import { ConstantContactService } from '../services/constantContactService'
+import { StripeService } from '../services/stripeService'
+import { BuyMeCoffeeService } from '../services/buyMeCoffeeService'
 
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [subscriptionMessage, setSubscriptionMessage] = useState('')
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubscriptionMessage('')
     
-    // Simulate Constant Contact integration
     try {
-      // In a real implementation, you would integrate with Constant Contact API
-      console.log('Subscribing email to Constant Contact:', email)
+      const result = await ConstantContactService.subscribeEmail(email)
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      alert('Thank you for subscribing! Check your email for a welcome message.')
-      setEmail('')
+      if (result.success) {
+        setSubscriptionMessage(result.message)
+        setEmail('')
+      } else {
+        setSubscriptionMessage(result.message)
+      }
     } catch (error) {
-      alert('Something went wrong. Please try again.')
+      console.error('Subscription error:', error)
+      setSubscriptionMessage('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleStripeSubscription = (plan: 'monthly' | 'yearly') => {
-    // In a real implementation, you would integrate with Stripe
-    console.log(`Redirecting to Stripe for ${plan} subscription`)
-    
-    // Simulate Stripe redirect
-    const prices = {
-      monthly: 'price_monthly_id',
-      yearly: 'price_yearly_id'
+  const handleStripeSubscription = async (plan: 'monthly' | 'yearly') => {
+    try {
+      await StripeService.redirectToCheckout(plan, email || undefined)
+    } catch (error) {
+      console.error('Stripe error:', error)
+      alert('Failed to redirect to checkout. Please try again.')
     }
-    
-    // This would be your actual Stripe checkout URL
-    const checkoutUrl = `https://checkout.stripe.com/pay/${prices[plan]}`
-    alert(`Redirecting to Stripe checkout for ${plan} plan...`)
   }
 
   const handleBuyMeCoffee = () => {
-    // In a real implementation, you would integrate with Buy Me a Coffee or Stripe one-time payment
-    console.log('Redirecting to Buy Me a Coffee')
-    alert('Redirecting to Buy Me a Coffee...')
+    try {
+      // Try Stripe first (more integrated), fallback to Buy Me a Coffee
+      if (import.meta.env.VITE_STRIPE_COFFEE_PRICE_ID) {
+        StripeService.redirectToCoffeeCheckout(email || undefined)
+      } else {
+        BuyMeCoffeeService.openBuyMeCoffeePage('Thanks for supporting our options trading platform!')
+      }
+    } catch (error) {
+      console.error('Coffee payment error:', error)
+      // Fallback to Buy Me a Coffee
+      BuyMeCoffeeService.openBuyMeCoffeePage('Thanks for supporting our options trading platform!')
+    }
+  }
+
+  // Check URL parameters for success/error messages
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const subscription = urlParams.get('subscription')
+    const coffee = urlParams.get('coffee')
+    const plan = urlParams.get('plan')
+
+    if (subscription === 'success') {
+      setSubscriptionMessage(`🎉 Welcome to ${plan === 'yearly' ? 'Pro Yearly' : 'Pro Monthly'}! Check your email for next steps.`)
+    } else if (subscription === 'cancelled') {
+      setSubscriptionMessage('Subscription cancelled. No worries, you can try again anytime!')
+    }
+
+    if (coffee === 'success') {
+      setSubscriptionMessage('☕ Thank you for the coffee! Your support means the world to us.')
+    } else if (coffee === 'cancelled') {
+      setSubscriptionMessage('Coffee payment cancelled. No worries!')
+    }
+
+    // Clean up URL
+    if (subscription || coffee) {
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+  }, [])
+
+  const handleFreeTrialStart = () => {
+    // Redirect to app with free trial
+    window.location.href = '/app?trial=started'
+  }
+
+  const handleGetFreeGuide = async () => {
+    if (!email) {
+      alert('Please enter your email address first to receive the free guide.')
+      return
+    }
+
+    try {
+      const result = await ConstantContactService.subscribeEmail(email)
+      if (result.success) {
+        alert('Free guide sent! Check your email for the "Complete Guide to Options Trading" PDF.')
+        setEmail('')
+      } else {
+        alert(result.message)
+      }
+    } catch (error) {
+      alert('Failed to send guide. Please try again.')
+    }
+  }
+
+  // Load Buy Me a Coffee widget on component mount
+  React.useEffect(() => {
+    if (BuyMeCoffeeService.isConfigured()) {
+      BuyMeCoffeeService.loadWidget('bmc-widget-container', {
+        message: 'Support our options trading platform!'
+      })
+    }
+  }, [])
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    try {
+      const result = await ConstantContactService.subscribeEmail(email)
+      
+      if (result.success) {
+        setSubscriptionMessage(result.message)
+      setEmail('')
+    } catch (error) {
+      setSubscriptionMessage('Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -98,6 +181,11 @@ export default function Landing() {
                   {isSubmitting ? 'Joining...' : 'Start Free'}
                 </button>
               </div>
+              {subscriptionMessage && (
+                <p className={`text-sm mt-2 ${subscriptionMessage.includes('🎉') || subscriptionMessage.includes('☕') || subscriptionMessage.includes('Success') ? 'text-green-200' : 'text-yellow-200'}`}>
+                  {subscriptionMessage}
+                </p>
+              )}
               <p className="text-sm text-blue-200 mt-2">
                 Join 10,000+ traders learning options risk-free
               </p>
@@ -412,6 +500,9 @@ export default function Landing() {
                 <Coffee className="h-5 w-5 mr-2" />
                 Buy Me a Coffee - $5
               </button>
+              
+              {/* Buy Me a Coffee Widget Container */}
+              <div id="bmc-widget-container" className="mt-4"></div>
             </div>
           </div>
         </div>
@@ -484,11 +575,17 @@ export default function Landing() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center">
+            <button 
+              onClick={handleFreeTrialStart}
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center"
+            >
               <Play className="h-5 w-5 mr-2" />
               Start Free Trial
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors flex items-center justify-center">
+            <button 
+              onClick={handleGetFreeGuide}
+              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors flex items-center justify-center"
+            >
               <Mail className="h-5 w-5 mr-2" />
               Get Free Guide
             </button>
