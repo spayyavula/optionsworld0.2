@@ -565,6 +565,7 @@ export class RegimeAnalysisService {
       .filter(r => r.id !== currentRegime.id)
       .sort((a, b) => b.probability - a.probability)
       .slice(0, 2)
+      .map(regime => ({ regime, probability: regime.probability }))
 
     const recommendedStrategies = this.getRecommendedStrategies(currentRegime.id)
     const warnings = this.generateWarnings(currentRegime, marketData)
