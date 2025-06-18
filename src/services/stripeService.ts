@@ -89,16 +89,8 @@ export class StripeService {
         successUrl: options.successUrl,
         cancelUrl: options.cancelUrl,
         customerEmail: options.customerEmail,
-        metadata: options.metadata,
         allowPromotionCodes: true,
         billingAddressCollection: 'auto'
-      }
-
-      // Add coupon if provided
-      if (couponCode) {
-        checkoutOptions.discounts = [{
-          coupon: couponCode
-        }]
       }
 
       const { error } = await stripe.redirectToCheckout(checkoutOptions)
@@ -160,10 +152,7 @@ export class StripeService {
         successUrl: `${window.location.origin}/?coffee=success`,
         cancelUrl: `${window.location.origin}/?coffee=cancelled`,
         customerEmail,
-        metadata: {
-          type: 'coffee',
-          source: 'landing_page'
-        }
+        billingAddressCollection: 'auto'
       })
 
       if (error) {
