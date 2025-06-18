@@ -19,11 +19,23 @@ import {
 import { ConstantContactService } from '../services/constantContactService'
 import { StripeService } from '../services/stripeService'
 import { BuyMeCoffeeService } from '../services/buyMeCoffeeService'
+import { CouponService } from '../services/couponService'
+import DealsSection from '../components/DealsSection'
+import CouponInput from '../components/CouponInput'
 
 export default function Landing() {
   const [email, setEmail] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [selectedDeal, setSelectedDeal] = useState<any>(null)
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
+  const [showDeals, setShowDeals] = useState(false)
+
+  // Initialize coupon system
+  React.useEffect(() => {
+    CouponService.initializeDefaultData()
+    setShowDeals(CouponService.hasActiveDeals())
+  }, [])
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,9 +51,17 @@ export default function Landing() {
     }
   }
 
-  const handleSubscribe = async (priceId: string) => {
+  const handleSubscribe = async (plan: 'monthly' | 'yearly') => {
     try {
-      const { url } = await StripeService.createCheckoutSession(priceId)
+      // Apply coupon if selected deal or manual coupon
+      let couponCode = ''
+      if (selectedDeal) {
+        couponCode = selectedDeal.couponCode
+      } else if (appliedCoupon) {
+        couponCode = appliedCoupon.coupon.code
+      }
+
+      const { url } = await StripeService.createCheckoutSession(plan, couponCode)
       window.location.href = url
     } catch (error) {
       console.error('Failed to create checkout session:', error)
@@ -57,6 +77,47 @@ export default function Landing() {
     }
   }
 
+  const handleSelectDeal = (deal: any) => {
+    setSelectedDeal(deal)
+    setAppliedCoupon(null) // Clear manual coupon if deal is selected
+  }
+
+  const handleCouponApplied = (validation: any) => {
+    setAppliedCoupon(validation)
+    setSelectedDeal(null) // Clear deal if manual coupon is applied
+  }
+
+  const handleCouponRemoved = () => {
+    setAppliedCoupon(null)
+  }
+
+  const getDiscountedPrice = (originalPrice: number, plan: 'monthly' | 'yearly') => {
+    if (selectedDeal && selectedDeal.plan === plan) {
+      return selectedDeal.discountedPrice
+    }
+    if (appliedCoupon) {
+      return appliedCoupon.finalAmount
+    }
+    return originalPrice
+  }
+
+  const getDiscountInfo = (plan: 'monthly' | 'yearly') => {
+    if (selectedDeal && selectedDeal.plan === plan) {
+      return {
+        hasDiscount: true,
+        discountText: `${selectedDeal.discountPercentage}% OFF`,
+        savings: selectedDeal.originalPrice - selectedDeal.discountedPrice
+      }
+    }
+    if (appliedCoupon) {
+      return {
+        hasDiscount: true,
+        discountText: CouponService.formatDiscount(appliedCoupon.coupon),
+        savings: appliedCoupon.discountAmount
+      }
+    }
+    return { hasDiscount: false }
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
       {/* Hero Section */}
@@ -146,6 +207,29 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      {/* Special Deals Section */}
+      {showDeals && (
+        <section className="py-20 bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="flex items-center justify-center mb-4">
+                <Tag className="h-8 w-8 text-red-500 mr-3" />
+                <h2 className="text-4xl font-bold text-white">
+                  Limited Time Deals
+                </h2>
+              </div>
+              <p className="text-xl text-gray-400">
+                Don't miss out on these exclusive offers
+              </p>
+            </div>
+
+            <DealsSection 
+              onSelectDeal={handleSelectDeal}
+              className="max-w-4xl mx-auto"
+            />
+          </div>
+        </section>
+      )}
 
       {/* Pricing Section */}
       <section className="py-20 bg-gray-800">
@@ -159,6 +243,16 @@ export default function Landing() {
             </p>
           </div>
 
+          {/* Coupon Input */}
+          <div className="max-w-md mx-auto mb-8">
+            <CouponInput
+              plan="monthly"
+              originalAmount={29}
+              onCouponApplied={handleCouponApplied}
+              onCouponRemoved={handleCouponRemoved}
+              appliedCoupon={appliedCoupon}
+            />
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {/* Basic Plan */}
             <div className="bg-gray-900 p-8 rounded-xl border border-gray-700">
@@ -191,11 +285,16 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('price_basic')}
+                onClick={() => handleSubscribe('monthly')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Get Started
               </button>
+              {getDiscountInfo('monthly').hasDiscount && (
+                <p className="text-center text-green-400 text-sm mt-2">
+                  Save ${getDiscountInfo('monthly').savings} with this deal!
+                </p>
+              )}
             </div>
 
             {/* Pro Plan */}
@@ -208,10 +307,22 @@ export default function Landing() {
 
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                {getDiscountInfo('yearly').hasDiscount && (
+                  <div className="mb-2">
+                    <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-bold">
+                      {getDiscountInfo('yearly').discountText}
+                    </span>
+                  </div>
+                )}
                 <div className="text-4xl font-bold text-white mb-2">
                   <span className="text-2xl">$</span>79
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
+                {getDiscountInfo('monthly').hasDiscount && (
+                  <div className="text-sm text-gray-400 line-through mb-2">
+                    Was $79/month
+                  </div>
+                )}
                 <p className="text-gray-400">For serious traders</p>
               </div>
 
@@ -239,21 +350,38 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('price_pro')}
+                onClick={() => handleSubscribe('monthly')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Upgrade to Pro
               </button>
+              {getDiscountInfo('monthly').hasDiscount && (
+                <p className="text-center text-green-400 text-sm mt-2">
+                  Save ${getDiscountInfo('monthly').savings} with this deal!
+                </p>
+              )}
             </div>
 
             {/* Enterprise Plan */}
             <div className="bg-gray-900 p-8 rounded-xl border border-gray-700">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
+                {getDiscountInfo('yearly').hasDiscount && (
+                  <div className="mb-2">
+                    <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-bold">
+                      {getDiscountInfo('yearly').discountText}
+                    </span>
+                  </div>
+                )}
                 <div className="text-4xl font-bold text-white mb-2">
                   <span className="text-2xl">$</span>199
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
+                {getDiscountInfo('yearly').hasDiscount && (
+                  <div className="text-sm text-gray-400 line-through mb-2">
+                    Was $199/month
+                  </div>
+                )}
                 <p className="text-gray-400">For institutions</p>
               </div>
 
@@ -277,11 +405,16 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('price_enterprise')}
+                onClick={() => handleSubscribe('yearly')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Contact Sales
               </button>
+              {getDiscountInfo('yearly').hasDiscount && (
+                <p className="text-center text-green-400 text-sm mt-2">
+                  Save ${getDiscountInfo('yearly').savings} with this deal!
+                </p>
+              )}
             </div>
           </div>
         </div>
