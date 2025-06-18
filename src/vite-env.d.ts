@@ -1,0 +1,25 @@
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_POLYGON_API_KEY: string
+  readonly VITE_APP_NAME: string
+  readonly VITE_APP_VERSION: string
+  readonly VITE_DEV_MODE: string
+  readonly VITE_ENABLE_MOCK_DATA: string
+  readonly VITE_POLYGON_BASE_URL: string
+  readonly VITE_OPTIONS_UPDATE_INTERVAL: string
+  readonly VITE_MAX_HISTORICAL_DAYS: string
+  readonly VITE_DEFAULT_PORTFOLIO_VALUE: string
+  readonly VITE_ENABLE_OPTIONS_TRADING: string
+  readonly VITE_ENABLE_REAL_TIME_DATA: string
+  readonly VITE_ENABLE_ADVANCED_CHARTS: string
+  readonly VITE_SUPABASE_URL: string
+  readonly VITE_SUPABASE_ANON_KEY: string
+  readonly VITE_STRIPE_PUBLISHABLE_KEY: string
+  readonly VITE_ENABLE_DATA_PERSISTENCE: string
+  readonly VITE_HISTORICAL_DATA_RETENTION_DAYS: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
