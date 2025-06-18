@@ -9,22 +9,25 @@ import OptionsChain from './pages/OptionsChain'
 import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
 import { OptionsProvider } from './context/OptionsContext'
+import { TradingProvider } from './context/TradingContext'
 
 function App() {
   return (
-    <OptionsProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/portfolio" element={<OptionsPortfolio />} />
-          <Route path="/trading" element={<OptionsTrading />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/watchlist" element={<OptionsChain />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Layout>
-    </OptionsProvider>
+    <TradingProvider>
+      <OptionsProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/portfolio" element={<OptionsPortfolio />} />
+            <Route path="/trading" element={<OptionsTrading />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/watchlist" element={<OptionsChain />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Layout>
+      </OptionsProvider>
+    </TradingProvider>
   )
 }
 
