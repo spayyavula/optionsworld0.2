@@ -138,7 +138,8 @@ export default function Landing() {
       
       if (result.success) {
         setSubscriptionMessage(result.message)
-      setEmail('')
+        setEmail('')
+      }
     } catch (error) {
       setSubscriptionMessage('Something went wrong. Please try again.')
     } finally {
@@ -640,10 +641,4 @@ export default function Landing() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Options Trader. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  )
-}
+            <p>&copy; 2024 Options Trader. All rights reserved.</p
