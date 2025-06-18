@@ -99,7 +99,7 @@ body {
 
 /* Responsive grid utilities */
 .grid {
-  @apply grid gap-6;
+  @apply gap-6;
 }
 
 .grid-cols-1 {
