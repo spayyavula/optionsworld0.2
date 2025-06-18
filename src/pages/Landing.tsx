@@ -14,7 +14,8 @@ import {
   Award,
   Coffee,
   Mail,
-  CreditCard
+  CreditCard,
+  Tag
 } from 'lucide-react'
 import { ConstantContactService } from '../services/constantContactService'
 import { StripeService } from '../services/stripeService'
