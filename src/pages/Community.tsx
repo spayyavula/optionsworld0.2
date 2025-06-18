@@ -72,7 +72,7 @@ export default function Community() {
     const position = state.positions.find(p => p.symbol === symbol)
     if (!position) return
 
-    const alert = {
+    const tradeAlertData = {
       symbol: position.symbol,
       action: 'buy' as const,
       price: position.currentPrice,
@@ -82,7 +82,7 @@ export default function Community() {
     }
 
     try {
-      await CommunityService.shareTradingAlert(alert, selectedPlatforms)
+      await CommunityService.shareTradingAlert(tradeAlertData, selectedPlatforms)
       alert('Trade shared to community!')
     } catch (error) {
       alert('Failed to share trade. Please try again.')
