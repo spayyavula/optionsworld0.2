@@ -136,13 +136,29 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <div style={{ height: "400px" }}>
-            <iframe 
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_d8e37&symbol=SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=[]&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1&studies_overrides=%7B%7D"
-              style={{ width: "100%", height: "100%", border: "none" }}
-              allowTransparency={true}
-              frameBorder={0}
-            ></iframe>
+          <div style={{ height: "400px", width: "100%" }}>
+            <div id="tradingview_dashboard" style={{ height: "100%", width: "100%" }}></div>
+            <script
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  new TradingView.widget({
+                    "autosize": true,
+                    "symbol": "AMEX:SPY",
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "allow_symbol_change": true,
+                    "container_id": "tradingview_dashboard"
+                  });
+                `
+              }}
+            />
+            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
           </div>
         </div>
       </div>

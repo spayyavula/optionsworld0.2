@@ -421,25 +421,69 @@ export default function RegimeAnalysisPage() {
       <div className="card">
         <div className="card-header">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-900">SPY Market Analysis</h3>
+            <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
             <div className="flex space-x-2">
-              <span className="text-sm text-gray-500">
-                S&P 500 ETF with Technical Indicators
-              </span>
+              <select
+                className="form-select text-sm"
+                defaultValue="SPY"
+                id="symbolSelector"
+              >
+                <option value="SPY">SPY (S&P 500)</option>
+                <option value="QQQ">QQQ (Nasdaq)</option>
+                <option value="IWM">IWM (Russell 2000)</option>
+                <option value="DIA">DIA (Dow Jones)</option>
+                <option value="VIX">VIX (Volatility Index)</option>
+              </select>
+              <select
+                className="form-select text-sm"
+                defaultValue="D"
+                id="intervalSelector"
+              >
+                <option value="5">5 min</option>
+                <option value="15">15 min</option>
+                <option value="60">1 hour</option>
+                <option value="240">4 hours</option>
+                <option value="D">1 day</option>
+                <option value="W">1 week</option>
+                <option value="M">1 month</option>
+              </select>
             </div>
           </div>
         </div>
         <div className="card-body">
-          <div style={{ height: "650px" }}>
-            <iframe 
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_b3a56&symbol=SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%22%2C%22MACD%22%2C%22StochasticRSI%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1&studies_overrides=%7B%7D"
+          <div id="tradingview_chart_container" style={{ height: "650px" }}>
+            <iframe
+              id="tradingview_chart"
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1"
               style={{ width: "100%", height: "100%", border: "none" }}
               allowTransparency={true}
               frameBorder={0}
-            ></iframe>
+            />
           </div>
           
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+
+          <script dangerouslySetInnerHTML={{ __html: `
+            document.addEventListener('DOMContentLoaded', function() {
+              const symbolSelector = document.getElementById('symbolSelector');
+              const intervalSelector = document.getElementById('intervalSelector');
+              const iframe = document.getElementById('tradingview_chart');
+              
+              if (symbolSelector && intervalSelector && iframe) {
+                symbolSelector.addEventListener('change', updateChart);
+                intervalSelector.addEventListener('change', updateChart);
+                
+                function updateChart() {
+                  const symbol = symbolSelector.value;
+                  const interval = intervalSelector.value;
+                  const baseUrl = "https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart";
+                  const params = "&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1";
+                  
+                  iframe.src = baseUrl + "&symbol=" + symbol + "&interval=" + interval + params;
+                }
+              }
+            });
+          `}} />
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
               <TrendingUp className="h-4 w-4 mr-2" />
               Chart Analysis for {analysis.currentRegime.name} Regime
