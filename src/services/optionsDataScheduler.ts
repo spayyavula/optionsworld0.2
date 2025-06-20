@@ -7,7 +7,7 @@ import { PolygonOptionsDataService } from './polygonOptionsDataService'
 export class OptionsDataScheduler {
   private static instance: OptionsDataScheduler | null = null
   private schedulerActive = false
-  private currentTimeout: NodeJS.Timeout | null = null
+  private currentTimeout: number | null = null
 
   private constructor() {}
 
