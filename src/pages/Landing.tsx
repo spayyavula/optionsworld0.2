@@ -105,7 +105,7 @@ export default function Landing() {
     if (selectedDeal && selectedDeal.plan === plan) {
       return selectedDeal.discountedPrice
     }
-    if (appliedCoupon && appliedCoupon.isValid && appliedCoupon.finalAmount !== undefined) {
+    if (appliedCoupon && appliedCoupon.isValid && typeof appliedCoupon.finalAmount === 'number') {
       return appliedCoupon.finalAmount
     }
     return originalPrice
@@ -119,7 +119,7 @@ export default function Landing() {
         savings: selectedDeal.originalPrice - selectedDeal.discountedPrice
       }
     }
-    if (appliedCoupon && appliedCoupon.isValid && appliedCoupon.discountAmount > 0) {
+    if (appliedCoupon && appliedCoupon.isValid && typeof appliedCoupon.discountAmount === 'number' && appliedCoupon.discountAmount > 0) {
       return {
         hasDiscount: true,
         discountText: CouponService.formatDiscount(appliedCoupon.coupon),

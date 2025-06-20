@@ -17,7 +17,7 @@ export default function CouponInput({
   onCouponApplied,
   onCouponRemoved,
   appliedCoupon,
-  className = ''
+  className = '',
 }: CouponInputProps) {
   const [couponCode, setCouponCode] = useState('')
   const [isValidating, setIsValidating] = useState(false)
@@ -32,14 +32,19 @@ export default function CouponInput({
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500))
-
+      
+      if (!couponCode.trim()) {
+        setError('Please enter a coupon code')
+        return
+      }
+      
       const validation = CouponService.validateCoupon(
         couponCode.trim(),
         plan,
         originalAmount,
         true // Assume first time for demo
       )
-
+      
       if (validation.isValid) {
         onCouponApplied(validation)
         setCouponCode('')
@@ -62,6 +67,7 @@ export default function CouponInput({
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleApplyCoupon()
+      e.preventDefault()
     }
   }
 

@@ -167,8 +167,6 @@ export class CouponService {
     if (coupon.type === 'percentage') {
       discountAmount = (amount || 0) * (coupon.value / 100)
       if (coupon.maxDiscount) {
-        discountAmount = Math.min(discountAmount, coupon.maxDiscount)
-      }
     } else {
       discountAmount = coupon.value
     }
