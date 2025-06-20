@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Search, TrendingUp, TrendingDown, Calculator, Eye } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
-import YahooFinanceWidget from '../components/YahooFinanceWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsChain() {
@@ -303,13 +303,13 @@ export default function OptionsChain() {
             </h3>
           </div>
           <div className="card-body">
-            <YahooFinanceWidget
+            <TradingViewWidget
               symbol={selectedUnderlying || 'SPY'}
               width="100%"
               height={500}
               interval="1d"
-              range="6mo"
-              darkMode={false}
+              range="6M"
+              theme="light"
             />
           </div>
         </div>

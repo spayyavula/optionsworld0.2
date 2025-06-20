@@ -13,7 +13,7 @@ import {
   Zap
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
-import YahooFinanceWidget from '../components/YahooFinanceWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 
 export default function RegimeAnalysisPage() {
@@ -441,10 +441,7 @@ export default function RegimeAnalysisPage() {
                 className="form-select text-sm"
                 defaultValue="D"
                 id="tvIntervalSelector"
-                onChange={(e) => setChartInterval(e.target.value === 'D' ? '1d' : 
-                                                e.target.value === 'W' ? '1wk' : 
-                                                e.target.value === 'M' ? '1mo' : 
-                                                e.target.value)}
+                onChange={(e) => setChartInterval(e.target.value)}
               >
                 <option value="5">5 min</option>
                 <option value="15">15 min</option>
@@ -458,16 +455,13 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-            <YahooFinanceWidget
+            <TradingViewWidget
               symbol={chartSymbol || 'SPY'}
               width="100%"
               height={650}
-              interval={chartInterval as '1d'}
-              range="1y"
-              showControls={true}
-              showTabs={true}
-              darkMode={false}
-              container_id="regime_analysis_chart"
+              interval={chartInterval}
+              range="12M"
+              theme="light"
             />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">

@@ -3,7 +3,7 @@ import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2 } fro
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
-import YahooFinanceMiniChart from '../components/YahooFinanceMiniChart'
+import TradingViewMiniChart from '../components/TradingViewMiniChart'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsTrading() {
@@ -450,13 +450,12 @@ export default function OptionsTrading() {
               </h3>
             </div>
             <div className="card-body">
-              <YahooFinanceMiniChart
+              <TradingViewMiniChart
                 symbol={selectedContractData.underlying_ticker}
                 width="100%"
                 height={300}
-                interval="3mo"
-                lineColor="#2563eb"
-                darkMode={false}
+                interval="3M"
+                theme="light"
               />
             </div>
           </div>
