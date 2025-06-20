@@ -118,16 +118,27 @@ export class StripeService {
     plan: 'monthly' | 'yearly',
     couponCode?: string
   ): Promise<{ url: string }> {
-    // In a real implementation, this would call your backend
-    // For demo purposes, we'll simulate the response
-    const baseUrl = `${window.location.origin}/checkout`
-    const params = new URLSearchParams({ plan })
-    
-    if (couponCode) {
-      params.append('coupon', couponCode)
+    try {
+      // For demo purposes, redirect to mock checkout with deal pricing
+      if (couponCode) {
+        // Import coupon service to get deal pricing
+        const { CouponService } = await import('./couponService')
+        const validation = CouponService.validateCoupon(couponCode, plan, plan === 'monthly' ? 29 : 290, true)
+        
+        if (validation.isValid) {
+          // Redirect to mock Stripe checkout with discounted price
+          this.mockStripeCheckout(plan, couponCode)
+          return { url: '#' } // Return placeholder since redirect happens immediately
+        }
+      }
+      
+      // Regular checkout without coupon
+      this.mockStripeCheckout(plan)
+      return { url: '#' }
+    } catch (error) {
+      console.error('Checkout session error:', error)
+      throw new Error('Failed to create checkout session')
     }
-    
-    return { url: `${baseUrl}?${params.toString()}` }
   }
   /**
    * Redirect to Stripe Checkout for one-time payment (Buy Me a Coffee)
@@ -251,41 +262,59 @@ export class StripeService {
     
     let displayPrice = product?.price || 0
     let discountInfo = ''
+    let finalPrice = displayPrice
     
     if (couponCode) {
       // Import coupon service for validation
       import('../services/couponService').then(({ CouponService }) => {
         const validation = CouponService.validateCoupon(couponCode, plan, displayPrice, true)
         if (validation.isValid) {
-          displayPrice = validation.finalAmount
+          finalPrice = validation.finalAmount
           discountInfo = `\nCoupon Applied: ${couponCode}\nDiscount: $${validation.discountAmount.toFixed(2)}`
+          
+          // Show confirmation with discounted price
+          if (confirm(`Mock Stripe Checkout\n\nPlan: ${product?.name}\nOriginal Price: $${displayPrice}/${product?.interval}${discountInfo}\nFinal Price: $${finalPrice}/${product?.interval}\n\nProceed with mock subscription?`)) {
+            this.completeMockCheckout(plan, couponCode, finalPrice)
+          }
+        } else {
+          alert('Invalid coupon code: ' + validation.error)
+        }
+      })
+    } else {
+      if (confirm(`Mock Stripe Checkout\n\nPlan: ${product?.name}\nPrice: $${displayPrice}/${product?.interval}\n\nProceed with mock subscription?`)) {
+        this.completeMockCheckout(plan, couponCode, finalPrice)
+      }
         }
       })
     }
-    
-    if (confirm(`Mock Stripe Checkout\n\nPlan: ${product?.name}\nPrice: $${displayPrice}/${product?.interval}${discountInfo}\n\nProceed with mock subscription?`)) {
-      // Store mock subscription in localStorage
-      const mockSubscription = {
-        id: `sub_mock_${Date.now()}`,
-        plan,
-        status: 'active',
-        created: new Date().toISOString(),
-        current_period_end: new Date(Date.now() + (plan === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000).toISOString(),
-        coupon_applied: couponCode || null
-      }
-      
-      localStorage.setItem('mock_subscription', JSON.stringify(mockSubscription))
-      
-      // Apply coupon usage if provided
-      if (couponCode) {
-        import('../services/couponService').then(({ CouponService }) => {
-          CouponService.applyCoupon(couponCode)
-        })
-      }
-      
-      // Redirect to success page
-      window.location.href = `/app?subscription=success&plan=${plan}`
+  }
+
+  /**
+   * Complete mock checkout process
+   */
+  private static completeMockCheckout(plan: 'monthly' | 'yearly', couponCode?: string, finalPrice?: number): void {
+    // Store mock subscription in localStorage
+    const mockSubscription = {
+      id: `sub_mock_${Date.now()}`,
+      plan,
+      status: 'active',
+      created: new Date().toISOString(),
+      current_period_end: new Date(Date.now() + (plan === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000).toISOString(),
+      coupon_applied: couponCode || null,
+      amount_paid: finalPrice || (plan === 'monthly' ? 29 : 290)
     }
+    
+    localStorage.setItem('mock_subscription', JSON.stringify(mockSubscription))
+    
+    // Apply coupon usage if provided
+    if (couponCode) {
+      import('../services/couponService').then(({ CouponService }) => {
+        CouponService.applyCoupon(couponCode)
+      })
+    }
+    
+    // Redirect to success page
+    window.location.href = `/app?subscription=success&plan=${plan}`
   }
 
   /**

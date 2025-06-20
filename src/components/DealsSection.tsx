@@ -4,11 +4,12 @@ import { CouponService } from '../services/couponService'
 
 interface DealsSectionProps {
   onSelectDeal?: (deal: any) => void
+  onClaimDeal?: (deal: any) => void
   selectedPlan?: 'monthly' | 'yearly'
   className?: string
 }
 
-export default function DealsSection({ onSelectDeal, selectedPlan, className = '' }: DealsSectionProps) {
+export default function DealsSection({ onSelectDeal, onClaimDeal, selectedPlan, className = '' }: DealsSectionProps) {
   const deals = CouponService.getActiveDeals()
   const featuredDeal = CouponService.getFeaturedDeal()
 
@@ -64,7 +65,7 @@ export default function DealsSection({ onSelectDeal, selectedPlan, className = '
                   <span className="text-sm">{formatTimeRemaining(featuredDeal.validUntil)}</span>
                 </div>
                 <button
-                  onClick={() => onSelectDeal?.(featuredDeal)}
+                  onClick={() => onClaimDeal?.(featuredDeal)}
                   className="mt-2 bg-white text-red-600 px-6 py-2 rounded-lg font-semibold hover:bg-red-50 transition-colors"
                 >
                   Claim Deal
@@ -87,7 +88,7 @@ export default function DealsSection({ onSelectDeal, selectedPlan, className = '
                 ? 'border-blue-500 bg-blue-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => onSelectDeal?.(deal)}
+            onClick={() => onClaimDeal?.(deal)}
           >
             <div className="flex items-start justify-between mb-3">
               <div>

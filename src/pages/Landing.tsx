@@ -83,6 +83,15 @@ export default function Landing() {
     setAppliedCoupon(null) // Clear manual coupon if deal is selected
   }
 
+  const handleClaimDeal = async (deal: any) => {
+    try {
+      await handleSubscribe(deal.plan)
+    } catch (error) {
+      console.error('Failed to claim deal:', error)
+      alert('Failed to process deal. Please try again.')
+    }
+  }
+
   const handleCouponApplied = (validation: any) => {
     setAppliedCoupon(validation)
     setSelectedDeal(null) // Clear deal if manual coupon is applied
@@ -229,6 +238,7 @@ export default function Landing() {
 
             <DealsSection 
               onSelectDeal={handleSelectDeal}
+              onClaimDeal={handleClaimDeal}
               className="max-w-4xl mx-auto"
             />
           </div>
