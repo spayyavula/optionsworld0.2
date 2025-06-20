@@ -303,32 +303,18 @@ export default function OptionsChain() {
             </h3>
           </div>
           <div className="card-body">
-            <div style={{ height: "500px", width: "100%" }}>
-              <div id="tradingview_options_chain" style={{ height: "100%", width: "100%" }}></div>
-              <script
-                type="text/javascript"
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    document.addEventListener('DOMContentLoaded', function() {
-                      new TradingView.widget({
-                        "autosize": true,
-                        "symbol": "NASDAQ:${selectedUnderlying || 'SPY'}",
-                        "interval": "D",
-                        "timezone": "Etc/UTC",
-                        "theme": "light",
-                        "style": "1",
-                        "locale": "en",
-                        "toolbar_bg": "#f1f3f6",
-                        "enable_publishing": false,
-                        "allow_symbol_change": false,
-                        "container_id": "tradingview_options_chain"
-                      });
-                    });
-                  `
-                }}
-              />
-              <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-            </div>
+            <TradingViewWidget
+              symbol={`NASDAQ:${selectedUnderlying || 'SPY'}`}
+              width="100%"
+              height={500}
+              interval="D"
+              theme="light"
+              style="candles"
+              toolbar_bg="#f1f3f6"
+              enable_publishing={false}
+              allow_symbol_change={false}
+              container_id="tradingview_options_chain"
+            />
           </div>
         </div>
       )}

@@ -425,19 +425,33 @@ export default function RegimeAnalysisPage() {
             <div className="flex space-x-2">
               <select
                 className="form-select text-sm"
-                defaultValue="SPY"
-                id="symbolSelector"
+                defaultValue="AMEX:SPY"
+                id="tvSymbolSelector"
+                onChange={(e) => {
+                  const iframe = document.getElementById('tradingview_chart') as HTMLIFrameElement;
+                  if (iframe && iframe.contentWindow) {
+                    const symbol = e.target.value;
+                    iframe.src = iframe.src.replace(/symbol=[^&]+/, `symbol=${symbol}`);
+                  }
+                }}
               >
-                <option value="SPY">SPY (S&P 500)</option>
-                <option value="QQQ">QQQ (Nasdaq)</option>
-                <option value="IWM">IWM (Russell 2000)</option>
-                <option value="DIA">DIA (Dow Jones)</option>
-                <option value="VIX">VIX (Volatility Index)</option>
+                <option value="AMEX:SPY">SPY (S&P 500)</option>
+                <option value="NASDAQ:QQQ">QQQ (Nasdaq)</option>
+                <option value="AMEX:IWM">IWM (Russell 2000)</option>
+                <option value="AMEX:DIA">DIA (Dow Jones)</option>
+                <option value="CBOE:VIX">VIX (Volatility Index)</option>
               </select>
               <select
                 className="form-select text-sm"
                 defaultValue="D"
-                id="intervalSelector"
+                id="tvIntervalSelector"
+                onChange={(e) => {
+                  const iframe = document.getElementById('tradingview_chart') as HTMLIFrameElement;
+                  if (iframe && iframe.contentWindow) {
+                    const interval = e.target.value;
+                    iframe.src = iframe.src.replace(/interval=[^&]+/, `interval=${interval}`);
+                  }
+                }}
               >
                 <option value="5">5 min</option>
                 <option value="15">15 min</option>
@@ -453,8 +467,8 @@ export default function RegimeAnalysisPage() {
         <div className="card-body">
           <div id="tradingview_chart_container" style={{ height: "650px" }}>
             <iframe
-              id="tradingview_chart"
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1"
+              id="tradingview_chart" 
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=AMEX:SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1"
               style={{ width: "100%", height: "100%", border: "none" }}
               allowTransparency={true}
               frameBorder={0}
@@ -462,28 +476,6 @@ export default function RegimeAnalysisPage() {
           </div>
           
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-
-          <script dangerouslySetInnerHTML={{ __html: `
-            document.addEventListener('DOMContentLoaded', function() {
-              const symbolSelector = document.getElementById('symbolSelector');
-              const intervalSelector = document.getElementById('intervalSelector');
-              const iframe = document.getElementById('tradingview_chart');
-              
-              if (symbolSelector && intervalSelector && iframe) {
-                symbolSelector.addEventListener('change', updateChart);
-                intervalSelector.addEventListener('change', updateChart);
-                
-                function updateChart() {
-                  const symbol = symbolSelector.value;
-                  const interval = intervalSelector.value;
-                  const baseUrl = "https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart";
-                  const params = "&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1";
-                  
-                  iframe.src = baseUrl + "&symbol=" + symbol + "&interval=" + interval + params;
-                }
-              }
-            });
-          `}} />
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
               <TrendingUp className="h-4 w-4 mr-2" />
               Chart Analysis for {analysis.currentRegime.name} Regime
