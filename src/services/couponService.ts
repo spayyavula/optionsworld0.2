@@ -173,6 +173,7 @@ export class CouponService {
       }
     } else {
       // Fixed amount discount
+    }
 
     // Ensure discount doesn't exceed amount
     discountAmount = Math.min(discountAmount, amount)
