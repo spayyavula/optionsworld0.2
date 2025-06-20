@@ -165,22 +165,18 @@ export class CouponService {
     // Calculate discount
     let discountAmount = 0
     if (coupon.type === 'percentage') {
-      // Calculate percentage discount
-      // Calculate percentage discount
       discountAmount = amount * (coupon.value / 100)
-      // Apply maximum discount cap if specified
-      // Apply maximum discount cap if specified
       if (coupon.maxDiscount) {
         discountAmount = Math.min(discountAmount, coupon.maxDiscount)
       }
     } else {
       // Fixed amount discount
+      discountAmount = coupon.value
     }
 
     // Ensure discount doesn't exceed amount
     discountAmount = Math.min(discountAmount, amount)
     const finalAmount = Math.max(0, amount - discountAmount)
-
 
     return {
       isValid: true,
