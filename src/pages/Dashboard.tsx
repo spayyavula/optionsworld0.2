@@ -123,8 +123,6 @@ export default function Dashboard() {
         <div className="card-body">
           <TradingViewTicker 
             symbols={tickerSymbols}
-            width="100%"
-            height={46}
             colorTheme="light"
           />
         </div>
@@ -141,7 +139,6 @@ export default function Dashboard() {
             width="100%"
             height={400}
             interval="1d"
-            range="12M"
             theme="light"
           />
         </div>
