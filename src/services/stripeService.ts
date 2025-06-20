@@ -278,15 +278,15 @@ export class StripeService {
           }
         } else {
           alert('Invalid coupon code: ' + validation.error)
-            } else {
+        }
+      })
+    } else {
+      // No coupon code provided
       if (confirm(`Mock Stripe Checkout\n\nPlan: ${product?.name}\nPrice: $${displayPrice}/${product?.interval}\n\nProceed with mock subscription?`)) {
         this.completeMockCheckout(plan, couponCode, finalPrice)
       }
     }
-        }
-      )
-    }
-  }
+  }</parameter>
 
   /**
    * Complete mock checkout process
