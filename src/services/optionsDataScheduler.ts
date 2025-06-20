@@ -36,6 +36,8 @@ export class OptionsDataScheduler {
       this.runDataFetch().catch(error => {
         console.error('Error in initial options data fetch:', error)
       })
+        console.error('Error in initial options data fetch:', error)
+      })
     }, 10000) // 10 seconds delay for initial fetch
   }
 
@@ -66,6 +68,10 @@ export class OptionsDataScheduler {
 
     this.currentTimeout = setTimeout(() => {
       this.runDataFetch().catch(error => {
+        console.error('Error in scheduled options data fetch:', error)
+        // Continue scheduling even if this fetch failed
+        this.scheduleNextFetch()
+      })
         console.error('Error in scheduled options data fetch:', error)
         // Continue scheduling even if this fetch failed
         this.scheduleNextFetch()

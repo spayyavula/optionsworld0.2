@@ -60,6 +60,33 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         hide_legend: false,
         withdateranges: true,
         hide_side_toolbar: false,
+      // Add script to container
+      // Clear previous content
+      containerRef.current.innerHTML = ''
+      
+      // Format symbol to ensure it has exchange prefix if needed
+      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
+      
+      // Create widget options
+      const widgetOptions = {
+        symbol: formattedSymbol,
+        interval: interval,
+        timezone: 'Etc/UTC',
+        theme: theme,
+        style: style,
+        locale: locale,
+        toolbar_bg: toolbar_bg,
+        enable_publishing: enable_publishing,
+        allow_symbol_change: allow_symbol_change,
+        container_id: container_id || containerRef.current.id,
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+        autosize: true,
+        save_image: true,
+        hide_top_toolbar: false,
+        hide_legend: false,
+        withdateranges: true,
+        hide_side_toolbar: false,
         details: true,
         hotlist: true,
         calendar: true,
