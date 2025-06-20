@@ -303,12 +303,16 @@ export default function OptionsChain() {
             </h3>
           </div>
           <div className="card-body">
-            <iframe
-              id="tradingview_options_chain"
-              src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_options_chain&symbol=NASDAQ:${selectedUnderlying || 'SPY'}&interval=D&hidesidetoolbar=0&symboledit=0&saveimage=1&toolbarbg=f1f3f6&theme=light&style=1&timezone=exchange&withdateranges=1`}
-              style={{ width: "100%", height: "500px", border: "none" }}
-              allowTransparency={true}
-              frameBorder={0}
+            <TradingViewWidget
+              symbol={`NASDAQ:${selectedUnderlying || 'SPY'}`}
+              width="100%"
+              height={500}
+              interval="D"
+              theme="light"
+              style="candles"
+              toolbar_bg="#f1f3f6"
+              enable_publishing={false}
+              allow_symbol_change={false}
             />
           </div>
         </div>

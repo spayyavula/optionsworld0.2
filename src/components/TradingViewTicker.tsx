@@ -31,7 +31,10 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
       
       // Create iframe for ticker
       const iframe = document.createElement('iframe');
-      const symbolsParam = encodeURIComponent(JSON.stringify(symbols.map(s => s.proName)));
+      const symbolsParam = encodeURIComponent(JSON.stringify(symbols.map(s => ({
+        "proName": s.proName,
+        "title": s.title
+      }))));
       
       iframe.src = `https://s.tradingview.com/embed-widget/ticker-tape/?locale=${locale}&colorTheme=${colorTheme}${isTransparent ? '&isTransparent=true' : ''}&displayMode=${displayMode}&symbols=${symbolsParam}`;
       iframe.style.width = '100%';
