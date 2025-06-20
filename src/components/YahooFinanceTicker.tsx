@@ -82,11 +82,15 @@ const YahooFinanceTicker: React.FC<YahooFinanceTickerProps> = ({
           
           for (const symbol of symbols) {
             try {
-              const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/' + symbol);
+              const response = await fetch('https://api.allorigins.win/get?url=' + 
+                encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/' + symbol));
               const data = await response.json();
               
-              if (data && data.chart && data.chart.result && data.chart.result[0]) {
-                const quote = data.chart.result[0].meta;
+              // Parse the response from the CORS proxy
+              const yahooData = JSON.parse(data.contents);
+              
+              if (yahooData && yahooData.chart && yahooData.chart.result && yahooData.chart.result[0]) {
+                const quote = yahooData.chart.result[0].meta;
                 const priceElement = document.getElementById(symbol + '-price');
                 const changeElement = document.getElementById(symbol + '-change');
                 
@@ -109,6 +113,16 @@ const YahooFinanceTicker: React.FC<YahooFinanceTickerProps> = ({
               }
             } catch (error) {
               console.error('Error fetching data for ' + symbol, error);
+              
+              // Show error state in UI
+              const priceElement = document.getElementById(symbol + '-price');
+              const changeElement = document.getElementById(symbol + '-change');
+              
+              if (priceElement && changeElement) {
+                priceElement.textContent = 'Error';
+                changeElement.textContent = 'Unable to load';
+                changeElement.style.color = '#888';
+              }
             }
           }
         }

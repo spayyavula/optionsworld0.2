@@ -126,12 +126,16 @@ const YahooFinanceMiniChart: React.FC<YahooFinanceMiniChartProps> = ({
         // Function to fetch Yahoo Finance data and render chart
         async function fetchAndRenderMiniChart(symbol, interval, elementId, lineColor) {
           try {
-            const response = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/' + 
-              symbol + '?interval=1d&range=' + interval);
+            const response = await fetch('https://api.allorigins.win/get?url=' + 
+              encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/' + 
+              symbol + '?interval=1d&range=' + interval));
             const data = await response.json();
             
-            if (data && data.chart && data.chart.result && data.chart.result[0]) {
-              const result = data.chart.result[0];
+            // Parse the response from the CORS proxy
+            const yahooData = JSON.parse(data.contents);
+            
+            if (yahooData && yahooData.chart && yahooData.chart.result && yahooData.chart.result[0]) {
+              const result = yahooData.chart.result[0];
               const timestamps = result.timestamp;
               const quotes = result.indicators.quote[0];
               const closePrices = quotes.close;
@@ -248,6 +252,16 @@ const YahooFinanceMiniChart: React.FC<YahooFinanceMiniChartProps> = ({
             const chartArea = document.getElementById(elementId);
             if (chartArea) {
               chartArea.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #888;">Failed to load chart data</div>';
+            }
+            
+            // Also update price elements to show error state
+            const priceElement = document.getElementById(symbol + '-mini-price');
+            const changeElement = document.getElementById(symbol + '-mini-change');
+            
+            if (priceElement && changeElement) {
+              priceElement.textContent = 'Error';
+              changeElement.textContent = 'Unable to load';
+              changeElement.style.color = '#888';
             }
           }
         }
