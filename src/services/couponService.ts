@@ -167,8 +167,9 @@ export class CouponService {
     if (coupon.type === 'percentage') {
       discountAmount = (amount || 0) * (coupon.value / 100)
       if (coupon.maxDiscount) {
-    } else {
+          } else {
       discountAmount = coupon.value
+    }
     }
 
     // Ensure discount doesn't exceed amount
