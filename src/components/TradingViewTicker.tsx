@@ -25,29 +25,30 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'
-    script.type = 'text/javascript'
-    script.async = true
-    script.innerHTML = JSON.stringify({
-      symbols,
-      showSymbolLogo,
-      colorTheme,
-      isTransparent,
-      displayMode,
-      locale
-    })
-
     if (containerRef.current) {
-      containerRef.current.appendChild(script)
+      // Clear previous content
+      containerRef.current.innerHTML = '';
+      
+      // Create iframe for ticker
+      const iframe = document.createElement('iframe');
+      const symbolsParam = encodeURIComponent(JSON.stringify(symbols.map(s => s.proName)));
+      
+      iframe.src = `https://s.tradingview.com/embed-widget/ticker-tape/?locale=${locale}&colorTheme=${colorTheme}${isTransparent ? '&isTransparent=true' : ''}&displayMode=${displayMode}&symbols=${symbolsParam}`;
+      iframe.style.width = '100%';
+      iframe.style.height = '46px';
+      iframe.style.border = 'none';
+      iframe.allowTransparency = true;
+      iframe.frameBorder = '0';
+      
+      containerRef.current.appendChild(iframe);
     }
-
+    
     return () => {
-      if (containerRef.current && script.parentNode) {
-        script.parentNode.removeChild(script)
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
-    }
-  }, [symbols, showSymbolLogo, colorTheme, isTransparent, displayMode, locale])
+    };
+  }, [symbols, colorTheme, isTransparent, displayMode, locale])
 
   const containerId = container_id || `tradingview_ticker_${Math.random().toString(36).substr(2, 9)}`
 

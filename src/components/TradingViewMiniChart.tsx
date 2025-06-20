@@ -26,34 +26,28 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
-    script.type = 'text/javascript'
-    script.async = true
-    script.innerHTML = JSON.stringify({
-      symbol,
-      width,
-      height,
-      locale: 'en',
-      dateRange: '12M',
-      colorTheme: theme,
-      trendLineColor,
-      underLineColor,
-      isTransparent,
-      autosize,
-      largeChartUrl: ''
-    })
-
     if (containerRef.current) {
-      containerRef.current.appendChild(script)
+      // Clear previous content
+      containerRef.current.innerHTML = '';
+      
+      // Create iframe for mini chart
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=${container_id || 'tradingview_mini'}&symbol=${symbol}&interval=D&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=${trendLineColor.replace(/[^a-zA-Z0-9]/g, '')}&studies=[]&theme=${theme}&style=1&timezone=exchange&withdateranges=0&showpopupbutton=0&width=${typeof width === 'number' ? width : '100%'}&height=${typeof height === 'number' ? height : '100%'}`;
+      iframe.style.width = typeof width === 'number' ? `${width}px` : width.toString();
+      iframe.style.height = typeof height === 'number' ? `${height}px` : height.toString();
+      iframe.style.border = 'none';
+      iframe.allowTransparency = true;
+      iframe.frameBorder = '0';
+      
+      containerRef.current.appendChild(iframe);
     }
-
+    
     return () => {
-      if (containerRef.current && script.parentNode) {
-        script.parentNode.removeChild(script)
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
-    }
-  }, [symbol, width, height, theme, trendLineColor, underLineColor, isTransparent, autosize])
+    };
+  }, [symbol, width, height, theme, trendLineColor, container_id])
 
   const containerId = container_id || `tradingview_mini_${Math.random().toString(36).substr(2, 9)}`
 

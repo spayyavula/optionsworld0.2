@@ -29,14 +29,14 @@ export default function CouponInput({
     setIsValidating(true)
     setError('')
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
     if (!couponCode.trim()) {
       setError('Please enter a coupon code')
       setIsValidating(false)
       return
     }
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500))
     
     const validation = CouponService.validateCoupon(
       couponCode.trim(),
