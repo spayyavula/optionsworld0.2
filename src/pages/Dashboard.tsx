@@ -136,17 +136,12 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewWidget
-            symbol="AMEX:SPY"
-            width="100%"
-            height={400}
-            interval="D"
-            theme="light"
-            style="candles"
-            toolbar_bg="#f1f3f6"
-            enable_publishing={false}
-            allow_symbol_change={true}
-            container_id="tradingview_dashboard"
+          <iframe
+            id="tradingview_dashboard"
+            src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_dashboard&symbol=AMEX:SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&theme=light&style=1&timezone=exchange&withdateranges=1"
+            style={{ width: "100%", height: "400px", border: "none" }}
+            allowTransparency={true}
+            frameBorder={0}
           />
         </div>
       </div>

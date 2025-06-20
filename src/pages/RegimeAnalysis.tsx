@@ -465,15 +465,13 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-          <div id="tradingview_chart_container" style={{ height: "650px" }}>
-            <iframe
-              id="tradingview_chart" 
-              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=AMEX:SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1"
-              style={{ width: "100%", height: "100%", border: "none" }}
-              allowTransparency={true}
-              frameBorder={0}
-            />
-          </div>
+          <iframe
+            id="tradingview_chart"
+            src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=AMEX:SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%22RSI%40tv-basicstudies%22%2C%22MACD%40tv-basicstudies%22%2C%22StochasticRSI%40tv-basicstudies%22%5D&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1"
+            style={{ width: "100%", height: "650px", border: "none" }}
+            allowTransparency={true}
+            frameBorder={0}
+          />
           
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
