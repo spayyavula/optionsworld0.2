@@ -171,8 +171,6 @@ export class CouponService {
       }
     } else {
       discountAmount = coupon.value
-    } else {
-      discountAmount = coupon.value
     }
 
     // Ensure discount doesn't exceed amount
