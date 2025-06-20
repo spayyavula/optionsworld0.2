@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight, Users } from 'lucide-react'
+import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
 import { CommunityService } from '../services/communityService'
 import TradingViewWidget from '../components/TradingViewWidget'
@@ -265,13 +265,54 @@ export default function Dashboard() {
               <PieChart className="h-4 w-4" />
               View Portfolio
             </Link>
-            <Link to="/watchlist" className="btn btn-secondary">
-              <Activity className="h-4 w-4" />
-              Manage Watchlist
+            <Link to="/learning" className="btn btn-secondary">
+              <BookOpen className="h-4 w-4" />
+              Start Learning
             </Link>
-            <Link to="/community" className="btn btn-secondary">
-              <Users className="h-4 w-4" />
-              Join Community
+            <Link to="/journal" className="btn btn-secondary">
+              <BookMarked className="h-4 w-4" />
+              Trading Journal
+            </Link>
+          </div>
+        </div>
+      </div>
+      
+      {/* Learning Resources */}
+      <div className="card">
+        <div className="card-header flex items-center justify-between">
+          <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <BookOpen className="h-5 w-5 mr-2" />
+            Learning Resources
+          </h3>
+          <Link to="/learning" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
+            View all
+            <ArrowUpRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <Link to="/learning" className="p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+              <div className="flex items-center space-x-3 mb-2">
+                <BookOpen className="h-5 w-5 text-blue-600" />
+                <h4 className="font-medium text-blue-900">Options Fundamentals</h4>
+              </div>
+              <p className="text-sm text-blue-700">Learn the basics of options trading with our structured courses.</p>
+            </Link>
+            
+            <Link to="/strategies" className="p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+              <div className="flex items-center space-x-3 mb-2">
+                <Lightbulb className="h-5 w-5 text-green-600" />
+                <h4 className="font-medium text-green-900">Strategy Library</h4>
+              </div>
+              <p className="text-sm text-green-700">Explore and implement proven options trading strategies.</p>
+            </Link>
+            
+            <Link to="/journal" className="p-4 border border-purple-200 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+              <div className="flex items-center space-x-3 mb-2">
+                <BookMarked className="h-5 w-5 text-purple-600" />
+                <h4 className="font-medium text-purple-900">Trading Journal</h4>
+              </div>
+              <p className="text-sm text-purple-700">Document and analyze your trades to improve performance.</p>
             </Link>
           </div>
         </div>
