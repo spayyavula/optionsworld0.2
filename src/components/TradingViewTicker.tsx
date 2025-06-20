@@ -33,15 +33,6 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
       const widgetOptions = {
         symbols: symbols,
         showSymbolLogo: showSymbolLogo,
-      }
-      // Add script to container
-      // Clear previous content
-      containerRef.current.innerHTML = ''
-      
-      // Create widget options
-      const widgetOptions = {
-        symbols: symbols,
-        showSymbolLogo: showSymbolLogo,
         colorTheme: colorTheme,
         isTransparent: isTransparent,
         displayMode: displayMode,
