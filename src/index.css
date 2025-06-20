@@ -148,7 +148,21 @@ body {
   color: #1e53e5 !important;
 }
 
-/* Hide TradingView copyright for cleaner look (optional) */
-.tradingview-widget-copyright {
-  display: none;
+/* Yahoo Finance chart styles */
+.yahoo-finance-chart-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.yahoo-finance-ticker-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.yahoo-finance-mini-chart-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }

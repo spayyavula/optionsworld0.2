@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
 import { CommunityService } from '../services/communityService'
-import TradingViewWidget from '../components/TradingViewWidget'
-import TradingViewTicker from '../components/TradingViewTicker'
+import YahooFinanceWidget from '../components/YahooFinanceWidget'
+import YahooFinanceTicker from '../components/YahooFinanceTicker'
 import { format } from 'date-fns'
 
 // TradingView ticker symbols
 const tickerSymbols = [
-  { proName: 'NASDAQ:AAPL', title: 'Apple Inc.' },
-  { proName: 'NASDAQ:GOOGL', title: 'Alphabet Inc.' },
-  { proName: 'NASDAQ:MSFT', title: 'Microsoft Corporation' },
-  { proName: 'NASDAQ:TSLA', title: 'Tesla, Inc.' },
-  { proName: 'NASDAQ:AMZN', title: 'Amazon.com, Inc.' },
-  { proName: 'AMEX:SPY', title: 'SPDR S&P 500 ETF' },
-  { proName: 'NASDAQ:QQQ', title: 'Invesco QQQ Trust' },
-  { proName: 'NASDAQ:NVDA', title: 'NVIDIA Corporation' }
+  'AAPL',
+  'GOOGL',
+  'MSFT',
+  'TSLA',
+  'AMZN',
+  'SPY',
+  'QQQ',
+  'NVDA'
 ]
 
 export default function Dashboard() {
@@ -121,11 +121,11 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewTicker 
+          <YahooFinanceTicker 
             symbols={tickerSymbols}
-            showSymbolLogo={true}
-            colorTheme="light"
-            displayMode="adaptive"
+            width="100%"
+            height={60}
+            darkMode={false}
           />
         </div>
       </div>
@@ -136,16 +136,13 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewWidget
-            symbol="AMEX:SPY"
+          <YahooFinanceWidget
+            symbol="SPY"
             width="100%"
             height={400}
-            interval="D"
-            theme="light"
-            style="candles"
-            toolbar_bg="#f1f3f6"
-            enable_publishing={false}
-            allow_symbol_change={true}
+            interval="1d"
+            range="1y"
+            darkMode={false}
           />
         </div>
       </div>

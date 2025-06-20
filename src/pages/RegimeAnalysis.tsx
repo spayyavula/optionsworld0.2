@@ -13,12 +13,14 @@ import {
   Zap
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
-import TradingViewWidget from '../components/TradingViewWidget'
+import YahooFinanceWidget from '../components/YahooFinanceWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 
 export default function RegimeAnalysisPage() {
   const [analysis, setAnalysis] = useState<RegimeAnalysis | null>(null)
   const [marketData, setMarketData] = useState<MarketData | null>(null)
+  const [chartSymbol, setChartSymbol] = useState<string>('SPY')
+  const [chartInterval, setChartInterval] = useState<string>('1d')
   const [selectedStrategy, setSelectedStrategy] = useState<TradingStrategy | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -427,13 +429,7 @@ export default function RegimeAnalysisPage() {
                 className="form-select text-sm"
                 defaultValue="AMEX:SPY"
                 id="tvSymbolSelector"
-                onChange={(e) => {
-                  const iframe = document.getElementById('tradingview_chart') as HTMLIFrameElement;
-                  if (iframe && iframe.contentWindow) {
-                    const symbol = e.target.value;
-                    iframe.src = iframe.src.replace(/symbol=[^&]+/, `symbol=${symbol}`);
-                  }
-                }}
+                onChange={(e) => setChartSymbol(e.target.value.replace(/^(AMEX|NASDAQ|CBOE):/, ''))}
               >
                 <option value="AMEX:SPY">SPY (S&P 500)</option>
                 <option value="NASDAQ:QQQ">QQQ (Nasdaq)</option>
@@ -445,13 +441,10 @@ export default function RegimeAnalysisPage() {
                 className="form-select text-sm"
                 defaultValue="D"
                 id="tvIntervalSelector"
-                onChange={(e) => {
-                  const iframe = document.getElementById('tradingview_chart') as HTMLIFrameElement;
-                  if (iframe && iframe.contentWindow) {
-                    const interval = e.target.value;
-                    iframe.src = iframe.src.replace(/interval=[^&]+/, `interval=${interval}`);
-                  }
-                }}
+                onChange={(e) => setChartInterval(e.target.value === 'D' ? '1d' : 
+                                                e.target.value === 'W' ? '1wk' : 
+                                                e.target.value === 'M' ? '1mo' : 
+                                                e.target.value)}
               >
                 <option value="5">5 min</option>
                 <option value="15">15 min</option>
@@ -465,19 +458,17 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-          <TradingViewWidget
-            symbol="AMEX:SPY"
-            width="100%"
-            height={650}
-            interval="D"
-            theme="light"
-            style="candles"
-            toolbar_bg="#f1f3f6"
-            enable_publishing={true}
-            allow_symbol_change={true}
-            studies={["RSI@tv-basicstudies", "MACD@tv-basicstudies", "StochasticRSI@tv-basicstudies"]}
-            container_id="regime_analysis_chart"
-          />
+            <YahooFinanceWidget
+              symbol={chartSymbol || 'SPY'}
+              width="100%"
+              height={650}
+              interval={chartInterval as '1d'}
+              range="1y"
+              showControls={true}
+              showTabs={true}
+              darkMode={false}
+              container_id="regime_analysis_chart"
+            />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
               <TrendingUp className="h-4 w-4 mr-2" />
