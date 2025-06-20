@@ -133,20 +133,17 @@ export default function Dashboard() {
       {/* Portfolio Performance Chart */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">SPY Chart - Market Overview</h3>
+          <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewWidget
-            symbol="AMEX:SPY"
-            width="100%"
-            height={400}
-            interval="D"
-            theme="light"
-            style="candles"
-            toolbar_bg="#f1f3f6"
-            enable_publishing={false}
-            allow_symbol_change={true}
-          />
+          <div style={{ height: "400px" }}>
+            <iframe 
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_d8e37&symbol=SPY&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=[]&theme=light&style=1&timezone=exchange&withdateranges=1&showpopupbutton=1&studies_overrides=%7B%7D"
+              style={{ width: "100%", height: "100%", border: "none" }}
+              allowTransparency={true}
+              frameBorder={0}
+            ></iframe>
+          </div>
         </div>
       </div>
 

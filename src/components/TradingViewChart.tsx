@@ -47,13 +47,14 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
   useEffect(() => {
     const loadTradingViewScript = () => {
       return new Promise<void>((resolve, reject) => {
-        if (window.TradingView) {
+        // Check if TradingView is already loaded
+        if (typeof window.TradingView !== 'undefined') {
           resolve()
           return
         }
 
         const script = document.createElement('script')
-        script.src = 'https://s3.tradingview.com/tv.js'
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
         script.async = true
         script.onload = () => resolve()
         script.onerror = () => reject(new Error('Failed to load TradingView script'))
@@ -64,79 +65,50 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
     const initializeChart = async () => {
       try {
         await loadTradingViewScript()
-        
-        if (!containerRef.current || !window.TradingView) {
+
+        if (!containerRef.current) {
           return
         }
 
-        // Clean up existing widget
-        if (widgetRef.current) {
-          widgetRef.current.remove()
-        }
-
-        const widgetOptions = {
+        // Create widget options
+        const widgetOptions: any = {
           symbol,
           interval,
+          width: typeof width === 'number' ? `${width}px` : width,
+          height: typeof height === 'number' ? `${height}px` : height,
+          timezone: 'exchange',
+          theme: theme === 'dark' ? 'dark' : 'light',
+          style: style || 'candles',
+          locale: locale || 'en',
+          toolbar_bg: toolbar_bg,
+          enable_publishing: enable_publishing,
+          withdateranges: withdateranges,
+          hide_side_toolbar: hide_side_toolbar,
+          allow_symbol_change: allow_symbol_change,
           container_id: container_id || containerRef.current.id,
-          datafeed: new window.TradingView.Datafeed({
-            // You can customize the datafeed here
-            // For now, we'll use TradingView's default datafeed
-          }),
-          library_path: '/charting_library/',
-          locale,
-          disabled_features: [
-            'use_localstorage_for_settings',
-            ...(hide_side_toolbar ? ['left_toolbar'] : []),
-            ...(!enable_publishing ? ['publishing_feature'] : []),
-          ],
-          enabled_features: [
-            'study_templates',
-            ...(withdateranges ? ['timeframes_toolbar'] : []),
-          ],
-          charts_storage_url: 'https://saveload.tradingview.com',
-          charts_storage_api_version: '1.1',
-          client_id: 'tradingview.com',
-          user_id: 'public_user_id',
-          fullscreen: false,
+          studies: studies || [],
           autosize,
-          width,
-          height,
-          theme: theme === 'dark' ? 'Dark' : 'Light',
-          style,
-          toolbar_bg,
-          overrides: {
-            'paneProperties.background': theme === 'dark' ? '#1a1a1a' : '#ffffff',
-            'paneProperties.vertGridProperties.color': theme === 'dark' ? '#2a2a2a' : '#e1e1e1',
-            'paneProperties.horzGridProperties.color': theme === 'dark' ? '#2a2a2a' : '#e1e1e1',
-            'symbolWatermarkProperties.transparency': 90,
-            'scalesProperties.textColor': theme === 'dark' ? '#ffffff' : '#131722',
-          },
-          studies_overrides: {},
-          time_frames: [
-            { text: '1m', resolution: '1', description: '1 Minute' },
-            { text: '5m', resolution: '5', description: '5 Minutes' },
-            { text: '15m', resolution: '15', description: '15 Minutes' },
-            { text: '30m', resolution: '30', description: '30 Minutes' },
-            { text: '1h', resolution: '60', description: '1 Hour' },
-            { text: '4h', resolution: '240', description: '4 Hours' },
-            { text: '1d', resolution: 'D', description: '1 Day' },
-            { text: '1w', resolution: 'W', description: '1 Week' },
-            { text: '1M', resolution: 'M', description: '1 Month' },
-          ],
+          details: true,
+          hotlist: true,
+          calendar: true,
+          show_popup_button: true,
+          popup_width: '1000',
+          popup_height: '650',
+          support_host: 'https://www.tradingview.com'
         }
 
-        // Create the widget
-        widgetRef.current = new window.TradingView.widget(widgetOptions)
-
-        // Add studies after widget is ready
-        widgetRef.current.onChartReady(() => {
-          const chart = widgetRef.current.chart()
-          
-          // Add default studies
-          studies.forEach(study => {
-            chart.createStudy(study, false, false)
-          })
-        })
+        // Create the widget script
+        const script = document.createElement('script')
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
+        script.type = 'text/javascript'
+        script.async = true
+        script.innerHTML = JSON.stringify(widgetOptions)
+        
+        // Clear container and add script
+        if (containerRef.current) {
+          containerRef.current.innerHTML = ''
+          containerRef.current.appendChild(script)
+        }
 
       } catch (error) {
         console.error('Failed to initialize TradingView chart:', error)
@@ -146,7 +118,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
     initializeChart()
 
     return () => {
-      if (widgetRef.current) {
+      if (containerRef.current) {
         widgetRef.current.remove()
       }
     }
@@ -155,7 +127,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
   // Generate unique container ID
   const containerId = container_id || `tradingview_${Math.random().toString(36).substr(2, 9)}`
 
-  return (
+  return (  
     <div 
       ref={containerRef}
       id={containerId}

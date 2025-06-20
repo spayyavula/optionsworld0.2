@@ -12,6 +12,7 @@ interface TradingViewWidgetProps {
   enable_publishing?: boolean
   allow_symbol_change?: boolean
   container_id?: string
+  studies?: string[]
 }
 
 const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
@@ -25,7 +26,8 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   toolbar_bg = '#f1f3f6',
   enable_publishing = false,
   allow_symbol_change = true,
-  container_id
+  container_id,
+  studies
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -35,17 +37,28 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
     script.type = 'text/javascript'
     script.async = true
     script.innerHTML = JSON.stringify({
+      width,
+      height,
       autosize: true,
       symbol,
       interval,
-      timezone: 'Etc/UTC',
+      timezone: 'exchange',
       theme,
       style,
       locale,
       toolbar_bg,
       enable_publishing,
       allow_symbol_change,
-      calendar: false,
+      withdateranges: true,
+      hide_side_toolbar: false,
+      details: true,
+      hotlist: true,
+      calendar: true,
+      studies: studies || [],
+      container_id: container_id || containerId,
+      show_popup_button: true,
+      popup_width: '1000',
+      popup_height: '650',
       support_host: 'https://www.tradingview.com'
     })
 
@@ -63,18 +76,13 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   const containerId = container_id || `tradingview_widget_${Math.random().toString(36).substr(2, 9)}`
 
   return (
-    <div className="tradingview-widget-container" style={{ height, width }}>
+    <div className="tradingview-widget-container relative" style={{ height, width }}>
       <div 
         ref={containerRef}
         id={containerId}
-        className="tradingview-widget-container__widget"
+        className="tradingview-widget-container__widget w-full h-full"
         style={{ height: '100%', width: '100%' }}
       />
-      <div className="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-          <span className="blue-text">Track all markets on TradingView</span>
-        </a>
-      </div>
     </div>
   )
 }
