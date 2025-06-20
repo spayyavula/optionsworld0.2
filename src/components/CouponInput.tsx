@@ -29,24 +29,29 @@ export default function CouponInput({
     setIsValidating(true)
     setError('')
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500))
 
-    const validation = CouponService.validateCoupon(
-      couponCode.trim(),
-      plan,
-      originalAmount,
-      true // Assume first time for demo
-    )
+      const validation = CouponService.validateCoupon(
+        couponCode.trim(),
+        plan,
+        originalAmount,
+        true // Assume first time for demo
+      )
 
-    if (validation.isValid) {
-      onCouponApplied(validation)
-      setCouponCode('')
-    } else {
-      setError(validation.error || 'Invalid coupon code')
+      if (validation.isValid) {
+        onCouponApplied(validation)
+        setCouponCode('')
+      } else {
+        setError(validation.error || 'Invalid coupon code')
+      }
+    } catch (error) {
+      console.error('Error validating coupon:', error);
+      setError('Error validating coupon. Please try again.')
+    } finally {
+      setIsValidating(false)
     }
-
-    setIsValidating(false)
   }
 
   const handleRemoveCoupon = () => {

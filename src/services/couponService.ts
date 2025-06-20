@@ -171,10 +171,11 @@ export class CouponService {
       }
     } else {
       discountAmount = coupon.value
+    } else {
+      discountAmount = coupon.value
     }
 
     // Ensure discount doesn't exceed amount
-    discountAmount = Math.min(discountAmount, amount)
     discountAmount = Math.min(discountAmount, amount || 0)
     const finalAmount = Math.max(0, (amount || 0) - discountAmount)
 

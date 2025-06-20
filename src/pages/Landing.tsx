@@ -105,7 +105,7 @@ export default function Landing() {
     if (selectedDeal && selectedDeal.plan === plan) {
       return selectedDeal.discountedPrice
     }
-    if (appliedCoupon && appliedCoupon.finalAmount !== undefined) {
+    if (appliedCoupon && appliedCoupon.isValid && appliedCoupon.finalAmount !== undefined) {
       return appliedCoupon.finalAmount
     }
     return originalPrice
@@ -119,7 +119,7 @@ export default function Landing() {
         savings: selectedDeal.originalPrice - selectedDeal.discountedPrice
       }
     }
-    if (appliedCoupon && appliedCoupon.discountAmount > 0) {
+    if (appliedCoupon && appliedCoupon.isValid && appliedCoupon.discountAmount > 0) {
       return {
         hasDiscount: true,
         discountText: CouponService.formatDiscount(appliedCoupon.coupon),
