@@ -37,6 +37,7 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
       const widgetOptions = {
         symbol: formattedSymbol,
         width: typeof width === 'number' ? width : '100%',
+      }
       // Add script to container
       // Clear previous content
       containerRef.current.innerHTML = ''

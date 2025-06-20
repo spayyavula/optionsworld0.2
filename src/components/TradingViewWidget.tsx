@@ -60,6 +60,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         hide_legend: false,
         withdateranges: true,
         hide_side_toolbar: false,
+      }
       // Add script to container
       // Clear previous content
       containerRef.current.innerHTML = ''
