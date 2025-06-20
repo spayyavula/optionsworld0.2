@@ -461,6 +461,11 @@ export default function RegimeAnalysisPage() {
               height={650}
               interval={chartInterval}
               theme="light"
+              style="candles"
+              toolbar_bg="#f1f3f6"
+              enable_publishing={false}
+              allow_symbol_change={true}
+              studies={["RSI@tv-basicstudies", "MACD@tv-basicstudies", "AwesomeOscillator@tv-basicstudies", "StochasticRSI@tv-basicstudies"]}
             />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">

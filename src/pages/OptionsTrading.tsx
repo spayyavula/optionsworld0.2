@@ -455,6 +455,9 @@ export default function OptionsTrading() {
                 width="100%"
                 height={300}
                 theme="light"
+                autosize={true}
+                trendLineColor="rgba(41, 98, 255, 1)"
+                underLineColor="rgba(41, 98, 255, 0.3)"
               />
             </div>
           </div>

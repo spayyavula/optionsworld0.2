@@ -27,33 +27,38 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
   useEffect(() => {
     if (containerRef.current) {
       // Clear previous content
-      containerRef.current.innerHTML = '';
+      containerRef.current.innerHTML = ''
       
-      // Create iframe for ticker
-      const iframe = document.createElement('iframe');
-      const symbolsParam = encodeURIComponent(JSON.stringify(symbols.map(s => ({
-        "proName": s.proName,
-        "title": s.title
-      }))));
+      // Create widget options
+      const widgetOptions = {
+        symbols: symbols,
+        showSymbolLogo: showSymbolLogo,
+        colorTheme: colorTheme,
+        isTransparent: isTransparent,
+        displayMode: displayMode,
+        locale: locale
+      }
       
-      iframe.src = `https://s.tradingview.com/embed-widget/ticker-tape/?locale=${locale}&colorTheme=${colorTheme}${isTransparent ? '&isTransparent=true' : ''}&displayMode=${displayMode}&symbols=${symbolsParam}`;
-      iframe.style.width = '100%';
-      iframe.style.height = '46px';
-      iframe.style.border = 'none';
-      iframe.setAttribute('allowTransparency', 'true');
-      iframe.setAttribute('frameBorder', '0');
+      // Create the script element
+      const script = document.createElement('script')
+      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'
+      script.type = 'text/javascript'
+      script.async = true
+      script.innerHTML = JSON.stringify(widgetOptions)
       
-      containerRef.current.appendChild(iframe);
+      // Add script to container
+      containerRef.current.appendChild(script)
     }
     
     return () => {
       if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+        containerRef.current.innerHTML = ''
       }
-    };
-  }, [symbols, colorTheme, isTransparent, displayMode, locale])
+    }
+  }, [symbols, showSymbolLogo, colorTheme, isTransparent, displayMode, locale])
 
-  const containerId = container_id || `tradingview_ticker_${Math.random().toString(36).substr(2, 9)}`
+  // Generate unique container ID
+  const containerId = container_id || `tradingview_ticker_${Math.random().toString(36).substring(2, 11)}`
 
   return (
     <div className="tradingview-widget-container">
@@ -62,11 +67,6 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
         id={containerId}
         className="tradingview-widget-container__widget"
       />
-      <div className="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-          <span className="blue-text">Track all markets on TradingView</span>
-        </a>
-      </div>
     </div>
   )
 }

@@ -28,33 +28,46 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
   useEffect(() => {
     if (containerRef.current) {
       // Clear previous content
-      containerRef.current.innerHTML = '';
+      containerRef.current.innerHTML = ''
       
-      // Create iframe for mini chart
-      const iframe = document.createElement('iframe');
-      const uniqueId = container_id || `tradingview_mini_${Math.random().toString(36).substr(2, 9)}`;
+      // Format symbol to ensure it has exchange prefix if needed
+      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
       
-      // Construct the iframe URL with proper parameters
-      iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=${uniqueId}&symbol=${symbol}&interval=D&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&studies=[]&theme=${theme}&style=1&timezone=exchange&withdateranges=0&showpopupbutton=0`;
+      // Create widget options
+      const widgetOptions = {
+        symbol: formattedSymbol,
+        width: typeof width === 'number' ? width : '100%',
+        height: typeof height === 'number' ? height : 220,
+        locale: 'en',
+        dateRange: '12M',
+        colorTheme: theme,
+        trendLineColor: trendLineColor,
+        underLineColor: underLineColor,
+        isTransparent: isTransparent,
+        autosize: autosize,
+        largeChartUrl: ''
+      }
       
-      // Set dimensions
-      iframe.style.width = typeof width === 'number' ? `${width}px` : width.toString();
-      iframe.style.height = typeof height === 'number' ? `${height}px` : height.toString();
-      iframe.style.border = 'none';
-      iframe.setAttribute('allowTransparency', 'true');
-      iframe.setAttribute('frameBorder', '0');
+      // Create the script element
+      const script = document.createElement('script')
+      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
+      script.type = 'text/javascript'
+      script.async = true
+      script.innerHTML = JSON.stringify(widgetOptions)
       
-      containerRef.current.appendChild(iframe);
+      // Add script to container
+      containerRef.current.appendChild(script)
     }
     
     return () => {
       if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+        containerRef.current.innerHTML = ''
       }
-    };
-  }, [symbol, width, height, theme, container_id])
+    }
+  }, [symbol, width, height, theme, trendLineColor, underLineColor, isTransparent, autosize])
 
-  const containerId = container_id || `tradingview_mini_${Math.random().toString(36).substr(2, 9)}`
+  // Generate unique container ID
+  const containerId = container_id || `tradingview_mini_${Math.random().toString(36).substring(2, 11)}`
 
   return (
     <div className="tradingview-widget-container">

@@ -123,7 +123,9 @@ export default function Dashboard() {
         <div className="card-body">
           <TradingViewTicker 
             symbols={tickerSymbols}
+            showSymbolLogo={true}
             colorTheme="light"
+            displayMode="adaptive"
           />
         </div>
       </div>
@@ -140,6 +142,10 @@ export default function Dashboard() {
             height={400}
             interval="1d"
             theme="light"
+            style="candles"
+            toolbar_bg="#f1f3f6"
+            enable_publishing={false}
+            allow_symbol_change={true}
           />
         </div>
       </div>

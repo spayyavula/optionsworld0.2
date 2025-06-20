@@ -19,7 +19,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   symbol,
   width = '100%',
   height = 400,
-  interval = 'D',
+  interval = '1d',
   theme = 'light',
   style = 'candles',
   locale = 'en',
@@ -34,40 +34,69 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   useEffect(() => {
     if (containerRef.current) {
       // Clear previous content
-      containerRef.current.innerHTML = '';
+      containerRef.current.innerHTML = ''
       
-      // Create iframe for advanced chart
-      const iframe = document.createElement('iframe');
-      const uniqueId = container_id || `tradingview_widget_${Math.random().toString(36).substr(2, 9)}`;
+      // Format symbol to ensure it has exchange prefix if needed
+      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
       
-      // Convert studies array to URL parameter
-      const studiesParam = studies.length > 0 
-        ? `&studies=${encodeURIComponent(JSON.stringify(studies))}` 
-        : '';
+      // Create widget options
+      const widgetOptions = {
+        symbol: formattedSymbol,
+        interval: interval,
+        timezone: 'Etc/UTC',
+        theme: theme,
+        style: style,
+        locale: locale,
+        toolbar_bg: toolbar_bg,
+        enable_publishing: enable_publishing,
+        allow_symbol_change: allow_symbol_change,
+        container_id: container_id || containerRef.current.id,
+        studies: studies,
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+        autosize: true,
+        save_image: true,
+        hide_top_toolbar: false,
+        hide_legend: false,
+        withdateranges: true,
+        hide_side_toolbar: false,
+        details: true,
+        hotlist: true,
+        calendar: true,
+        show_popup_button: true,
+        popup_width: '1000',
+        popup_height: '650',
+        support_host: 'https://www.tradingview.com'
+      }
       
-      // Construct the iframe URL with proper parameters
-      iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=${uniqueId}&symbol=${symbol}&interval=${interval}&hidesidetoolbar=0&symboledit=${allow_symbol_change ? 1 : 0}&saveimage=1&toolbarbg=${toolbar_bg.replace('#', '')}&theme=${theme}&style=${style === 'candles' ? 1 : style === 'bars' ? 0 : style === 'line' ? 2 : 3}&timezone=exchange&withdateranges=1&showpopupbutton=${enable_publishing ? 1 : 0}${studiesParam}`;
+      // Create the script element
+      const script = document.createElement('script')
+      script.src = 'https://s3.tradingview.com/tv.js'
+      script.async = true
+      script.onload = () => {
+        if (typeof window.TradingView !== 'undefined') {
+          new window.TradingView.widget(widgetOptions)
+        }
+      }
       
-      // Set dimensions
-      iframe.style.width = typeof width === 'number' ? `${width}px` : width.toString();
-      iframe.style.height = typeof height === 'number' ? `${height}px` : height.toString();
-      iframe.style.border = 'none';
-      iframe.setAttribute('allowTransparency', 'true');
-      iframe.setAttribute('frameBorder', '0');
-      
-      containerRef.current.appendChild(iframe);
+      // Add script to container
+      containerRef.current.appendChild(script)
     }
     
     return () => {
       if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+        containerRef.current.innerHTML = ''
       }
-    };
+    }
   }, [symbol, width, height, interval, theme, style, locale, toolbar_bg, enable_publishing, allow_symbol_change, container_id, studies])
+
+  // Generate unique container ID
+  const containerId = container_id || `tradingview_${Math.random().toString(36).substring(2, 11)}`
 
   return (
     <div 
       ref={containerRef}
+      id={containerId}
       className="tradingview-widget-container"
       style={{ width: typeof width === 'number' ? `${width}px` : width, height: typeof height === 'number' ? `${height}px` : height }}
     />
