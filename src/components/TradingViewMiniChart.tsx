@@ -38,17 +38,6 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
         symbol: formattedSymbol,
         width: typeof width === 'number' ? width : '100%',
       }
-      // Add script to container
-      // Clear previous content
-      containerRef.current.innerHTML = ''
-      
-      // Format symbol to ensure it has exchange prefix if needed
-      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
-      
-      // Create widget options
-      const widgetOptions = {
-        symbol: formattedSymbol,
-        width: typeof width === 'number' ? width : '100%',
         height: typeof height === 'number' ? height : 220,
         locale: 'en',
         dateRange: '12M',
