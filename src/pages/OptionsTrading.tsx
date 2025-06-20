@@ -454,7 +454,6 @@ export default function OptionsTrading() {
                 symbol={selectedContractData.underlying_ticker}
                 width="100%"
                 height={300}
-                interval="3M"
                 theme="light"
               />
             </div>

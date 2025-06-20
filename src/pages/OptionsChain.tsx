@@ -308,7 +308,6 @@ export default function OptionsChain() {
               width="100%"
               height={500}
               interval="1d"
-              range="6M"
               theme="light"
             />
           </div>
