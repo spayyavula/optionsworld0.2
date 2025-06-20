@@ -460,7 +460,6 @@ export default function RegimeAnalysisPage() {
               width="100%"
               height={650}
               interval={chartInterval}
-              range="12M"
               theme="light"
             />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
