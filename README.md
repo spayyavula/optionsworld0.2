@@ -24,7 +24,7 @@ A comprehensive paper trading platform built with React, TypeScript, and Vite, f
 ### Data Integration
 - Polygon.io API integration for real market data
 - TradingView charts integration for advanced technical analysis
-- Community integration with Slack, Discord, Telegram, WhatsApp, and Facebook
+- **Community integration with Slack, Discord, Telegram, WhatsApp, and Facebook**
 - Fallback to simulated data for development
 - Historical data storage and retrieval
 - Real-time price updates
@@ -60,6 +60,81 @@ VITE_ENABLE_MOCK_DATA=false
 npm run dev
 ```
 
+## 🌐 Community Integration Setup
+
+The platform includes a robust community integration system that connects with popular messaging platforms:
+
+### Supported Platforms
+
+1. **Slack** - Share trades and analysis to Slack channels
+2. **Discord** - Post updates to Discord servers
+3. **Telegram** - Send messages to Telegram channels or groups
+4. **WhatsApp** - Share links to WhatsApp groups
+5. **Facebook** - Post to Facebook groups
+
+### Configuration
+
+To enable community integrations, add the following to your `.env` file:
+
+```bash
+# Slack Configuration
+VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/your/slack/webhook
+
+# Discord Configuration
+VITE_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/your/discord/webhook
+
+# Telegram Configuration
+VITE_TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+VITE_TELEGRAM_CHAT_ID=your_telegram_chat_id
+VITE_TELEGRAM_CHANNEL=your_telegram_channel_username
+
+# WhatsApp Configuration
+VITE_WHATSAPP_GROUP_INVITE=your_whatsapp_group_invite_code
+
+# Facebook Configuration
+VITE_FACEBOOK_GROUP_ID=your_facebook_group_id
+```
+
+### Setting Up Webhooks
+
+#### Slack Webhook
+1. Go to your Slack workspace
+2. Create a new Slack app from the [Slack API dashboard](https://api.slack.com/apps)
+3. Enable "Incoming Webhooks"
+4. Create a new webhook URL for a specific channel
+5. Copy the webhook URL to your `.env` file
+
+#### Discord Webhook
+1. Go to your Discord server
+2. Edit a channel → Integrations → Webhooks
+3. Create a new webhook
+4. Copy the webhook URL to your `.env` file
+
+#### Telegram Bot
+1. Create a bot using [BotFather](https://t.me/BotFather)
+2. Copy the bot token provided
+3. Add the bot to your group or channel
+4. Get the chat ID by sending a message and checking the getUpdates API
+5. Add these details to your `.env` file
+
+### Running Standalone
+
+To run the community features standalone:
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Create a `.env` file with the platform configurations
+4. Start the development server: `npm run dev`
+5. Navigate to the Community page
+
+### Features
+
+- **Share Trading Alerts**: Post your trades with analysis
+- **Market Analysis**: Share market insights and commentary
+- **Journal Entries**: Share your trading journal entries
+- **Position Updates**: Post updates about your current positions
+- **Multi-platform Sharing**: Send to multiple platforms simultaneously
+
 ## 📋 Environment Variables
 
 | Variable | Description | Default |
@@ -82,6 +157,54 @@ npm run dev
 | `VITE_TELEGRAM_CHANNEL` | Telegram channel username | `optionsworld` |
 | `VITE_WHATSAPP_GROUP_INVITE` | WhatsApp group invite code | `ABC123DEF456` |
 | `VITE_FACEBOOK_GROUP_ID` | Facebook group ID | `1234567890` |
+
+## 🔄 Community Integration API
+
+The community integration system provides the following API:
+
+```typescript
+// Share a trading alert
+CommunityService.shareTradingAlert({
+  symbol: 'AAPL',
+  action: 'buy',
+  price: 185.43,
+  quantity: 10,
+  strategy: 'Long Call',
+  reasoning: 'Strong technical breakout with increasing volume'
+}, ['slack', 'discord']); // Optional platform selection
+
+// Share market analysis
+CommunityService.shareMarketAnalysis(
+  'Market Outlook',
+  'SPY showing strong support at the 200-day moving average...',
+  ['telegram'] // Optional platform selection
+);
+
+// Share a position
+CommunityService.sharePosition(position);
+
+// Share a journal entry
+CommunityService.shareJournalEntry(journalEntry);
+```
+
+### Message Formatting
+
+Messages are automatically formatted for each platform with appropriate markdown/formatting:
+
+- **Trading Alerts**: Includes symbol, action, price, quantity, and reasoning
+- **Market Analysis**: Includes title, content, and relevant hashtags
+- **Position Updates**: Includes contract details, P&L, and Greeks
+- **Journal Entries**: Includes trade details, reasoning, and lessons learned
+
+### Webhook Security
+
+For production use, consider these security practices:
+
+1. Store webhook URLs and API keys securely
+2. Implement rate limiting to prevent abuse
+3. Use environment variables for all sensitive credentials
+4. Consider using a backend service to proxy webhook requests
+5. Rotate webhook URLs and API keys periodically
 
 ## 🧪 Testing
 
