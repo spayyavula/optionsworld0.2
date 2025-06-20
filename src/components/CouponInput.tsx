@@ -4,7 +4,7 @@ import { CouponService } from '../services/couponService'
 
 interface CouponInputProps {
   plan: 'monthly' | 'yearly'
-  originalAmount: number
+  originalAmount?: number
   onCouponApplied: (validation: any) => void
   onCouponRemoved: () => void
   appliedCoupon?: any
@@ -13,7 +13,7 @@ interface CouponInputProps {
 
 export default function CouponInput({
   plan,
-  originalAmount,
+  originalAmount = 0,
   onCouponApplied,
   onCouponRemoved,
   appliedCoupon,

@@ -366,7 +366,7 @@ export default function OptionsStrategies() {
                       }}
                       className="w-full btn btn-primary"
                     >
-                      <Play className="h-4 w-4" />
+                      <Zap className="h-4 w-4" />
                       Implement This Strategy
                     </button>
                   </div>
@@ -455,6 +455,7 @@ export default function OptionsStrategies() {
                   onClick={handleImplementStrategy}
                   className="btn btn-primary"
                 >
+                  <Zap className="h-4 w-4" />
                   Implement Strategy
                 </button>
                 <button

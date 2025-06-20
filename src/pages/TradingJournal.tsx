@@ -58,6 +58,7 @@ export default function TradingJournal() {
       contractTicker: newEntry.contractTicker,
       underlyingTicker: newEntry.underlyingTicker,
       strategy: newEntry.strategy,
+     date: new Date(),
       entryPrice: newEntry.entryPrice,
       exitPrice: newEntry.exitPrice || undefined,
       quantity: newEntry.quantity,

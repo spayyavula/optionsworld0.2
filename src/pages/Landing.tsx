@@ -105,7 +105,7 @@ export default function Landing() {
     if (selectedDeal && selectedDeal.plan === plan) {
       return selectedDeal.discountedPrice
     }
-    if (appliedCoupon) {
+    if (appliedCoupon && appliedCoupon.finalAmount !== undefined) {
       return appliedCoupon.finalAmount
     }
     return originalPrice
@@ -114,12 +114,12 @@ export default function Landing() {
   const getDiscountInfo = (plan: 'monthly' | 'yearly') => {
     if (selectedDeal && selectedDeal.plan === plan) {
       return {
-        hasDiscount: true,
+        hasDiscount: selectedDeal.discountPercentage > 0,
         discountText: `${selectedDeal.discountPercentage}% OFF`,
         savings: selectedDeal.originalPrice - selectedDeal.discountedPrice
       }
     }
-    if (appliedCoupon) {
+    if (appliedCoupon && appliedCoupon.discountAmount > 0) {
       return {
         hasDiscount: true,
         discountText: CouponService.formatDiscount(appliedCoupon.coupon),

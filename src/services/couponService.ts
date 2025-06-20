@@ -93,7 +93,7 @@ export class CouponService {
   static validateCoupon(
     code: string, 
     plan: 'monthly' | 'yearly', 
-    amount: number,
+    amount: number = 0,
     isFirstTime: boolean = false
   ): CouponValidation {
     const coupons = this.getCoupons()
@@ -106,7 +106,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: 'Invalid coupon code'
       }
     }
@@ -117,7 +117,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: 'Coupon has expired'
       }
     }
@@ -127,7 +127,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: `Coupon not valid for ${plan} plan`
       }
     }
@@ -137,7 +137,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: 'Coupon is only valid for first-time subscribers'
       }
     }
@@ -147,7 +147,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: `Minimum order amount is $${coupon.minAmount}`
       }
     }
@@ -157,7 +157,7 @@ export class CouponService {
       return {
         isValid: false,
         discountAmount: 0,
-        finalAmount: amount,
+        finalAmount: amount || 0,
         error: 'Coupon usage limit reached'
       }
     }
@@ -165,7 +165,7 @@ export class CouponService {
     // Calculate discount
     let discountAmount = 0
     if (coupon.type === 'percentage') {
-      discountAmount = amount * (coupon.value / 100)
+      discountAmount = (amount || 0) * (coupon.value / 100)
       if (coupon.maxDiscount) {
         discountAmount = Math.min(discountAmount, coupon.maxDiscount)
       }
@@ -175,7 +175,8 @@ export class CouponService {
 
     // Ensure discount doesn't exceed amount
     discountAmount = Math.min(discountAmount, amount)
-    const finalAmount = Math.max(0, amount - discountAmount)
+    discountAmount = Math.min(discountAmount, amount || 0)
+    const finalAmount = Math.max(0, (amount || 0) - discountAmount)
 
     return {
       isValid: true,
