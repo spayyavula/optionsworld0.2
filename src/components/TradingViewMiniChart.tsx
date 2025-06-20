@@ -41,8 +41,8 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
       iframe.style.width = typeof width === 'number' ? `${width}px` : width.toString();
       iframe.style.height = typeof height === 'number' ? `${height}px` : height.toString();
       iframe.style.border = 'none';
-      iframe.allowTransparency = true;
-      iframe.frameBorder = '0';
+      iframe.setAttribute('allowTransparency', 'true');
+      iframe.setAttribute('frameBorder', '0');
       
       containerRef.current.appendChild(iframe);
     }

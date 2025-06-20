@@ -40,8 +40,8 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
       iframe.style.width = '100%';
       iframe.style.height = '46px';
       iframe.style.border = 'none';
-      iframe.allowTransparency = true;
-      iframe.frameBorder = '0';
+      iframe.setAttribute('allowTransparency', 'true');
+      iframe.setAttribute('frameBorder', '0');
       
       containerRef.current.appendChild(iframe);
     }
