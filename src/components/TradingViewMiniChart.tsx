@@ -32,7 +32,12 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
       
       // Create iframe for mini chart
       const iframe = document.createElement('iframe');
-      iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=${container_id || 'tradingview_mini'}&symbol=${symbol}&interval=D&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=${trendLineColor.replace(/[^a-zA-Z0-9]/g, '')}&studies=[]&theme=${theme}&style=1&timezone=exchange&withdateranges=0&showpopupbutton=0&width=${typeof width === 'number' ? width : '100%'}&height=${typeof height === 'number' ? height : '100%'}`;
+      const uniqueId = container_id || `tradingview_mini_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Construct the iframe URL with proper parameters
+      iframe.src = `https://s.tradingview.com/widgetembed/?frameElementId=${uniqueId}&symbol=${symbol}&interval=D&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&studies=[]&theme=${theme}&style=1&timezone=exchange&withdateranges=0&showpopupbutton=0`;
+      
+      // Set dimensions
       iframe.style.width = typeof width === 'number' ? `${width}px` : width.toString();
       iframe.style.height = typeof height === 'number' ? `${height}px` : height.toString();
       iframe.style.border = 'none';
@@ -47,7 +52,7 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
         containerRef.current.innerHTML = '';
       }
     };
-  }, [symbol, width, height, theme, trendLineColor, container_id])
+  }, [symbol, width, height, theme, container_id])
 
   const containerId = container_id || `tradingview_mini_${Math.random().toString(36).substr(2, 9)}`
 
@@ -57,12 +62,8 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
         ref={containerRef}
         id={containerId}
         className="tradingview-widget-container__widget"
+        style={{ width: typeof width === 'number' ? `${width}px` : width, height: typeof height === 'number' ? `${height}px` : height }}
       />
-      <div className="tradingview-widget-copyright">
-        <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-          <span className="blue-text">Track all markets on TradingView</span>
-        </a>
-      </div>
     </div>
   )
 }
