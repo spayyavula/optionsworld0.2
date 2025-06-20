@@ -420,20 +420,101 @@ export default function RegimeAnalysisPage() {
       {/* Market Chart Analysis */}
       <div className="card">
         <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
+            <div className="flex space-x-2">
+              <select
+                className="form-select text-sm"
+                defaultValue="AMEX:SPY"
+                onChange={(e) => {
+                  const widget = document.querySelector('iframe')?.contentWindow;
+                  if (widget && widget.postMessage) {
+                    widget.postMessage({ method: 'setSymbol', params: { symbol: e.target.value } }, '*');
+                  }
+                }}
+              >
+                <option value="AMEX:SPY">SPY (S&P 500)</option>
+                <option value="NASDAQ:QQQ">QQQ (Nasdaq)</option>
+                <option value="AMEX:IWM">IWM (Russell 2000)</option>
+                <option value="AMEX:DIA">DIA (Dow Jones)</option>
+                <option value="AMEX:VIX">VIX (Volatility Index)</option>
+              </select>
+              <select
+                className="form-select text-sm"
+                defaultValue="D"
+                onChange={(e) => {
+                  const widget = document.querySelector('iframe')?.contentWindow;
+                  if (widget && widget.postMessage) {
+                    widget.postMessage({ method: 'setInterval', params: { interval: e.target.value } }, '*');
+                  }
+                }}
+              >
+                <option value="5">5 min</option>
+                <option value="15">15 min</option>
+                <option value="60">1 hour</option>
+                <option value="240">4 hours</option>
+                <option value="D">1 day</option>
+                <option value="W">1 week</option>
+                <option value="M">1 month</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div className="card-body">
           <TradingViewWidget
             symbol="AMEX:SPY"
             width="100%"
-            height={600}
+            height={650}
             interval="D"
             theme="light"
             style="candles"
             toolbar_bg="#f1f3f6"
-            enable_publishing={false}
+            enable_publishing={true}
             allow_symbol_change={true}
+            studies={["RSI@tv-basicstudies", "MACD@tv-basicstudies", "AwesomeOscillator@tv-basicstudies", "StochasticRSI@tv-basicstudies"]}
+            container_id="regime_analysis_chart"
           />
+          
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h4 className="font-medium text-blue-900 mb-2 flex items-center">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Chart Analysis for {analysis.currentRegime.name} Regime
+            </h4>
+            <p className="text-sm text-blue-800 mb-3">
+              {analysis.currentRegime.trend === 'bullish' 
+                ? 'Look for bullish patterns like higher highs and higher lows, with strong volume on up days.'
+                : analysis.currentRegime.trend === 'bearish'
+                ? 'Watch for bearish patterns like lower highs and lower lows, with increased volume on down days.'
+                : 'Observe range-bound price action between support and resistance levels with decreasing volume.'
+              }
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="p-3 bg-white rounded-lg">
+                <h5 className="font-medium text-gray-900 mb-1">Key Support/Resistance</h5>
+                <ul className="space-y-1 text-gray-600">
+                  <li>• Support: ${(marketData.price * 0.95).toFixed(2)}</li>
+                  <li>• Resistance: ${(marketData.price * 1.05).toFixed(2)}</li>
+                  <li>• 200-day MA: ${marketData.movingAverages.sma200.toFixed(2)}</li>
+                </ul>
+              </div>
+              <div className="p-3 bg-white rounded-lg">
+                <h5 className="font-medium text-gray-900 mb-1">Momentum Indicators</h5>
+                <ul className="space-y-1 text-gray-600">
+                  <li>• RSI: {marketData.rsi.toFixed(1)} ({marketData.rsi > 70 ? 'Overbought' : marketData.rsi < 30 ? 'Oversold' : 'Neutral'})</li>
+                  <li>• MACD: {marketData.macd.toFixed(2)} ({marketData.macd > 0 ? 'Bullish' : 'Bearish'})</li>
+                  <li>• Volume: {(marketData.volume / 1000000).toFixed(1)}M ({marketData.volume > 1000000 ? 'High' : 'Low'})</li>
+                </ul>
+              </div>
+              <div className="p-3 bg-white rounded-lg">
+                <h5 className="font-medium text-gray-900 mb-1">Volatility Metrics</h5>
+                <ul className="space-y-1 text-gray-600">
+                  <li>• VIX: {marketData.vix.toFixed(1)} ({marketData.vix > 30 ? 'High' : marketData.vix < 15 ? 'Low' : 'Moderate'})</li>
+                  <li>• Bollinger Width: {((marketData.bollingerBands.upper - marketData.bollingerBands.lower) / marketData.bollingerBands.middle * 100).toFixed(1)}%</li>
+                  <li>• ATR: ${(marketData.price * 0.015).toFixed(2)} ({analysis.currentRegime.volatility} volatility)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
