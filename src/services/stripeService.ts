@@ -140,6 +140,7 @@ export class StripeService {
       throw new Error('Failed to create checkout session')
     }
   }
+
   /**
    * Redirect to Stripe Checkout for one-time payment (Buy Me a Coffee)
    */
@@ -286,7 +287,7 @@ export class StripeService {
         this.completeMockCheckout(plan, couponCode, finalPrice)
       }
     }
-  }</parameter>
+  }
 
   /**
    * Complete mock checkout process
