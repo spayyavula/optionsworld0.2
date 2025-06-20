@@ -9,6 +9,9 @@ import Orders from './pages/Orders'
 import OptionsChain from './pages/OptionsChain'
 import RegimeAnalysis from './pages/RegimeAnalysis'
 import Analytics from './pages/Analytics'
+import OptionsLearning from './pages/OptionsLearning'
+import TradingJournal from './pages/TradingJournal'
+import OptionsStrategies from './pages/OptionsStrategies'
 import Community from './pages/Community'
 import Settings from './pages/Settings'
 import OptionsDataManager from './pages/OptionsDataManager'
@@ -38,6 +41,9 @@ function App() {
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/watchlist" element={<OptionsChain />} />
                   <Route path="/regime" element={<RegimeAnalysis />} />
+                  <Route path="/learning" element={<OptionsLearning />} />
+                  <Route path="/journal" element={<TradingJournal />} />
+                  <Route path="/strategies" element={<OptionsStrategies />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/settings" element={<Settings />} />

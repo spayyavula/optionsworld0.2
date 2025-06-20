@@ -3,20 +3,26 @@ import { Link, useLocation } from 'react-router-dom'
 import { 
   BarChart3, 
   Briefcase, 
-  TrendingUp, 
+  TrendingUp,
   FileText, 
   Eye, 
   PieChart, 
   Settings,
   Users,
   Menu,
-  X
+  X,
+  BookOpen,
+  BookMarked,
+  Lightbulb
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/app', icon: BarChart3 },
   { name: 'Options Portfolio', href: '/app/portfolio', icon: Briefcase },
   { name: 'Options Trading', href: '/app/trading', icon: TrendingUp },
+  { name: 'Options Learning', href: '/app/learning', icon: BookOpen },
+  { name: 'Trading Journal', href: '/app/journal', icon: BookMarked },
+  { name: 'Options Strategies', href: '/app/strategies', icon: Lightbulb },
   { name: 'Orders', href: '/app/orders', icon: FileText },
   { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
   { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
