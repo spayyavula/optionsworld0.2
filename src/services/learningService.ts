@@ -109,7 +109,7 @@ export class LearningService {
   /**
    * Add trading journal entry
    */
-  static addJournalEntry(entry: Omit<TradingJournalEntry, 'id'>): TradingJournalEntry {
+  static addJournalEntry(entry: Omit<TradingJournalEntry, 'id' | 'date'>): TradingJournalEntry {
     const entries = this.getJournalEntries()
     const newEntry: TradingJournalEntry = {
       ...entry,

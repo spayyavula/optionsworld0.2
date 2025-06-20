@@ -11,7 +11,8 @@ import {
   Target,
   DollarSign,
   Clock,
-  Zap
+  Zap,
+  Play
 } from 'lucide-react'
 import { LearningService } from '../services/learningService'
 import type { StrategyTemplate } from '../types/learning'
