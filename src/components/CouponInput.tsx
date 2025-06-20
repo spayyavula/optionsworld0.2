@@ -4,7 +4,7 @@ import { CouponService } from '../services/couponService'
 
 interface CouponInputProps {
   plan: 'monthly' | 'yearly'
-  originalAmount?: number
+  originalAmount: number
   onCouponApplied: (validation: any) => void
   onCouponRemoved: () => void
   appliedCoupon?: any
@@ -13,11 +13,11 @@ interface CouponInputProps {
 
 export default function CouponInput({
   plan,
-  originalAmount = 0,
+  originalAmount,
   onCouponApplied,
   onCouponRemoved,
   appliedCoupon,
-  className = '',
+  className = ''
 }: CouponInputProps) {
   const [couponCode, setCouponCode] = useState('')
   const [isValidating, setIsValidating] = useState(false)
@@ -29,34 +29,30 @@ export default function CouponInput({
     setIsValidating(true)
     setError('')
 
-    try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      if (!couponCode.trim()) {
-        setError('Please enter a coupon code')
-        return
-      }
-      
-      const validation = CouponService.validateCoupon(
-        couponCode.trim(),
-        plan,
-        originalAmount,
-        true // Assume first time for demo
-      )
-      
-      if (validation.isValid) {
-        onCouponApplied(validation)
-        setCouponCode('')
-      } else {
-        setError(validation.error || 'Invalid coupon code')
-      }
-    } catch (error) {
-      console.error('Error validating coupon:', error);
-      setError('Error validating coupon. Please try again.')
-    } finally {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    if (!couponCode.trim()) {
+      setError('Please enter a coupon code')
       setIsValidating(false)
+      return
     }
+    
+    const validation = CouponService.validateCoupon(
+      couponCode.trim(),
+      plan,
+      originalAmount,
+      true // Assume first time for demo
+    )
+    
+    if (validation.isValid) {
+      onCouponApplied(validation)
+      setCouponCode('')
+    } else {
+      setError(validation.error || 'Invalid coupon code')
+    }
+    
+    setIsValidating(false)
   }
 
   const handleRemoveCoupon = () => {
@@ -67,7 +63,6 @@ export default function CouponInput({
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleApplyCoupon()
-      e.preventDefault()
     }
   }
 
