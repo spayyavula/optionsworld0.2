@@ -12,6 +12,7 @@ import Analytics from './pages/Analytics'
 import Community from './pages/Community'
 import Settings from './pages/Settings'
 import OptionsDataManager from './pages/OptionsDataManager'
+import Construction from './pages/Construction'
 import { OptionsProvider } from './context/OptionsContext'
 import { TradingProvider } from './context/TradingContext'
 import { OptionsDataProvider } from './context/OptionsDataContext'
@@ -23,6 +24,7 @@ function App() {
         <OptionsDataProvider>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/construction" element={<Construction />} />
             <Route path="/app" element={
               <Layout>
                 <Dashboard />
