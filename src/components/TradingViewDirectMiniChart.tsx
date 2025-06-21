@@ -3,17 +3,15 @@ import React, { useEffect, useRef } from 'react'
 interface TradingViewDirectMiniChartProps {
   symbol: string
   width?: string | number
-  height?: string | number
+  height?: number
   theme?: 'light' | 'dark'
-  container_id?: string
 }
 
 const TradingViewDirectMiniChart: React.FC<TradingViewDirectMiniChartProps> = ({
   symbol,
   width = 350,
   height = 220,
-  theme = 'light',
-  container_id
+  theme = 'light'
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -139,12 +137,9 @@ const TradingViewDirectMiniChart: React.FC<TradingViewDirectMiniChartProps> = ({
     return cleanup
   }, [symbol, width, height, theme])
 
-  const containerId = container_id || `tradingview-mini-${Math.random().toString(36).substring(2, 11)}`
-
   return (
     <div 
       ref={containerRef}
-      id={containerId}
       className="tradingview-mini-chart-container"
       style={{ 
         width: typeof width === 'number' ? `${width}px` : width, 

@@ -3,10 +3,9 @@ import React, { useEffect, useRef } from 'react'
 interface TradingViewDirectWidgetProps {
   symbol: string
   width?: string | number
-  height?: string | number
+  height?: number
   interval?: string
   theme?: 'light' | 'dark'
-  container_id?: string
   showToolbar?: boolean
   showDrawings?: boolean
   showIndicators?: boolean
@@ -18,7 +17,6 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
   height = 500,
   interval = 'D',
   theme = 'light',
-  container_id,
   showToolbar = true,
   showDrawings = true,
   showIndicators = true
@@ -159,12 +157,9 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
     return cleanup
   }, [symbol, width, height, interval, theme, showToolbar, showDrawings, showIndicators])
 
-  const containerId = container_id || `tradingview-${Math.random().toString(36).substring(2, 11)}`
-
   return (
     <div 
       ref={containerRef}
-      id={containerId}
       className="tradingview-widget-container"
       style={{ 
         width: typeof width === 'number' ? `${width}px` : width, 

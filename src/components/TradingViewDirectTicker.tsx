@@ -3,17 +3,15 @@ import React, { useEffect, useRef } from 'react'
 interface TradingViewDirectTickerProps {
   symbols: string[]
   width?: string | number
-  height?: string | number
+  height?: number
   darkMode?: boolean
-  container_id?: string
 }
 
 const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
   symbols,
   width = '100%',
   height = 60,
-  darkMode = false,
-  container_id
+  darkMode = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -111,12 +109,9 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
     return cleanup
   }, [symbols, width, height, darkMode])
 
-  const containerId = container_id || `tradingview-ticker-${Math.random().toString(36).substring(2, 11)}`
-
   return (
     <div 
       ref={containerRef}
-      id={containerId}
       className="tradingview-ticker-container"
       style={{ 
         width: typeof width === 'number' ? `${width}px` : width, 
