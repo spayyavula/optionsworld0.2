@@ -13,7 +13,8 @@ import {
   CheckCircle,
   XCircle,
   Copy,
-  ExternalLink
+  ExternalLink,
+  TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
