@@ -445,7 +445,7 @@ export default function RegimeAnalysisPage() {
       <div className="card">
         <div className="card-header">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
+            <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis (StockCharts)</h3>
             <div className="flex space-x-2">
               <select
                 className="form-select text-sm"
@@ -477,11 +477,11 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-            <TradingViewDirectWidget
+            <StockChartsWidget
               symbol={chartSymbol || 'SPY'}
               width="100%"
               height={650}
-              interval={chartInterval}
+              timeframe={chartInterval}
               theme="light"
               showToolbar={true}
               showDrawings={true}

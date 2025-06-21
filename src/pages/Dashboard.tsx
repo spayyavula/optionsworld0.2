@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpR
 import { useTradingContext } from '../context/TradingContext'
 import { CommunityService } from '../services/communityService'
 import StockChartsWidget from '../components/StockChartsWidget'
+import StockChartsWidget from '../components/StockChartsWidget'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import PageViewCounter from './PageViewCounter'
 import YahooFinanceTicker from '../components/YahooFinanceTicker'
@@ -139,11 +140,11 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewDirectWidget
+          <StockChartsWidget
             symbol="SPY"
             width="100%"
             height={400}
-            interval="D"
+            timeframe="D"
             theme="light"
             showToolbar={true}
             showDrawings={true}

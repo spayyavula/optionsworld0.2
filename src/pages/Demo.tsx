@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import StockChartsWidget from '../components/StockChartsWidget'
 import { 
   ArrowRight, 
   TrendingUp, 
@@ -265,7 +266,7 @@ export default function Demo() {
                 <h3 className="text-lg font-semibold text-gray-900">Options Trading</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                Trade options with real-time market data, Greeks analysis, and comprehensive order management.
+                Trade options with real-time market data from StockCharts and TradingView, Greeks analysis, and comprehensive order management.
               </p>
               <Link to="/app/trading" className="text-blue-600 font-medium inline-flex items-center hover:text-blue-700">
                 Explore Trading

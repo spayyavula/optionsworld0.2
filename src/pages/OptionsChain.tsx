@@ -304,11 +304,11 @@ export default function OptionsChain() {
             </h3>
           </div>
           <div className="card-body">
-            <TradingViewDirectWidget
+            <StockChartsWidget
               symbol={selectedUnderlying || 'SPY'}
               width="100%"
               height={500}
-              interval="D"
+              timeframe="D"
               theme="light"
               showToolbar={true}
               showDrawings={true}
