@@ -523,30 +523,30 @@ export default function Landing() {
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><Link to="/app" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link to="/app/trading" className="hover:text-white transition-colors">Trading Platform</Link></li>
+                <li><Link to="/app/learning" className="hover:text-white transition-colors">Learning Resources</Link></li>
+                <li><Link to="/app/strategies" className="hover:text-white transition-colors">Strategy Library</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Blog</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Careers</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Contact</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+                <li><Link to="/app/community" className="hover:text-white transition-colors">Community</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Help Center</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Status</Link></li>
+                <li><Link to="/construction" className="hover:text-white transition-colors">Privacy</Link></li>
               </ul>
             </div>
           </div>
