@@ -136,11 +136,14 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
   // Simulate real-time price updates for options - set up once on mount
   useEffect(() => {
     const updateInterval = Math.max(1000, parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000') || 5000)
-    let intervalId: number | null = null
+    let timeoutId: number | null = null
+    let isActive = true
     
     try {
       const updatePrices = () => {
         try {
+          if (!isActive) return
+          
           const currentState = stateRef.current
           if (currentState.contracts.length === 0) return
           
@@ -160,22 +163,33 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
           })
           
           dispatch({ type: 'UPDATE_CONTRACT_PRICES', payload: updatedContracts })
+          
+          // Schedule next update
+          if (isActive) {
+            timeoutId = window.setTimeout(updatePrices, updateInterval)
+          }
         } catch (error) {
           console.error('Error updating options prices:', error)
+          // Schedule retry on error
+          if (isActive) {
+            timeoutId = window.setTimeout(updatePrices, updateInterval)
+          }
         }
       }
       
-      intervalId = window.setInterval(updatePrices, updateInterval);
+      // Start the update cycle
+      timeoutId = window.setTimeout(updatePrices, updateInterval)
     } catch (error) {
       console.error('Error setting up options price updates:', error)
     }
     
     return () => {
-      if (intervalId) {
+      isActive = false
+      if (timeoutId) {
         try {
-          window.clearInterval(intervalId)
+          window.clearTimeout(timeoutId)
         } catch (error) {
-          console.error('Error clearing options price interval:', error)
+          console.error('Error clearing options price timeout:', error)
         }
       }
     }
