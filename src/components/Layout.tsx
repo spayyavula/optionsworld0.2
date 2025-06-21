@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { 
   BarChart3, Briefcase, TrendingUp, FileText, Eye, PieChart, 
   Settings, Users, Menu, X, BookOpen, BookMarked, Lightbulb,
-  Bot, Cpu
+  Bot, Cpu, AlertTriangle
  } from 'lucide-react'
+import Disclaimer from './Disclaimer'
 
 const navigation = [
   { name: 'Dashboard', href: '/app', icon: BarChart3 },
@@ -128,6 +129,14 @@ export default function Layout({ children }: LayoutProps) {
         {/* Page content */}
         <main className="py-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {/* Persistent mini disclaimer for trading pages */}
+            <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-2 text-sm text-yellow-700 flex items-center">
+              <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2 flex-shrink-0" />
+              <p>
+                <strong>Disclaimer:</strong> This platform is for educational purposes only. Options trading involves significant risk.
+              </p>
+            </div>
+            
             {children}
           </div>
         </main>

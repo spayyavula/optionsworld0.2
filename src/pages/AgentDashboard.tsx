@@ -13,6 +13,7 @@ import {
   CheckCircle,
   XCircle,
   Copy,
+  AlertTriangle,
   ExternalLink
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -192,6 +193,26 @@ const AgentDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* API Disclaimer */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 text-yellow-600" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800">API Usage Disclaimer</h3>
+            <div className="mt-2 text-sm text-yellow-700">
+              <p>
+                The Options World API is provided for educational and paper trading purposes only. Any automated trading systems or agents built using this API should not be used for real money trading without thorough testing and risk assessment.
+              </p>
+              <p className="mt-1">
+                API users are responsible for ensuring their implementations comply with all applicable laws and regulations. Options World is not responsible for any losses incurred through the use of this API.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Header */}
       <div className="card">
         <div className="card-header">

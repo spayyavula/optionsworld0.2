@@ -6,6 +6,7 @@ import {
   BookOpen, 
   Users, 
   BarChart3, 
+  AlertTriangle,
   FileText, 
   Eye, 
   PieChart,
@@ -17,7 +18,17 @@ import {
 
 export default function Demo() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-12 relative">
+      {/* Demo Disclaimer Banner */}
+      <div className="bg-yellow-50 border-b border-yellow-200 py-2 px-4 text-center mb-8">
+        <div className="flex items-center justify-center">
+          <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2" />
+          <p className="text-sm text-yellow-700">
+            <strong>Disclaimer:</strong> This platform is for educational purposes only. Options trading involves significant risk.
+          </p>
+        </div>
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Options Trading Platform Demo</h1>
