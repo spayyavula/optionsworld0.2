@@ -199,7 +199,7 @@ export class BuyMeCoffeeService {
     // Check if we're in a browser environment
     if (typeof document === 'undefined') {
       console.warn('Coffee button creation called in non-browser environment')
-      return document.createElement('button') // This will fail gracefully
+      throw new Error('Document not available in non-browser environment')
     }
 
     const button = document.createElement('button')

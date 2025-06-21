@@ -165,7 +165,7 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
         }
       }
       
-      intervalId = setInterval(updatePrices, updateInterval)
+      intervalId = setInterval(updatePrices, updateInterval);
     } catch (error) {
       console.error('Error setting up options price updates:', error)
     }

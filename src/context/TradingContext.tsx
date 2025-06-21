@@ -461,7 +461,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
         }
       }
       
-      intervalId = setInterval(updatePrices, 5000) // Update every 5 seconds
+      intervalId = setInterval(updatePrices, 5000); // Update every 5 seconds
     } catch (error) {
       console.error('Error setting up stock price updates:', error)
     }
