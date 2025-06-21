@@ -41,15 +41,16 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       // Create mini chart container
       const chartContainer = document.createElement('div')
       chartContainer.className = 'stockcharts-mini-chart'
+      chartContainer.style.display = 'flex'
+      chartContainer.style.flexDirection = 'column'
+      chartContainer.style.alignItems = 'center'
+      chartContainer.style.justifyContent = 'center'
       chartContainer.style.width = '100%'
       chartContainer.style.height = '100%'
-      chartContainer.style.backgroundColor = theme === 'dark' ? '#1a1a1a' : '#ffffff'
+      chartContainer.style.backgroundColor = theme === 'dark' ? '#1a1a1a' : '#f8f9fa'
       chartContainer.style.borderRadius = '0.5rem'
-      chartContainer.style.overflow = 'hidden'
-      chartContainer.style.position = 'relative'
-      
-      // Create iframe for StockCharts
-      const iframe = document.createElement('iframe')
+      chartContainer.style.padding = '1rem'
+      chartContainer.style.textAlign = 'center'
       
       // Format symbol to ensure it has exchange prefix if needed
       const formattedSymbol = symbol.includes(':') ? symbol : symbol
@@ -65,36 +66,69 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
         t: 'false'  // No toolbar for mini chart
       })
       
-      iframe.src = `${baseUrl}?${params.toString()}`
-      iframe.style.width = '100%'
-      iframe.style.height = '100%'
-      iframe.style.border = 'none'
-      iframe.style.overflow = 'hidden'
+      // Create symbol header
+      const symbolHeader = document.createElement('div')
+      symbolHeader.style.fontWeight = 'bold'
+      symbolHeader.style.fontSize = '16px'
+      symbolHeader.style.marginBottom = '0.5rem'
+      symbolHeader.style.color = theme === 'dark' ? '#e0e0e0' : '#111827'
+      symbolHeader.textContent = symbol
       
-      chartContainer.appendChild(iframe)
+      // Create mini chart placeholder
+      const chartPlaceholder = document.createElement('div')
+      chartPlaceholder.style.width = '100%'
+      chartPlaceholder.style.height = '70%'
+      chartPlaceholder.style.backgroundColor = theme === 'dark' ? '#2a2a2a' : '#e9ecef'
+      chartPlaceholder.style.borderRadius = '0.375rem'
+      chartPlaceholder.style.marginBottom = '0.75rem'
+      chartPlaceholder.style.display = 'flex'
+      chartPlaceholder.style.alignItems = 'center'
+      chartPlaceholder.style.justifyContent = 'center'
+      
+      // Add chart icon
+      const chartIcon = document.createElement('div')
+      chartIcon.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${theme === 'dark' ? '#e0e0e0' : '#6c757d'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="20" x2="12" y2="10"></line>
+          <line x1="18" y1="20" x2="18" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="16"></line>
+        </svg>
+      `
+      
+      chartPlaceholder.appendChild(chartIcon)
+      
+      // Create link button
+      const linkButton = document.createElement('a')
+      linkButton.href = `${baseUrl}?${params.toString()}`
+      linkButton.target = '_blank'
+      linkButton.rel = 'noopener noreferrer'
+      linkButton.style.display = 'inline-flex'
+      linkButton.style.alignItems = 'center'
+      linkButton.style.justifyContent = 'center'
+      linkButton.style.padding = '0.5rem 0.75rem'
+      linkButton.style.backgroundColor = '#2563eb'
+      linkButton.style.color = 'white'
+      linkButton.style.borderRadius = '0.375rem'
+      linkButton.style.fontSize = '0.875rem'
+      linkButton.style.fontWeight = '500'
+      linkButton.style.textDecoration = 'none'
+      linkButton.style.transition = 'background-color 150ms'
+      linkButton.textContent = 'View Chart'
+      
+      // Add hover effect
+      linkButton.onmouseover = () => {
+        linkButton.style.backgroundColor = '#1d4ed8'
+      }
+      linkButton.onmouseout = () => {
+        linkButton.style.backgroundColor = '#2563eb'
+      }
+      
+      // Assemble the container
+      chartContainer.appendChild(symbolHeader)
+      chartContainer.appendChild(chartPlaceholder)
+      chartContainer.appendChild(linkButton)
+      
       containerRef.current.appendChild(chartContainer)
-      iframeRef.current = iframe
-      
-      // Create header with symbol info
-      const header = document.createElement('div')
-      header.style.position = 'absolute'
-      header.style.top = '0'
-      header.style.left = '0'
-      header.style.right = '0'
-      header.style.padding = '8px 12px'
-      header.style.backgroundColor = theme === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
-      header.style.backdropFilter = 'blur(4px)'
-      header.style.borderBottom = theme === 'dark' ? '1px solid #333' : '1px solid #e5e7eb'
-      header.style.zIndex = '10'
-      
-      const symbolName = document.createElement('div')
-      symbolName.textContent = symbol
-      symbolName.style.fontWeight = 'bold'
-      symbolName.style.fontSize = '14px'
-      symbolName.style.color = theme === 'dark' ? '#e0e0e0' : '#111827'
-      
-      header.appendChild(symbolName)
-      chartContainer.appendChild(header)
     } catch (error) {
       console.error('Error initializing StockCharts mini widget:', error)
       
