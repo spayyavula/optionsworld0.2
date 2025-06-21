@@ -150,15 +150,13 @@ export default function Landing() {
                 <Play className="mr-2 h-5 w-5" />
                 Start Trading Now
               </Link>
-              <button className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-                <Link 
-                  to="/demo" 
-                  className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
-                >
-                  <Info className="mr-2 h-5 w-5" />
-                  View Demo
-                </Link>
-              </button>
+              <Link 
+                to="/demo" 
+                className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
+              >
+                <Info className="mr-2 h-5 w-5" />
+                View Demo
+              </Link>
             </div>
           </div>
         </div>
@@ -509,16 +507,9 @@ export default function Landing() {
               onClick={() => handleDonate(25)}
               className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center"
             >
-              <Coffee className="mr-2 h-5 w-5" />
-              Become a sponsor - $25
+              <Award className="mr-2 h-5 w-5" />
+              Sponsor us - $25
             </button>
-            <Link 
-              to="/demo" 
-              className="border border-white text-white hover:bg-white hover:text-gray-900 px-6 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
-            >
-              <Info className="mr-2 h-5 w-5" />
-              View Demo
-            </Link>
           </div>
         </div>
       </section>
