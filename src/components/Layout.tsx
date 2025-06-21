@@ -1,22 +1,10 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
-  BarChart3, 
-  Briefcase, 
-  TrendingUp,
-  FileText, 
-  Eye, 
-  PieChart, 
-  Settings,
-  Users,
-  Menu,
-  X,
-  BookOpen,
-  BookMarked,
-  Lightbulb,
-  Bot,
-  Cpu
-} from 'lucide-react'
+  BarChart3, Briefcase, TrendingUp, FileText, Eye, PieChart, 
+  Settings, Users, Menu, X, BookOpen, BookMarked, Lightbulb,
+  Bot, Cpu
+ } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/app', icon: BarChart3 },
