@@ -13,7 +13,7 @@ import {
   X,
   BookOpen,
   BookMarked,
-  Lightbulb
+  Lightbulb,
   Bot,
   Cpu
 } from 'lucide-react'
