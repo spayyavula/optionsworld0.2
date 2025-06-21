@@ -6,6 +6,8 @@ declare global {
   }
 }
 
+export {};
+
 interface ImportMetaEnv {
   readonly VITE_POLYGON_API_KEY: string
   readonly VITE_APP_NAME: string
