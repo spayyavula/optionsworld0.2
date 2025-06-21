@@ -475,21 +475,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
         }
       }
     }
-  }, []) // Empty dependency array - only set up once
-        
-        return {
-          ...stock,
-          price: Math.round(newPrice * 100) / 100,
-          change: Math.round(change * 100) / 100,
-          changePercent: Math.round(changePercent * 10000) / 100
-        }
-      })
-      
-      dispatch({ type: 'UPDATE_STOCK_PRICES', payload: updatedStocks })
-    }, 5000) // Update every 5 seconds
-    
-    return () => clearInterval(interval)
-  }, []) // Empty dependency array - only set up once
+  }, [])
   
   // Cleanup old data periodically (once per day) - only if services are available
   useEffect(() => {
