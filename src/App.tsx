@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
+import Demo from './pages/Demo'
 import OptionsPortfolio from './pages/OptionsPortfolio'
 import OptionsTrading from './pages/OptionsTrading'
 import Orders from './pages/Orders'
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/construction" element={<Construction />} />
+            <Route path="/demo" element={<Demo />} />
             <Route path="/app" element={
               <Layout>
                 <Dashboard />
