@@ -480,6 +480,7 @@ export default function OptionsTrading() {
                 height={300}
                 theme="light"
               />
+              />
             </div>
           </div>
         )}
