@@ -130,7 +130,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
         scriptRef.current.parentNode.removeChild(scriptRef.current)
         scriptRef.current = null
       }
-      }
     }
   }, [symbol, interval, theme, style, width, height])
 
