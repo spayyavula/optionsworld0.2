@@ -1,5 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
+import SeoHelmet from './components/SeoHelmet'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
@@ -24,6 +25,7 @@ import { OptionsDataProvider } from './context/OptionsDataContext'
 function App() {
   return (
     <TradingProvider>
+      <SeoHelmet />
       <OptionsProvider>
         <OptionsDataProvider>
           <Routes>

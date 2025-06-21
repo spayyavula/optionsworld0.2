@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Save, RefreshCw, Download, Upload, AlertTriangle, Database, Activity, Tag, Plus, Trash2 } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
 import { CouponService } from '../services/couponService'
+import PageViewCounter from './PageViewCounter'
 import SubscriptionStatus from '../components/SubscriptionStatus'
 
 export default function Settings() {
@@ -676,6 +677,16 @@ export default function Settings() {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Site Statistics */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Site Statistics</h3>
+        </div>
+        <div className="card-body">
+          <PageViewCounter />
         </div>
       </div>
 

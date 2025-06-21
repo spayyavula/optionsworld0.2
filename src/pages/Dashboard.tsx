@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, ArrowUpRight,
 import { useTradingContext } from '../context/TradingContext'
 import { CommunityService } from '../services/communityService'
 import TradingViewWidget from '../components/TradingViewWidget'
+import PageViewCounter from './PageViewCounter'
 import TradingViewTicker from '../components/TradingViewTicker'
 import { format } from 'date-fns'
 
@@ -366,6 +367,16 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+      
+      {/* Page View Counter */}
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Site Statistics</h3>
+        </div>
+        <div className="card-body">
+          <PageViewCounter />
+        </div>
+      </div>
     </div>
   )
 }

@@ -132,7 +132,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
       {/* Hero Section */}
-      <header className="relative overflow-hidden">
+      <header className="relative overflow-hidden" id="home">
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
@@ -163,7 +163,7 @@ export default function Landing() {
       </header>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-900">
+      <section className="py-20 bg-gray-900" id="features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -227,7 +227,7 @@ export default function Landing() {
       </section>
       {/* Special Deals Section */}
       {showDeals && (
-        <section className="py-20 bg-gray-800">
+        <section className="py-20 bg-gray-800" id="deals">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="flex items-center justify-center mb-4">
@@ -251,7 +251,7 @@ export default function Landing() {
       )}
 
       {/* Pricing Section */}
-      <section className="py-20 bg-gray-800">
+      <section className="py-20 bg-gray-800" id="pricing">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -440,7 +440,7 @@ export default function Landing() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20 bg-gray-900">
+      <section className="py-20 bg-gray-900" id="newsletter">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Mail className="h-16 w-16 text-blue-500 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-white mb-4">
@@ -478,7 +478,7 @@ export default function Landing() {
       </section>
 
       {/* Support Section */}
-      <section className="py-20 bg-gray-800">
+      <section className="py-20 bg-gray-800" id="support">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Coffee className="h-16 w-16 text-yellow-500 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-white mb-4">
@@ -515,7 +515,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-12">
+      <footer className="bg-black py-12" id="footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -557,7 +557,13 @@ export default function Landing() {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Options World. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Options World. All rights reserved.</p>
+            <div className="flex justify-center space-x-4 mt-4">
+              <a href="#home" className="text-gray-500 hover:text-white transition-colors">Home</a>
+              <a href="#features" className="text-gray-500 hover:text-white transition-colors">Features</a>
+              <a href="#pricing" className="text-gray-500 hover:text-white transition-colors">Pricing</a>
+              <a href="#support" className="text-gray-500 hover:text-white transition-colors">Support</a>
+            </div>
           </div>
         </div>
       </footer>
