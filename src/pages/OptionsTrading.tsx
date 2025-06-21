@@ -456,7 +456,6 @@ export default function OptionsTrading() {
                 width="100%"
                 height={300}
                 theme="light"
-                timeframe="D"
               />
             </div>
           </div>

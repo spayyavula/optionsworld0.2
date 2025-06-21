@@ -308,7 +308,7 @@ export default function OptionsChain() {
               symbol={selectedUnderlying || 'SPY'}
               width="100%"
               height={500}
-              timeframe="D"
+              interval="D"
               theme="light"
               showToolbar={true}
               showDrawings={true}

@@ -460,7 +460,7 @@ export default function RegimeAnalysisPage() {
               symbol={chartSymbol || 'SPY'}
               width="100%"
               height={650}
-              timeframe={chartInterval}
+              interval={chartInterval}
               theme="light"
               showToolbar={true}
               showDrawings={true}

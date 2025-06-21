@@ -143,7 +143,7 @@ export default function Dashboard() {
             symbol="SPY"
             width="100%"
             height={400}
-            timeframe="D"
+            interval="D"
             theme="light"
             showToolbar={true}
             showDrawings={true}
