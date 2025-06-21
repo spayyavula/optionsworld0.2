@@ -13,6 +13,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://optionsworld.trade/agent</loc>
+    <lastmod>2024-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://optionsworld.trade/app</loc>
     <lastmod>2024-06-20</lastmod>
     <changefreq>weekly</changefreq>
