@@ -13,9 +13,15 @@ export class BuyMeCoffeeService {
    * Open Buy Me a Coffee page in new tab
    */
   static openBuyMeCoffeePage(message?: string): void {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      console.warn('Buy Me a Coffee service called in non-browser environment')
+      return
+    }
+
     if (!this.USERNAME) {
       console.warn('Buy Me a Coffee username not configured, using mock payment')
-      if (confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
+      if (typeof confirm !== 'undefined' && confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
         // Store mock payment
         const mockPayment = {
           id: `coffee_mock_${Date.now()}`,
@@ -31,7 +37,9 @@ export class BuyMeCoffeeService {
           mockPayment
         ]))
         
-        alert('Thank you for the coffee! ☕ (Development Mode)')
+        if (typeof alert !== 'undefined') {
+          alert('Thank you for the coffee! ☕ (Development Mode)')
+        }
         window.location.href = '/'
       }
       return
@@ -97,6 +105,12 @@ export class BuyMeCoffeeService {
    * Load Buy Me a Coffee widget script
    */
   static async loadWidget(containerId: string, config: Partial<BuyMeCoffeeConfig> = {}): Promise<void> {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      console.warn('Buy Me a Coffee widget called in non-browser environment')
+      return
+    }
+
     if (!this.USERNAME || !this.WIDGET_ID) {
       console.warn('Buy Me a Coffee widget not fully configured')
       return
@@ -129,6 +143,12 @@ export class BuyMeCoffeeService {
    * Mock coffee payment for development
    */
   private static mockCoffeePayment(): void {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof confirm === 'undefined') {
+      console.warn('Mock coffee payment called in non-browser environment')
+      return
+    }
+
     if (confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
       // Store mock payment
       const mockPayment = {
@@ -145,7 +165,9 @@ export class BuyMeCoffeeService {
         mockPayment
       ]))
       
-      alert('Thank you for the coffee! ☕ (Development Mode)')
+      if (typeof alert !== 'undefined') {
+        alert('Thank you for the coffee! ☕ (Development Mode)')
+      }
       window.location.href = '/'
     }
   }
@@ -154,6 +176,11 @@ export class BuyMeCoffeeService {
    * Get coffee payment history (for development)
    */
   static getCoffeePayments(): any[] {
+    // Check if localStorage is available
+    if (typeof localStorage === 'undefined') {
+      return []
+    }
+
     try {
       return JSON.parse(localStorage.getItem('mock_coffee_payments') || '[]')
     } catch (error) {
@@ -169,6 +196,12 @@ export class BuyMeCoffeeService {
     text: string = 'Buy me a coffee',
     onClick?: () => void
   ): HTMLButtonElement {
+    // Check if we're in a browser environment
+    if (typeof document === 'undefined') {
+      console.warn('Coffee button creation called in non-browser environment')
+      return document.createElement('button') // This will fail gracefully
+    }
+
     const button = document.createElement('button')
     button.innerHTML = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px;">
