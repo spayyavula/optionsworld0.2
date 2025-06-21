@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 
+declare global {
+  interface Window {
+    TradingView?: any;
+  }
+}
+
 interface TradingViewMiniChartProps {
   symbol: string
   width?: string | number
@@ -24,44 +30,52 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
   container_id
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const scriptRef = useRef<HTMLScriptElement | null>(null)
 
   useEffect(() => {
     if (containerRef.current) {
       // Clear previous content
       containerRef.current.innerHTML = ''
       
-      // Format symbol to ensure it has exchange prefix if needed
-      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
-      
-      // Create widget options
-      const widgetOptions = {
-        symbol: formattedSymbol,
-        width: typeof width === 'number' ? width : '100%',
-        height: typeof height === 'number' ? height : 220,
-        locale: 'en',
-        dateRange: '12M',
-        colorTheme: theme,
-        trendLineColor: trendLineColor,
-        underLineColor: underLineColor,
-        isTransparent: isTransparent,
-        autosize: autosize,
-        largeChartUrl: ''
+      try {
+        // Format symbol to ensure it has exchange prefix if needed
+        const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
+        
+        // Create widget options
+        const widgetOptions = {
+          "symbol": formattedSymbol,
+          "width": typeof width === 'number' ? width : '100%',
+          "height": typeof height === 'number' ? height : 220,
+          "locale": "en",
+          "dateRange": "12M",
+          "colorTheme": theme,
+          "trendLineColor": trendLineColor,
+          "underLineColor": underLineColor,
+          "isTransparent": isTransparent,
+          "autosize": autosize,
+          "largeChartUrl": ""
+        }
+        
+        // Create the script element
+        const script = document.createElement('script')
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
+        script.type = 'text/javascript'
+        script.async = true
+        script.innerHTML = JSON.stringify(widgetOptions)
+        
+        // Add script to container
+        containerRef.current.appendChild(script)
+        scriptRef.current = script
+      } catch (error) {
+        console.error('Error initializing TradingView mini chart:', error)
       }
-      
-      // Create the script element
-      const script = document.createElement('script')
-      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
-      script.type = 'text/javascript'
-      script.async = true
-      script.innerHTML = JSON.stringify(widgetOptions)
-      
-      // Add script to container
-      containerRef.current.appendChild(script)
     }
     
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+      // Clean up
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.parentNode.removeChild(scriptRef.current)
+        scriptRef.current = null
       }
     }
   }, [symbol, width, height, theme, trendLineColor, underLineColor, isTransparent, autosize])

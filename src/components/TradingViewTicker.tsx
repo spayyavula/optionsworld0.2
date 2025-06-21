@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 
+declare global {
+  interface Window {
+    TradingView?: any;
+  }
+}
+
 interface TradingViewTickerProps {
   symbols: Array<{
     proName: string
@@ -23,36 +29,44 @@ const TradingViewTicker: React.FC<TradingViewTickerProps> = ({
   container_id
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const scriptRef = useRef<HTMLScriptElement | null>(null)
 
   useEffect(() => {
     if (containerRef.current) {
       // Clear previous content
       containerRef.current.innerHTML = ''
       
-      // Create widget options
-      const widgetOptions = {
-        symbols: symbols,
-        showSymbolLogo: showSymbolLogo,
-        colorTheme: colorTheme,
-        isTransparent: isTransparent,
-        displayMode: displayMode,
-        locale: locale
+      try {
+        // Create widget options
+        const widgetOptions = {
+          "symbols": symbols,
+          "showSymbolLogo": showSymbolLogo,
+          "colorTheme": colorTheme,
+          "isTransparent": isTransparent,
+          "displayMode": displayMode,
+          "locale": locale
+        }
+        
+        // Create the script element
+        const script = document.createElement('script')
+        script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'
+        script.type = 'text/javascript'
+        script.async = true
+        script.innerHTML = JSON.stringify(widgetOptions)
+        
+        // Add script to container
+        containerRef.current.appendChild(script)
+        scriptRef.current = script
+      } catch (error) {
+        console.error('Error initializing TradingView ticker:', error)
       }
-      
-      // Create the script element
-      const script = document.createElement('script')
-      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js'
-      script.type = 'text/javascript'
-      script.async = true
-      script.innerHTML = JSON.stringify(widgetOptions)
-      
-      // Add script to container
-      containerRef.current.appendChild(script)
     }
     
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+      // Clean up
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.parentNode.removeChild(scriptRef.current)
+        scriptRef.current = null
       }
     }
   }, [symbols, showSymbolLogo, colorTheme, isTransparent, displayMode, locale])

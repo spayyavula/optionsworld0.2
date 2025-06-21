@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, memo } from 'react'
 
+declare global {
+  interface Window {
+    TradingView: any
+  }
+}
+
 interface TradingViewChartProps {
   symbol: string
   interval?: string
@@ -42,7 +48,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
   locale = 'en'
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const widgetRef = useRef<any>(null)
+  const scriptRef = useRef<HTMLScriptElement | null>(null)
 
   useEffect(() => {
     const loadTradingViewScript = () => {
@@ -56,7 +62,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
         const script = document.createElement('script')
         script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
         script.async = true
-        script.onload = () => resolve()
+        script.onload = () => { resolve(); scriptRef.current = script; }
         script.onerror = () => reject(new Error('Failed to load TradingView script'))
         document.head.appendChild(script)
       })
@@ -71,7 +77,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
         }
 
         // Create widget options
-        const widgetOptions: any = {
+        const widgetOptions = {
           symbol,
           interval,
           width: typeof width === 'number' ? `${width}px` : width,
@@ -97,7 +103,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
           support_host: 'https://www.tradingview.com'
         }
 
-        // Create the widget script
+        // Create the widget script with proper JSON
         const script = document.createElement('script')
         script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
         script.type = 'text/javascript'
@@ -108,6 +114,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
         if (containerRef.current) {
           containerRef.current.innerHTML = ''
           containerRef.current.appendChild(script)
+          scriptRef.current = script
         }
 
       } catch (error) {
@@ -118,8 +125,11 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
     initializeChart()
 
     return () => {
-      if (containerRef.current) {
-        widgetRef.current.remove()
+      // Clean up
+      if (scriptRef.current && scriptRef.current.parentNode) {
+        scriptRef.current.parentNode.removeChild(scriptRef.current)
+        scriptRef.current = null
+      }
       }
     }
   }, [symbol, interval, theme, style, width, height])
