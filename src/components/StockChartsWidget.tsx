@@ -143,10 +143,7 @@ const StockChartsWidget: React.FC<StockChartsWidgetProps> = ({
       credentialsInfo.style.marginTop = '1rem'
       credentialsInfo.style.fontSize = '12px'
       credentialsInfo.style.color = theme === 'dark' ? '#adb5bd' : '#6c757d'
-      credentialsInfo.innerHTML = `
-        <div>Login: <strong>spayyavula@gmail.com</strong></div>
-        <div>Password: <strong>TOAST-INDIGO-177</strong></div>
-      `
+      credentialsInfo.textContent = 'Use your own StockCharts account credentials to log in'
       
       // Assemble the container
       linkContainer.appendChild(chartPlaceholder)

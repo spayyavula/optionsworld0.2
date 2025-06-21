@@ -18,11 +18,6 @@ LearningService.initializeDefaultData()
 // Initialize community data
 CommunityService.initializeData()
 
-// Log StockCharts credentials for development
-if (import.meta.env.DEV) {
-  console.log('StockCharts credentials:', StockChartsService.getCredentials())
-}
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>

@@ -115,6 +115,13 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       linkButton.style.transition = 'background-color 150ms'
       linkButton.textContent = 'View Chart'
       
+      // Add note about account
+      const accountNote = document.createElement('div')
+      accountNote.style.marginTop = '0.5rem'
+      accountNote.style.fontSize = '10px'
+      accountNote.style.color = theme === 'dark' ? '#adb5bd' : '#6c757d'
+      accountNote.textContent = 'Requires StockCharts account'
+      
       // Add hover effect
       linkButton.onmouseover = () => {
         linkButton.style.backgroundColor = '#1d4ed8'
@@ -127,6 +134,7 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       chartContainer.appendChild(symbolHeader)
       chartContainer.appendChild(chartPlaceholder)
       chartContainer.appendChild(linkButton)
+      chartContainer.appendChild(accountNote)
       
       containerRef.current.appendChild(chartContainer)
     } catch (error) {

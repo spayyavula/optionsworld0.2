@@ -2,8 +2,8 @@
  * Service for interacting with StockCharts
  */
 export class StockChartsService {
-  private static readonly USERNAME = 'spayyavula@gmail.com'
-  private static readonly PASSWORD = 'TOAST-INDIGO-177'
+  private static readonly USERNAME = ''
+  private static readonly PASSWORD = ''
   private static readonly BASE_URL = 'https://stockcharts.com'
   
   /**
