@@ -4,6 +4,7 @@ import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
 import StockChartsMiniWidget from '../components/StockChartsMiniWidget'
+import TradingViewDirectMiniChart from '../components/TradingViewDirectMiniChart'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsTrading() {
@@ -450,7 +451,7 @@ export default function OptionsTrading() {
               </h3>
             </div>
             <div className="card-body">
-              <StockChartsMiniWidget
+              <TradingViewDirectMiniChart
                 symbol={selectedContractData.underlying_ticker}
                 width="100%"
                 height={300}

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
 import StockChartsWidget from '../components/StockChartsWidget'
+import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 
 export default function RegimeAnalysisPage() {
@@ -455,7 +456,7 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-            <StockChartsWidget
+            <TradingViewDirectWidget
               symbol={chartSymbol || 'SPY'}
               width="100%"
               height={650}

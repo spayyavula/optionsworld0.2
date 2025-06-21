@@ -3,6 +3,7 @@ import { Search, TrendingUp, TrendingDown, Calculator, Eye } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import StockChartsWidget from '../components/StockChartsWidget'
+import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsChain() {
@@ -303,7 +304,7 @@ export default function OptionsChain() {
             </h3>
           </div>
           <div className="card-body">
-            <StockChartsWidget
+            <TradingViewDirectWidget
               symbol={selectedUnderlying || 'SPY'}
               width="100%"
               height={500}
