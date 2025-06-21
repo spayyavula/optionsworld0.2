@@ -436,11 +436,14 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   
   // Simulate real-time price updates - set up once on mount
   useEffect(() => {
-    let intervalId: number | null = null
+    let timeoutId: number | null = null
+    let isActive = true
     
     try {
       const updatePrices = () => {
         try {
+          if (!isActive) return
+          
           const currentState = stateRef.current
           const updatedStocks = currentState.stocks.map(stock => {
             const changePercent = (Math.random() - 0.5) * 0.1 // Random change between -5% and +5%
@@ -456,22 +459,33 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
           })
           
           dispatch({ type: 'UPDATE_STOCK_PRICES', payload: updatedStocks })
+          
+          // Schedule next update
+          if (isActive) {
+            timeoutId = window.setTimeout(updatePrices, 5000)
+          }
         } catch (error) {
           console.error('Error updating stock prices:', error)
+          // Schedule retry on error
+          if (isActive) {
+            timeoutId = window.setTimeout(updatePrices, 5000)
+          }
         }
       }
       
-      intervalId = window.setInterval(updatePrices, 5000) // Update every 5 seconds
+      // Start the update cycle
+      timeoutId = window.setTimeout(updatePrices, 5000)
     } catch (error) {
       console.error('Error setting up stock price updates:', error)
     }
     
     return () => {
-      if (intervalId) {
+      isActive = false
+      if (timeoutId) {
         try {
-          window.clearInterval(intervalId)
+          window.clearTimeout(timeoutId)
         } catch (error) {
-          console.error('Error clearing stock price interval:', error)
+          console.error('Error clearing stock price timeout:', error)
         }
       }
     }
@@ -479,22 +493,39 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   
   // Cleanup old data periodically (once per day) - only if services are available
   useEffect(() => {
-    const cleanupInterval = window.setInterval(async () => {
-      try {
-        const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
-        if (!enableDataPersistence) {
-          return
+    let cleanupTimeoutId: number | null = null
+    let isCleanupActive = true
+    
+    const scheduleCleanup = () => {
+      if (!isCleanupActive) return
+      
+      cleanupTimeoutId = window.setTimeout(async () => {
+        try {
+          const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
+          if (!enableDataPersistence) {
+            scheduleCleanup() // Schedule next cleanup
+            return
+          }
+          
+          const historicalModule = await import('../services/historicalDataService')
+          await historicalModule.HistoricalDataService.cleanupOldData()
+          console.log('Old historical data cleaned up')
+        } catch (error) {
+          console.warn('Failed to cleanup old data:', error)
         }
         
-        const historicalModule = await import('../services/historicalDataService')
-        await historicalModule.HistoricalDataService.cleanupOldData()
-        console.log('Old historical data cleaned up')
-      } catch (error) {
-        console.warn('Failed to cleanup old data:', error)
-      }
-    }, 24 * 60 * 60 * 1000) // Run once per day
+        scheduleCleanup() // Schedule next cleanup
+      }, 24 * 60 * 60 * 1000) // Run once per day
+    }
     
-    return () => window.clearInterval(cleanupInterval)
+    scheduleCleanup()
+    
+    return () => {
+      isCleanupActive = false
+      if (cleanupTimeoutId) {
+        window.clearTimeout(cleanupTimeoutId)
+      }
+    }
   }, [])
   
   return (
