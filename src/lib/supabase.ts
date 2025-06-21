@@ -153,5 +153,67 @@ export type Database = {
         }
       }
     }
+    subscriptions: {
+      Row: {
+        id: string
+        customer_id: string
+        user_id: string
+        status: string
+        price_id: string
+        quantity: number
+        cancel_at_period_end: boolean
+        cancel_at: string | null
+        canceled_at: string | null
+        current_period_start: string
+        current_period_end: string | null
+        created: string
+        ended_at: string | null
+        trial_start: string | null
+        trial_end: string | null
+        metadata: any
+        terms_accepted: boolean
+        terms_accepted_at: string | null
+      }
+      Insert: {
+        id: string
+        customer_id: string
+        user_id: string
+        status: string
+        price_id?: string
+        quantity?: number
+        cancel_at_period_end?: boolean
+        cancel_at?: string | null
+        canceled_at?: string | null
+        current_period_start: string
+        current_period_end?: string | null
+        created?: string
+        ended_at?: string | null
+        trial_start?: string | null
+        trial_end?: string | null
+        metadata?: any
+        terms_accepted?: boolean
+        terms_accepted_at?: string | null
+      }
+      Update: {
+        id?: string
+        customer_id?: string
+        user_id?: string
+        status?: string
+        price_id?: string
+        quantity?: number
+        cancel_at_period_end?: boolean
+        cancel_at?: string | null
+        canceled_at?: string | null
+        current_period_start?: string
+        current_period_end?: string | null
+        created?: string
+        ended_at?: string | null
+        trial_start?: string | null
+        trial_end?: string | null
+        metadata?: any
+        terms_accepted?: boolean
+        terms_accepted_at?: string | null
+      }
+    }
   }
 }

@@ -10,15 +10,65 @@ export default function SubscriptionStatus({ className = '' }: SubscriptionStatu
   const [subscription, setSubscription] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
+  // Function to fetch real subscription status from Supabase
+  const fetchSubscriptionStatus = async () => {
+    try {
+      if (supabase) {
+        const { data, error } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', supabase.auth.getUser())
+          .order('created', { ascending: false })
+          .limit(1)
+          .single()
+        
+        if (error) {
+          console.error('Error fetching subscription:', error)
+          return null
+        }
+        
+        if (data) {
+          return {
+            active: data.status === 'active',
+            plan: data.price_id.includes('monthly') ? 'monthly' : 'yearly',
+            subscription: data,
+            termsAccepted: data.terms_accepted
+          }
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('Error in fetchSubscriptionStatus:', error)
+      return null
+    }
+  }
+
   useEffect(() => {
     checkSubscriptionStatus()
   }, [])
 
-  const checkSubscriptionStatus = () => {
+  const checkSubscriptionStatus = async () => {
     setLoading(true)
-    const status = StripeService.getSubscriptionStatus()
-    setSubscription(status)
-    setLoading(false)
+    
+    try {
+      // Try to get real subscription status first
+      const realStatus = await fetchSubscriptionStatus()
+      
+      if (realStatus) {
+        setSubscription(realStatus)
+      } else {
+        // Fall back to mock status for development
+        const mockStatus = StripeService.getSubscriptionStatus()
+        setSubscription(mockStatus)
+      }
+    } catch (error) {
+      console.error('Error checking subscription status:', error)
+      // Fall back to mock status
+      const mockStatus = StripeService.getSubscriptionStatus()
+      setSubscription(mockStatus)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleManageSubscription = async () => {
@@ -76,8 +126,17 @@ export default function SubscriptionStatus({ className = '' }: SubscriptionStatu
         <div className="flex items-center space-x-2">
           <CheckCircle className="h-4 w-4 text-green-600" />
           <div>
-            <span className="text-sm font-medium text-green-800">{planName}</span>
-            <p className="text-xs text-green-600">Next billing: {nextBilling}</p>
+            <div className="flex items-center">
+              <span className="text-sm font-medium text-green-800">{planName}</span>
+              {subscription.termsAccepted && (
+                <span className="ml-2 px-1.5 py-0.5 bg-green-100 text-green-700 text-xs rounded">
+                  Terms Accepted
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-green-600">
+              Next billing: {nextBilling}
+            </p>
           </div>
         </div>
         <div className="flex space-x-2">

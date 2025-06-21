@@ -27,6 +27,7 @@ import { BuyMeCoffeeService } from '../services/buyMeCoffeeService'
 import { CouponService } from '../services/couponService'
 import DealsSection from '../components/DealsSection'
 import CouponInput from '../components/CouponInput'
+import TermsAgreement from '../components/TermsAgreement'
 
 export default function Landing() {
   const [email, setEmail] = useState('')
@@ -36,6 +37,8 @@ export default function Landing() {
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [showDeals, setShowDeals] = useState(false)
   const [subscriptionSuccess, setSubscriptionSuccess] = useState(false)
+  const [showTermsModal, setShowTermsModal] = useState(false)
+  const [pendingSubscription, setPendingSubscription] = useState<{plan: 'monthly' | 'yearly', couponCode?: string} | null>(null)
 
   // Initialize coupon system
   React.useEffect(() => {
@@ -51,6 +54,37 @@ export default function Landing() {
     }
   }, [])
 
+  const handleSubscribe = async (plan: 'monthly' | 'yearly') => {
+    // Show terms agreement before proceeding
+    setPendingSubscription({ 
+      plan, 
+      couponCode: selectedDeal?.couponCode || (appliedCoupon?.coupon?.code)
+    })
+    setShowTermsModal(true)
+  }
+
+  const handleTermsAccepted = async () => {
+    if (!pendingSubscription) return
+    
+    try {
+      // Apply coupon if selected deal or manual coupon
+      const { plan, couponCode } = pendingSubscription
+
+      const { url } = await StripeService.createCheckoutSession(plan, couponCode)
+      window.location.href = url
+    } catch (error) {
+      console.error('Failed to create checkout session:', error)
+    } finally {
+      setShowTermsModal(false)
+      setPendingSubscription(null)
+    }
+  }
+
+  const handleTermsDeclined = () => {
+    setShowTermsModal(false)
+    setPendingSubscription(null)
+  }
+
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -62,23 +96,6 @@ export default function Landing() {
       console.error('Failed to subscribe:', error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const handleSubscribe = async (plan: 'monthly' | 'yearly') => {
-    try {
-      // Apply coupon if selected deal or manual coupon
-      let couponCode = ''
-      if (selectedDeal) {
-        couponCode = selectedDeal.couponCode
-      } else if (appliedCoupon) {
-        couponCode = appliedCoupon.coupon.code
-      }
-
-      const { url } = await StripeService.createCheckoutSession(plan, couponCode)
-      window.location.href = url
-    } catch (error) {
-      console.error('Failed to create checkout session:', error)
     }
   }
 
@@ -598,5 +615,23 @@ export default function Landing() {
         </div>
       </footer>
     </div>
+    
+    {/* Terms and Conditions Modal */}
+    {showTermsModal && (
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" onClick={handleTermsDeclined} />
+          
+          <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <TermsAgreement 
+                onAccept={handleTermsAccepted}
+                onDecline={handleTermsDeclined}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
   )
 }

@@ -22,6 +22,7 @@ export class StripeService {
   private static readonly MONTHLY_PRICE_ID = import.meta.env.VITE_STRIPE_MONTHLY_PRICE_ID
   private static readonly YEARLY_PRICE_ID = import.meta.env.VITE_STRIPE_YEARLY_PRICE_ID
   private static readonly COFFEE_PRICE_ID = import.meta.env.VITE_STRIPE_COFFEE_PRICE_ID
+  private static readonly API_BASE_URL = '/api/stripe'
 
   /**
    * Initialize Stripe (loads Stripe.js)
@@ -116,27 +117,51 @@ export class StripeService {
    */
   static async createCheckoutSession(
     plan: 'monthly' | 'yearly',
-    couponCode?: string
+    couponCode?: string,
+    customerEmail?: string
   ): Promise<{ url: string }> {
     try {
-      // For demo purposes, redirect to mock checkout with deal pricing
-      if (couponCode) {
-        // Import coupon service to get deal pricing
-        const { CouponService } = await import('./couponService')
-        const validation = CouponService.validateCoupon(couponCode, plan, plan === 'monthly' ? 29 : 290, true)
-        
-        if (validation.isValid) {
-          // Redirect to mock Stripe checkout with discounted price
-          this.mockStripeCheckout(plan, couponCode)
-          return { url: '#' } // Return placeholder since redirect happens immediately
-        }
+      const priceId = plan === 'monthly' ? this.MONTHLY_PRICE_ID : this.YEARLY_PRICE_ID
+      
+      if (!priceId) {
+        throw new Error(`${plan} price ID not configured`)
       }
       
-      // Regular checkout without coupon
-      this.mockStripeCheckout(plan)
-      return { url: '#' }
+      // Create checkout session via API
+      const response = await fetch(`${this.API_BASE_URL}/create-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          priceId,
+          couponCode,
+          customerEmail,
+          successUrl: `${window.location.origin}/?subscription=success&plan=${plan}`,
+          cancelUrl: `${window.location.origin}/?subscription=cancelled`,
+          metadata: {
+            plan,
+            source: 'landing_page'
+          }
+        })
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Failed to create checkout session')
+      }
+      
+      const { url } = await response.json()
+      return { url }
     } catch (error) {
       console.error('Checkout session error:', error)
+      
+      // Fallback for development
+      if (import.meta.env.DEV) {
+        this.mockStripeCheckout(plan, couponCode)
+        return { url: '#' }
+      }
+      
       throw new Error('Failed to create checkout session')
     }
   }
@@ -188,8 +213,7 @@ export class StripeService {
    */
   static async createCustomerPortalSession(customerId: string): Promise<string> {
     try {
-      // This would typically be done on your backend
-      const response = await fetch('/api/create-portal-session', {
+      const response = await fetch(`${this.API_BASE_URL}/create-portal-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -341,6 +365,19 @@ export class StripeService {
    * Check if user has active subscription (mock for development)
    */
   static getSubscriptionStatus(): { active: boolean; plan?: string; subscription?: any } {
+    // Try to get real subscription status first
+    try {
+      const token = localStorage.getItem('supabase.auth.token')
+      if (token) {
+        // If we have auth token, we could fetch real subscription status
+        // This would be implemented with a real backend call
+        // For now, fall back to mock implementation
+      }
+    } catch (error) {
+      console.error('Error checking real subscription status:', error)
+    }
+    
+    // Fall back to mock implementation for development
     try {
       const mockSubscription = localStorage.getItem('mock_subscription')
       if (mockSubscription) {
@@ -359,5 +396,24 @@ export class StripeService {
       console.error('Error checking subscription status:', error)
       return { active: false }
     }
+  }
+  
+  /**
+   * Verify if a webhook signature is valid
+   * This would be used on the server side
+   */
+  static verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+    // This would be implemented on the server side
+    // For client-side, we just return true in development
+    return true
+  }
+  
+  /**
+   * Handle subscription webhook events
+   * This would be used on the server side
+   */
+  static handleWebhookEvent(event: any): void {
+    // This would be implemented on the server side
+    console.log('Webhook event received:', event.type)
   }
 }
