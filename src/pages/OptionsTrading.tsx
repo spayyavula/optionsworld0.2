@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2 } from 'lucide-react'
+import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2, AlertTriangle } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'

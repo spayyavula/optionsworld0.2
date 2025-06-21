@@ -7,6 +7,7 @@ import {
   ArrowRight,
   Info,
   AlertCircle,
+  AlertTriangle,
   CheckCircle,
   Target,
   DollarSign,

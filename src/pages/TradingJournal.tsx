@@ -13,7 +13,8 @@ import {
   BarChart3,
   Target,
   Brain,
-  Tag
+  Tag,
+  AlertTriangle
 } from 'lucide-react'
 import Disclaimer from '../components/Disclaimer'
 import { LearningService } from '../services/learningService'
