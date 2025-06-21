@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import SeoHelmet from './components/SeoHelmet'
+import Disclaimer from './components/Disclaimer'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
@@ -27,6 +28,7 @@ function App() {
   return (
     <TradingProvider>
       <SeoHelmet />
+      <Disclaimer variant="banner" />
       <OptionsProvider>
         <OptionsDataProvider>
           <Routes>

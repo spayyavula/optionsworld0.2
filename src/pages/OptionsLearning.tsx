@@ -3,6 +3,7 @@ import {
   BookOpen, 
   Trophy, 
   Clock, 
+  AlertTriangle,
   CheckCircle, 
   Play, 
   Lock,
@@ -322,6 +323,27 @@ export default function OptionsLearning() {
 
   return (
     <div className="space-y-6">
+      {/* Educational Disclaimer */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 text-blue-600" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-blue-800">Educational Content Disclaimer</h3>
+            <div className="mt-2 text-sm text-blue-700">
+              <p>
+                The educational content provided is for informational purposes only and does not constitute financial advice. 
+                Options trading involves significant risk of loss and may not be suitable for all investors.
+              </p>
+              <p className="mt-1">
+                Always conduct your own research and consider seeking advice from a licensed financial advisor before making investment decisions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Header */}
       <div className="card">
         <div className="card-header">

@@ -14,6 +14,7 @@ import {
   Zap,
   Play
 } from 'lucide-react'
+import Disclaimer from '../components/Disclaimer'
 import { LearningService } from '../services/learningService'
 import type { StrategyTemplate } from '../types/learning'
 import { useOptionsContext } from '../context/OptionsContext'
@@ -82,6 +83,26 @@ export default function OptionsStrategies() {
 
   return (
     <div className="space-y-6">
+      {/* Strategy Disclaimer */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 text-yellow-600" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-yellow-800">Strategy Risk Disclaimer</h3>
+            <div className="mt-2 text-sm text-yellow-700">
+              <p>
+                The options strategies presented here are for educational purposes only. Each strategy carries its own risk profile and potential for loss.
+              </p>
+              <p className="mt-1">
+                No strategy guarantees profits or protection against losses. Always understand the risks involved before implementing any trading strategy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Header */}
       <div className="card">
         <div className="card-header">

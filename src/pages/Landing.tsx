@@ -22,6 +22,7 @@ import {
 import { Link } from 'react-router-dom'
 import { ConstantContactService } from '../services/constantContactService'
 import { StripeService } from '../services/stripeService'
+import Disclaimer from '../components/Disclaimer'
 import { BuyMeCoffeeService } from '../services/buyMeCoffeeService'
 import { CouponService } from '../services/couponService'
 import DealsSection from '../components/DealsSection'
@@ -568,6 +569,10 @@ export default function Landing() {
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; {new Date().getFullYear()} Options World. All rights reserved.</p>
+            <p className="mt-2 text-sm">
+              <strong>Risk Disclaimer:</strong> Options trading involves substantial risk and is not suitable for all investors. 
+              You may lose all of your invested capital. Past performance is not indicative of future results.
+            </p>
             <div className="flex justify-center space-x-4 mt-4">
               <a href="#home" className="text-gray-500 hover:text-white transition-colors">Home</a>
               <a href="#features" className="text-gray-500 hover:text-white transition-colors">Features</a>

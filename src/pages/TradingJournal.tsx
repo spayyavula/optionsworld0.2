@@ -15,6 +15,7 @@ import {
   Brain,
   Tag
 } from 'lucide-react'
+import Disclaimer from '../components/Disclaimer'
 import { LearningService } from '../services/learningService'
 import type { TradingJournalEntry } from '../types/learning'
 import { format } from 'date-fns'
@@ -194,6 +195,26 @@ export default function TradingJournal() {
 
   return (
     <div className="space-y-6">
+      {/* Journal Disclaimer */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 text-blue-600" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-blue-800">Trading Journal Disclaimer</h3>
+            <div className="mt-2 text-sm text-blue-700">
+              <p>
+                This trading journal is for educational and record-keeping purposes only. Past trades and strategies documented here are not recommendations for future trades.
+              </p>
+              <p className="mt-1">
+                Each trader's circumstances, risk tolerance, and financial situation are unique. Always conduct your own analysis before making trading decisions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Header */}
       <div className="card">
         <div className="card-header">

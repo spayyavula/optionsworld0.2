@@ -16,6 +16,7 @@ import { RegimeAnalysisService } from '../services/regimeAnalysisService'
 import StockChartsWidget from '../components/StockChartsWidget'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
+import Disclaimer from '../components/Disclaimer'
 
 export default function RegimeAnalysisPage() {
   const [analysis, setAnalysis] = useState<RegimeAnalysis | null>(null)
@@ -74,6 +75,26 @@ export default function RegimeAnalysisPage() {
 
   return (
     <div className="space-y-6">
+      {/* Analysis Disclaimer */}
+      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <AlertTriangle className="h-5 w-5 text-purple-600" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-purple-800">Market Analysis Disclaimer</h3>
+            <div className="mt-2 text-sm text-purple-700">
+              <p>
+                The market regime analysis provided is based on simulated data and algorithmic interpretations. It is for educational purposes only and not a prediction of future market behavior.
+              </p>
+              <p className="mt-1">
+                Market conditions can change rapidly and unpredictably. No analysis system can guarantee accurate forecasts of market movements or regime changes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Current Regime Overview */}
       <div className="card">
         <div className="card-header">

@@ -5,6 +5,7 @@ import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
 import StockChartsMiniWidget from '../components/StockChartsMiniWidget'
 import TradingViewDirectMiniChart from '../components/TradingViewDirectMiniChart'
+import Disclaimer from '../components/Disclaimer'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsTrading() {
@@ -138,6 +139,28 @@ export default function OptionsTrading() {
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      {/* Trading Disclaimer */}
+      <div className="lg:col-span-3">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertTriangle className="h-5 w-5 text-yellow-600" />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800">Important Risk Disclaimer</h3>
+              <div className="mt-2 text-sm text-yellow-700">
+                <p>
+                  Options trading involves substantial risk and is not suitable for all investors. The valuation of options may fluctuate, and as a result, you may lose more than your original investment.
+                </p>
+                <p className="mt-1">
+                  This platform is for educational purposes only. Past performance is not indicative of future results. Consider your investment objectives before trading.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Options Contracts List */}
       <div className="lg:col-span-2">
         <div className="card">
