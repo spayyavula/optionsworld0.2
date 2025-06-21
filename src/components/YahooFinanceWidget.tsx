@@ -24,12 +24,26 @@ const YahooFinanceWidget: React.FC<YahooFinanceWidgetProps> = ({
   container_id
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
 
   useEffect(() => {
-    if (containerRef.current) {
-      // Clear previous content
-      containerRef.current.innerHTML = ''
+    // Clean up function
+    const cleanup = () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ''
+      }
       
+      if (iframeRef.current) {
+        iframeRef.current = null
+      }
+    }
+    
+    // Clean up first
+    cleanup()
+    
+    if (!containerRef.current) return
+    
+    try {
       // Create iframe for Yahoo Finance
       const iframe = document.createElement('iframe')
       
@@ -44,6 +58,7 @@ const YahooFinanceWidget: React.FC<YahooFinanceWidgetProps> = ({
       iframe.style.overflow = 'hidden'
       
       containerRef.current.appendChild(iframe)
+      iframeRef.current = iframe
       
       // Add message to explain iframe behavior
       const message = document.createElement('div')
@@ -53,13 +68,16 @@ const YahooFinanceWidget: React.FC<YahooFinanceWidgetProps> = ({
       message.textContent = 'Yahoo Finance chart loaded. For interactive features, click inside the chart.'
       
       containerRef.current.appendChild(message)
-    }
-    
-    return () => {
+    } catch (error) {
+      console.error('Error initializing Yahoo Finance widget:', error)
+      
+      // Show error message
       if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+        containerRef.current.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;">Failed to load Yahoo Finance widget</div>'
       }
     }
+    
+    return cleanup
   }, [symbol, width, height, interval, range, showControls, showTabs, darkMode])
 
   const containerId = container_id || `yahoo-finance-widget-${Math.random().toString(36).substring(2, 11)}`

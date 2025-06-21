@@ -24,12 +24,26 @@ const YahooFinanceChart: React.FC<YahooFinanceChartProps> = ({
   container_id
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
 
   useEffect(() => {
-    if (containerRef.current) {
-      // Clear previous content
-      containerRef.current.innerHTML = ''
+    // Clean up function
+    const cleanup = () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ''
+      }
       
+      if (iframeRef.current) {
+        iframeRef.current = null
+      }
+    }
+    
+    // Clean up first
+    cleanup()
+    
+    if (!containerRef.current) return
+    
+    try {
       // Create iframe for Yahoo Finance chart
       const iframe = document.createElement('iframe')
       
@@ -52,13 +66,21 @@ const YahooFinanceChart: React.FC<YahooFinanceChartProps> = ({
       iframe.style.overflow = 'hidden'
       
       containerRef.current.appendChild(iframe)
+      iframeRef.current = iframe
+      
+      // Add message to explain iframe behavior
+      const message = document.createElement('div')
+      message.style.marginTop = '10px'
+      message.style.fontSize = '12px'
+      message.style.color = '#666'
+      message.textContent = 'Yahoo Finance chart loaded. For interactive features, click inside the chart.'
+      
+      containerRef.current.appendChild(message)
+    } catch (error) {
+      console.error('Error initializing Yahoo Finance chart:', error)
     }
     
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
-      }
-    }
+    return cleanup
   }, [symbol, width, height, interval, includePrePost, lineColor, showControls, darkMode])
 
   const containerId = container_id || `yahoo-finance-chart-${Math.random().toString(36).substring(2, 11)}`

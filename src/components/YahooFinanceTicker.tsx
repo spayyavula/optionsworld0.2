@@ -18,10 +18,19 @@ const YahooFinanceTicker: React.FC<YahooFinanceTickerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (containerRef.current) {
-      // Clear previous content
-      containerRef.current.innerHTML = ''
-      
+    // Clean up function
+    const cleanup = () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ''
+      }
+    }
+    
+    // Clean up first
+    cleanup()
+    
+    if (!containerRef.current) return
+    
+    try {
       // Create ticker container
       const tickerContainer = document.createElement('div')
       tickerContainer.className = 'yahoo-finance-ticker'
@@ -54,7 +63,7 @@ const YahooFinanceTicker: React.FC<YahooFinanceTickerProps> = ({
         symbolName.style.fontSize = '14px'
         symbolName.style.marginBottom = '5px'
         
-        // Create placeholder for price and change (will be filled by script)
+        // Create placeholder for price and change (will be filled with mock data)
         const priceElement = document.createElement('div')
         priceElement.id = `${symbol}-price`
         priceElement.textContent = 'Loading...'
@@ -73,75 +82,33 @@ const YahooFinanceTicker: React.FC<YahooFinanceTickerProps> = ({
       
       containerRef.current.appendChild(tickerContainer)
       
-      // Add script to fetch real data
-      const script = document.createElement('script')
-      script.textContent = `
-        // Simple function to fetch Yahoo Finance data
-        async function fetchYahooData() {
-          const symbols = ${JSON.stringify(symbols)};
+      // For demo purposes, update with mock data
+      setTimeout(() => {
+        symbols.forEach(symbol => {
+          const priceElement = document.getElementById(`${symbol}-price`)
+          const changeElement = document.getElementById(`${symbol}-change`)
           
-          for (const symbol of symbols) {
-            try {
-              const response = await fetch('https://api.allorigins.win/get?url=' + 
-                encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/' + symbol));
-              const data = await response.json();
-              
-              // Parse the response from the CORS proxy
-              const yahooData = JSON.parse(data.contents);
-              
-              if (yahooData && yahooData.chart && yahooData.chart.result && yahooData.chart.result[0]) {
-                const quote = yahooData.chart.result[0].meta;
-                const priceElement = document.getElementById(symbol + '-price');
-                const changeElement = document.getElementById(symbol + '-change');
-                
-                if (priceElement && changeElement) {
-                  // Format price
-                  priceElement.textContent = '$' + quote.regularMarketPrice.toFixed(2);
-                  
-                  // Calculate change
-                  const change = quote.regularMarketPrice - quote.previousClose;
-                  const changePercent = (change / quote.previousClose) * 100;
-                  
-                  // Format change with color
-                  changeElement.textContent = (change >= 0 ? '+' : '') + 
-                    change.toFixed(2) + ' (' + 
-                    (change >= 0 ? '+' : '') + 
-                    changePercent.toFixed(2) + '%)';
-                  
-                  changeElement.style.color = change >= 0 ? '#22c55e' : '#ef4444';
-                }
-              }
-            } catch (error) {
-              console.error('Error fetching data for ' + symbol, error);
-              
-              // Show error state in UI
-              const priceElement = document.getElementById(symbol + '-price');
-              const changeElement = document.getElementById(symbol + '-change');
-              
-              if (priceElement && changeElement) {
-                priceElement.textContent = 'Error';
-                changeElement.textContent = 'Unable to load';
-                changeElement.style.color = '#888';
-              }
-            }
+          if (priceElement && changeElement) {
+            const mockPrice = Math.floor(Math.random() * 1000) + 100
+            const mockChange = (Math.random() * 10) - 5
+            const mockChangePercent = (mockChange / mockPrice) * 100
+            
+            priceElement.textContent = `$${mockPrice.toFixed(2)}`
+            changeElement.textContent = `${mockChange >= 0 ? '+' : ''}${mockChange.toFixed(2)} (${mockChange >= 0 ? '+' : ''}${mockChangePercent.toFixed(2)}%)`
+            changeElement.style.color = mockChange >= 0 ? '#22c55e' : '#ef4444'
           }
-        }
-        
-        // Run once immediately
-        fetchYahooData();
-        
-        // Then update every 60 seconds
-        setInterval(fetchYahooData, 60000);
-      `
+        })
+      }, 1000)
+    } catch (error) {
+      console.error('Error initializing Yahoo Finance ticker:', error)
       
-      containerRef.current.appendChild(script)
-    }
-    
-    return () => {
+      // Show error message
       if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+        containerRef.current.innerHTML = '<div style="text-align: center; padding: 10px; color: #888;">Failed to load ticker</div>'
       }
     }
+    
+    return cleanup
   }, [symbols, width, height, darkMode])
 
   const containerId = container_id || `yahoo-finance-ticker-${Math.random().toString(36).substring(2, 11)}`

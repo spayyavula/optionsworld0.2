@@ -5,7 +5,7 @@ import {
   Database, 
   Code, 
   Zap, 
-  Server, 
+  Server,
   Globe, 
   Key,
   FileJson,
@@ -13,10 +13,10 @@ import {
   CheckCircle,
   XCircle,
   Copy,
-  ExternalLink,
-  TrendingUp
+  ExternalLink
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { TrendingUp } from 'lucide-react'
 
 interface ApiEndpoint {
   path: string
