@@ -151,9 +151,13 @@ export default function Landing() {
                 Start Trading Now
               </Link>
               <button className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-                Watch Demo
-              </button>
-            </div>
+            <Link 
+              to="/demo" 
+              className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
+            >
+              <Info className="mr-2 h-5 w-5" />
+              View Demo
+            </Link>
           </div>
         </div>
       </header>
