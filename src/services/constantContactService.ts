@@ -100,7 +100,14 @@ export class ConstantContactService {
    */
   private static async mockSubscription(email: string): Promise<{ success: boolean; message: string; contactId?: string }> {
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => {
+      try {
+        window.setTimeout(resolve, 1000)
+      } catch (error) {
+        console.error('Error in mock subscription delay:', error)
+        resolve(undefined) // Resolve immediately if setTimeout fails
+      }
+    })
     
     // Store in localStorage for development
     const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]')

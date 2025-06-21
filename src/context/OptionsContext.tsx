@@ -113,8 +113,8 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'LOAD_OPTIONS_DATA' })
     
     // Load environment configuration
-    const updateInterval = parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000')
-    const maxHistoricalDays = parseInt(import.meta.env.VITE_MAX_HISTORICAL_DAYS || '14')
+    const updateInterval = Math.max(1000, parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000') || 5000)
+    const maxHistoricalDays = Math.max(1, parseInt(import.meta.env.VITE_MAX_HISTORICAL_DAYS || '14') || 14)
     
     console.log(`Options trading initialized with ${updateInterval}ms update interval`)
   }, [])
@@ -135,32 +135,51 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
 
   // Simulate real-time price updates for options - set up once on mount
   useEffect(() => {
-    const updateInterval = parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000')
+    const updateInterval = Math.max(1000, parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000') || 5000)
+    let intervalId: ReturnType<typeof setInterval> | null = null
     
-    const interval = setInterval(() => {
-      const currentState = stateRef.current
-      if (currentState.contracts.length === 0) return
-      
-      const updatedContracts = currentState.contracts.map(contract => {
-        // Simulate price movement based on implied volatility
-        const priceChange = (Math.random() - 0.5) * contract.implied_volatility * 0.1
-        const newLast = Math.max(0.01, contract.last * (1 + priceChange))
-        const newBid = Math.max(0.01, newLast * 0.98)
-        const newAsk = newLast * 1.02
-        
-        return {
-          ...contract,
-          bid: Math.round(newBid * 100) / 100,
-          ask: Math.round(newAsk * 100) / 100,
-          last: Math.round(newLast * 100) / 100
+    try {
+      const updatePrices = () => {
+        try {
+          const currentState = stateRef.current
+          if (currentState.contracts.length === 0) return
+          
+          const updatedContracts = currentState.contracts.map(contract => {
+            // Simulate price movement based on implied volatility
+            const priceChange = (Math.random() - 0.5) * contract.implied_volatility * 0.1
+            const newLast = Math.max(0.01, contract.last * (1 + priceChange))
+            const newBid = Math.max(0.01, newLast * 0.98)
+            const newAsk = newLast * 1.02
+            
+            return {
+              ...contract,
+              bid: Math.round(newBid * 100) / 100,
+              ask: Math.round(newAsk * 100) / 100,
+              last: Math.round(newLast * 100) / 100
+            }
+          })
+          
+          dispatch({ type: 'UPDATE_CONTRACT_PRICES', payload: updatedContracts })
+        } catch (error) {
+          console.error('Error updating options prices:', error)
         }
-      })
+      }
       
-      dispatch({ type: 'UPDATE_CONTRACT_PRICES', payload: updatedContracts })
-    }, updateInterval)
+      intervalId = setInterval(updatePrices, updateInterval)
+    } catch (error) {
+      console.error('Error setting up options price updates:', error)
+    }
     
-    return () => clearInterval(interval)
-  }, []) // Empty dependency array - only set up once
+    return () => {
+      if (intervalId) {
+        try {
+          clearInterval(intervalId)
+        } catch (error) {
+          console.error('Error clearing options price interval:', error)
+        }
+      }
+    }
+  }, [])
 
   return (
     <OptionsContext.Provider value={{ state, dispatch }}>

@@ -7,7 +7,7 @@ import { PolygonOptionsDataService } from './polygonOptionsDataService'
 export class OptionsDataScheduler {
   private static instance: OptionsDataScheduler | null = null
   private schedulerActive = false
-  private currentTimeout: ReturnType<typeof setTimeout> | null = null
+  private currentTimeout: number | null = null
 
   private constructor() {}
 
@@ -32,7 +32,7 @@ export class OptionsDataScheduler {
     this.scheduleNextFetch()
 
     // Run initial fetch after a short delay
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.runDataFetch().catch(error => {
         console.error('Error in initial options data fetch:', error)
       })
@@ -47,7 +47,11 @@ export class OptionsDataScheduler {
     this.schedulerActive = false
     
     if (this.currentTimeout) {
-      clearTimeout(this.currentTimeout)
+      try {
+        window.clearTimeout(this.currentTimeout)
+      } catch (error) {
+        console.error('Error clearing timeout:', error)
+      }
       this.currentTimeout = null
     }
   }
@@ -58,19 +62,27 @@ export class OptionsDataScheduler {
   private scheduleNextFetch(): void {
     if (!this.schedulerActive) return
 
-    const nextFetchTime = this.calculateNextFetchTime()
-    const timeUntilFetch = nextFetchTime.getTime() - Date.now()
+    try {
+      const nextFetchTime = this.calculateNextFetchTime()
+      const timeUntilFetch = Math.max(1000, nextFetchTime.getTime() - Date.now()) // Minimum 1 second
 
-    console.log(`Next options data fetch scheduled for: ${nextFetchTime.toISOString()}`)
-    console.log(`Time until next fetch: ${Math.round(timeUntilFetch / 1000 / 60)} minutes`)
+      console.log(`Next options data fetch scheduled for: ${nextFetchTime.toISOString()}`)
+      console.log(`Time until next fetch: ${Math.round(timeUntilFetch / 1000 / 60)} minutes`)
 
-    this.currentTimeout = setTimeout(() => {
-      this.runDataFetch().catch(error => {
-        console.error('Error in scheduled options data fetch:', error)
-        // Continue scheduling even if this fetch failed
+      this.currentTimeout = window.setTimeout(() => {
+        this.runDataFetch().catch(error => {
+          console.error('Error in scheduled options data fetch:', error)
+          // Continue scheduling even if this fetch failed
+          this.scheduleNextFetch()
+        })
+      }, timeUntilFetch)
+    } catch (error) {
+      console.error('Error scheduling next fetch:', error)
+      // Fallback: try again in 1 hour
+      this.currentTimeout = window.setTimeout(() => {
         this.scheduleNextFetch()
-      })
-    }, timeUntilFetch) as ReturnType<typeof setTimeout>
+      }, 60 * 60 * 1000)
+    }
   }
 
   /**

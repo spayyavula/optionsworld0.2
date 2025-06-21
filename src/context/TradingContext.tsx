@@ -436,12 +436,46 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   
   // Simulate real-time price updates - set up once on mount
   useEffect(() => {
-    const interval = setInterval(() => {
-      const currentState = stateRef.current
-      const updatedStocks = currentState.stocks.map(stock => {
-        const changePercent = (Math.random() - 0.5) * 0.1 // Random change between -5% and +5%
-        const newPrice = stock.price * (1 + changePercent)
-        const change = newPrice - stock.price
+    let intervalId: ReturnType<typeof setInterval> | null = null
+    
+    try {
+      const updatePrices = () => {
+        try {
+          const currentState = stateRef.current
+          const updatedStocks = currentState.stocks.map(stock => {
+            const changePercent = (Math.random() - 0.5) * 0.1 // Random change between -5% and +5%
+            const newPrice = stock.price * (1 + changePercent)
+            const change = newPrice - stock.price
+            
+            return {
+              ...stock,
+              price: Math.round(newPrice * 100) / 100,
+              change: Math.round(change * 100) / 100,
+              changePercent: Math.round(changePercent * 10000) / 100
+            }
+          })
+          
+          dispatch({ type: 'UPDATE_STOCK_PRICES', payload: updatedStocks })
+        } catch (error) {
+          console.error('Error updating stock prices:', error)
+        }
+      }
+      
+      intervalId = setInterval(updatePrices, 5000) // Update every 5 seconds
+    } catch (error) {
+      console.error('Error setting up stock price updates:', error)
+    }
+    
+    return () => {
+      if (intervalId) {
+        try {
+          clearInterval(intervalId)
+        } catch (error) {
+          console.error('Error clearing stock price interval:', error)
+        }
+      }
+    }
+  }, []) // Empty dependency array - only set up once
         
         return {
           ...stock,

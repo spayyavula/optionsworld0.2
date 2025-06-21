@@ -295,7 +295,7 @@ export class StripeService {
   private static completeMockCheckout(plan: 'monthly' | 'yearly', couponCode?: string, finalPrice?: number): void {
     // Store mock subscription in localStorage
     const mockSubscription = {
-      id: `sub_mock_${Date.now()}`,
+      id: `sub_mock_${Date.now().toString()}`,
       plan,
       status: 'active',
       created: new Date().toISOString(),
@@ -324,7 +324,7 @@ export class StripeService {
     if (confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
       // Store mock payment in localStorage
       const mockPayment = {
-        id: `pi_mock_${Date.now()}`,
+        id: `pi_mock_${Date.now().toString()}`,
         amount: 500, // $5 in cents
         status: 'succeeded',
         created: new Date().toISOString()
