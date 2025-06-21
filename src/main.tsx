@@ -4,8 +4,9 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 import { OptionsDataScheduler } from './services/optionsDataScheduler'
-import { LearningService } from './services/learningService' 
+import { LearningService } from './services/learningService'
 import { CommunityService } from './services/communityService'
+import { StockChartsService } from './services/stockChartsService'
 
 // Initialize the options data scheduler
 const scheduler = OptionsDataScheduler.getInstance()
@@ -16,6 +17,11 @@ LearningService.initializeDefaultData()
 
 // Initialize community data
 CommunityService.initializeData()
+
+// Log StockCharts credentials for development
+if (import.meta.env.DEV) {
+  console.log('StockCharts credentials:', StockChartsService.getCredentials())
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

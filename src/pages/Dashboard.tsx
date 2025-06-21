@@ -3,21 +3,21 @@ import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
 import { CommunityService } from '../services/communityService'
-import TradingViewWidget from '../components/TradingViewWidget'
+import StockChartsWidget from '../components/StockChartsWidget'
 import PageViewCounter from './PageViewCounter'
-import TradingViewTicker from '../components/TradingViewTicker'
+import YahooFinanceTicker from '../components/YahooFinanceTicker'
 import { format } from 'date-fns'
 
-// TradingView ticker symbols
+// Ticker symbols
 const tickerSymbols = [
-  { proName: 'NASDAQ:AAPL', title: 'AAPL' },
-  { proName: 'NASDAQ:GOOGL', title: 'GOOGL' },
-  { proName: 'NASDAQ:MSFT', title: 'MSFT' },
-  { proName: 'NASDAQ:TSLA', title: 'TSLA' },
-  { proName: 'NASDAQ:AMZN', title: 'AMZN' },
-  { proName: 'AMEX:SPY', title: 'SPY' },
-  { proName: 'NASDAQ:QQQ', title: 'QQQ' },
-  { proName: 'NASDAQ:NVDA', title: 'NVDA' }
+  'AAPL',
+  'GOOGL',
+  'MSFT',
+  'TSLA',
+  'AMZN',
+  'SPY',
+  'QQQ',
+  'NVDA'
 ]
 
 export default function Dashboard() {
@@ -122,11 +122,11 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewTicker 
+          <YahooFinanceTicker 
             symbols={tickerSymbols}
-            showSymbolLogo={true}
-            colorTheme="light"
-            displayMode="adaptive"
+            width="100%"
+            height={60}
+            darkMode={false}
           />
         </div>
       </div>
@@ -137,16 +137,15 @@ export default function Dashboard() {
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
         </div>
         <div className="card-body">
-          <TradingViewWidget
+          <StockChartsWidget
             symbol="SPY"
             width="100%"
             height={400}
-            interval="1d"
+            timeframe="D"
             theme="light"
-            style="candles"
-            toolbar_bg="#f1f3f6"
-            enable_publishing={false}
-            allow_symbol_change={true}
+            showToolbar={true}
+            showDrawings={true}
+            showIndicators={true}
           />
         </div>
       </div>

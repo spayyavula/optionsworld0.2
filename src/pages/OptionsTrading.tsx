@@ -3,7 +3,7 @@ import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2 } fro
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
-import TradingViewMiniChart from '../components/TradingViewMiniChart'
+import StockChartsMiniWidget from '../components/StockChartsMiniWidget'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsTrading() {
@@ -450,14 +450,12 @@ export default function OptionsTrading() {
               </h3>
             </div>
             <div className="card-body">
-              <TradingViewMiniChart
+              <StockChartsMiniWidget
                 symbol={selectedContractData.underlying_ticker}
                 width="100%"
                 height={300}
                 theme="light"
-                autosize={true}
-                trendLineColor="rgba(41, 98, 255, 1)"
-                underLineColor="rgba(41, 98, 255, 0.3)"
+                timeframe="D"
               />
             </div>
           </div>

@@ -13,7 +13,7 @@ import {
   Zap
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
-import TradingViewWidget from '../components/TradingViewWidget'
+import StockChartsWidget from '../components/StockChartsWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 
 export default function RegimeAnalysisPage() {
@@ -455,17 +455,15 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-            <TradingViewWidget
+            <StockChartsWidget
               symbol={chartSymbol || 'SPY'}
               width="100%"
               height={650}
-              interval={chartInterval}
+              timeframe={chartInterval}
               theme="light"
-              style="candles"
-              toolbar_bg="#f1f3f6"
-              enable_publishing={false}
-              allow_symbol_change={true}
-              studies={["RSI@tv-basicstudies", "MACD@tv-basicstudies", "AwesomeOscillator@tv-basicstudies", "StochasticRSI@tv-basicstudies"]}
+              showToolbar={true}
+              showDrawings={true}
+              showIndicators={true}
             />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
