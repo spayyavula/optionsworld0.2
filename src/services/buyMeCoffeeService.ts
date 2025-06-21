@@ -15,7 +15,25 @@ export class BuyMeCoffeeService {
   static openBuyMeCoffeePage(message?: string): void {
     if (!this.USERNAME) {
       console.warn('Buy Me a Coffee username not configured, using mock payment')
-      this.mockCoffeePayment()
+      if (confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
+        // Store mock payment
+        const mockPayment = {
+          id: `coffee_mock_${Date.now()}`,
+          amount: 5,
+          currency: 'USD',
+          status: 'completed',
+          created: new Date().toISOString(),
+          message: 'Thanks for the coffee! ☕'
+        }
+        
+        localStorage.setItem('mock_coffee_payments', JSON.stringify([
+          ...this.getCoffeePayments(),
+          mockPayment
+        ]))
+        
+        alert('Thank you for the coffee! ☕ (Development Mode)')
+        window.location.href = '/'
+      }
       return
     }
 
@@ -128,6 +146,7 @@ export class BuyMeCoffeeService {
       ]))
       
       alert('Thank you for the coffee! ☕ (Development Mode)')
+      window.location.href = '/'
     }
   }
 
