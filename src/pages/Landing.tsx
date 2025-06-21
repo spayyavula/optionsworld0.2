@@ -35,11 +35,20 @@ export default function Landing() {
   const [selectedDeal, setSelectedDeal] = useState<any>(null)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [showDeals, setShowDeals] = useState(false)
+  const [subscriptionSuccess, setSubscriptionSuccess] = useState(false)
 
   // Initialize coupon system
   React.useEffect(() => {
     CouponService.initializeDefaultData()
     setShowDeals(CouponService.hasActiveDeals())
+    
+    // Check for subscription success in URL
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('subscription') === 'success') {
+      setSubscriptionSuccess(true)
+      // Remove the query parameters from the URL
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
   }, [])
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -137,6 +146,12 @@ export default function Landing() {
       <header className="relative overflow-hidden" id="home">
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {subscriptionSuccess && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+              <strong className="font-bold">Success! </strong>
+              <span className="block sm:inline">Thank you for subscribing to Options World! Your account has been activated.</span>
+            </div>
+          )}
           <div className="text-center">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Master Options Trading

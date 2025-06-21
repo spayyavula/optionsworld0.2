@@ -64,7 +64,7 @@ export class StripeService {
 
       const options: StripeCheckoutOptions = {
         priceId,
-        successUrl: `${window.location.origin}/app?subscription=success&plan=${plan}`,
+        successUrl: `${window.location.origin}/?subscription=success&plan=${plan}`,
         cancelUrl: `${window.location.origin}/?subscription=cancelled`,
         metadata: {
           plan,
@@ -314,7 +314,7 @@ export class StripeService {
     }
     
     // Redirect to success page
-    window.location.href = `/app?subscription=success&plan=${plan}`
+    window.location.href = `/?subscription=success&plan=${plan}`
   }
 
   /**
