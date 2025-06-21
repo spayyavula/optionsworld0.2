@@ -474,8 +474,8 @@ export default function OptionsTrading() {
               </h3>
             </div>
             <div className="card-body">
-              <TradingViewDirectMiniChart
-            <StockChartsMiniWidget
+              <TradingViewDirectMiniChart />
+              <StockChartsMiniWidget
                 width="100%"
                 height={300}
                 theme="light"
