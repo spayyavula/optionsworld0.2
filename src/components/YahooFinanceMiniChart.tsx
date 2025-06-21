@@ -147,7 +147,7 @@ const YahooFinanceMiniChart: React.FC<YahooFinanceMiniChartProps> = ({
       chartArea.appendChild(placeholderMessage)
       
       // For demo purposes, update the price with mock data
-      setTimeout(() => {
+      window.setTimeout(() => {
         const priceElement = document.getElementById(`${symbol}-mini-price`)
         const changeElement = document.getElementById(`${symbol}-mini-change`)
         

@@ -139,7 +139,7 @@ const AgentDashboard: React.FC = () => {
     setCopiedKey(newKey.key)
 
     // Auto-clear copied status after 5 seconds
-    setTimeout(() => {
+    window.setTimeout(() => {
       if (setCopiedKey) {
         setCopiedKey(null)
       }
@@ -159,7 +159,7 @@ const AgentDashboard: React.FC = () => {
     setCopiedKey(text)
     
     // Auto-clear copied status after 5 seconds
-    setTimeout(() => {
+    window.setTimeout(() => {
       if (setCopiedKey) {
         setCopiedKey(null)
       }
@@ -172,7 +172,7 @@ const AgentDashboard: React.FC = () => {
     setTestResponse(null)
 
     // Simulate API call
-    setTimeout(() => {
+    window.setTimeout(() => {
       setTestStatus('success')
       setTestResponse(endpoint.responseExample)
     }, 1000)

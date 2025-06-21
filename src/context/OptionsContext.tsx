@@ -166,6 +166,7 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
       }
       
       intervalId = setInterval(updatePrices, updateInterval);
+      intervalId = window.setInterval(updatePrices, updateInterval);
     } catch (error) {
       console.error('Error setting up options price updates:', error)
     }
@@ -173,7 +174,7 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
     return () => {
       if (intervalId) {
         try {
-          clearInterval(intervalId)
+          window.clearInterval(intervalId)
         } catch (error) {
           console.error('Error clearing options price interval:', error)
         }

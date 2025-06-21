@@ -462,6 +462,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
       }
       
       intervalId = setInterval(updatePrices, 5000); // Update every 5 seconds
+      intervalId = window.setInterval(updatePrices, 5000); // Update every 5 seconds
     } catch (error) {
       console.error('Error setting up stock price updates:', error)
     }
@@ -469,7 +470,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
     return () => {
       if (intervalId) {
         try {
-          clearInterval(intervalId)
+          window.clearInterval(intervalId)
         } catch (error) {
           console.error('Error clearing stock price interval:', error)
         }
@@ -480,6 +481,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   // Cleanup old data periodically (once per day) - only if services are available
   useEffect(() => {
     const cleanupInterval = setInterval(async () => {
+    const cleanupInterval = window.setInterval(async () => {
       try {
         const enableDataPersistence = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
         if (!enableDataPersistence) {
@@ -494,7 +496,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
       }
     }, 24 * 60 * 60 * 1000) // Run once per day
     
-    return () => clearInterval(cleanupInterval)
+    return () => window.clearInterval(cleanupInterval)
   }, [])
   
   return (
