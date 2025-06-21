@@ -136,7 +136,7 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
   // Simulate real-time price updates for options - set up once on mount
   useEffect(() => {
     const updateInterval = Math.max(1000, parseInt(import.meta.env.VITE_OPTIONS_UPDATE_INTERVAL || '5000') || 5000)
-    let intervalId: ReturnType<typeof setInterval> | null = null
+    let intervalId: number | null = null
     
     try {
       const updatePrices = () => {
@@ -165,7 +165,6 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
         }
       }
       
-      intervalId = setInterval(updatePrices, updateInterval);
       intervalId = window.setInterval(updatePrices, updateInterval);
     } catch (error) {
       console.error('Error setting up options price updates:', error)

@@ -436,7 +436,7 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
   
   // Simulate real-time price updates - set up once on mount
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval> | null = null
+    let intervalId: number | null = null
     
     try {
       const updatePrices = () => {
@@ -461,7 +461,6 @@ export function TradingProvider({ children }: { children: React.ReactNode }) {
         }
       }
       
-      intervalId = setInterval(updatePrices, 5000) // Update every 5 seconds
       intervalId = window.setInterval(updatePrices, 5000) // Update every 5 seconds
     } catch (error) {
       console.error('Error setting up stock price updates:', error)
