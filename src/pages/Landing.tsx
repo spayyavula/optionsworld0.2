@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { 
   TrendingUp, 
   BookOpen, 
-  Users,
+  Users, 
   Info,
   Shield, 
   CheckCircle, 
@@ -15,8 +15,8 @@ import {
   Award,
   Coffee,
   Mail,
-  CreditCard,
-  Tag
+  Tag,
+  CreditCard
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ConstantContactService } from '../services/constantContactService'
