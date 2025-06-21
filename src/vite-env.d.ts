@@ -1,5 +1,11 @@
 /// <reference types="vite/client" />
 
+declare global {
+  interface Window {
+    TradingView: any;
+  }
+}
+
 interface ImportMetaEnv {
   readonly VITE_POLYGON_API_KEY: string
   readonly VITE_APP_NAME: string

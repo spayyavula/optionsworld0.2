@@ -1,11 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    TradingView?: any;
-  }
-}
-
 interface TradingViewWidgetProps {
   symbol: string
   width?: string | number

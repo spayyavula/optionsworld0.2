@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, memo } from 'react'
 
-declare global {
-  interface Window {
-    TradingView: any
-  }
-}
-
 interface TradingViewChartProps {
   symbol: string
   interval?: string
@@ -22,12 +16,6 @@ interface TradingViewChartProps {
   studies?: string[]
   container_id?: string
   locale?: string
-}
-
-declare global {
-  interface Window {
-    TradingView: any
-  }
 }
 
 const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
