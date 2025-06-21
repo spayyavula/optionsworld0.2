@@ -7,7 +7,7 @@ import { PolygonOptionsDataService } from './polygonOptionsDataService'
 export class OptionsDataScheduler {
   private static instance: OptionsDataScheduler | null = null
   private schedulerActive = false
-  private currentTimeout: number | null = null
+  private currentTimeout: ReturnType<typeof setTimeout> | null = null
 
   private constructor() {}
 
@@ -70,7 +70,7 @@ export class OptionsDataScheduler {
         // Continue scheduling even if this fetch failed
         this.scheduleNextFetch()
       })
-    }, timeUntilFetch)
+    }, timeUntilFetch) as ReturnType<typeof setTimeout>
   }
 
   /**
