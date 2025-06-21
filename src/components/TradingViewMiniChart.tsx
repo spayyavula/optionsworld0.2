@@ -53,7 +53,9 @@ const TradingViewMiniChart: React.FC<TradingViewMiniChartProps> = ({
       containerRef.current.appendChild(widgetContainer)
       
       // Format symbol to ensure it has exchange prefix if needed
-      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
+      const formattedSymbol = symbol.includes(':') ? symbol : 
+        symbol === 'SPY' ? 'AMEX:SPY' : 
+        `NASDAQ:${symbol}`
       
       // Create the script element with embedded JSON
       const script = document.createElement('script')

@@ -91,7 +91,9 @@ const TradingViewChart: React.FC<TradingViewChartProps> = memo(({
         if (!containerRef.current || !window.TradingView) return
         
         // Format symbol to ensure it has exchange prefix if needed
-        const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
+        const formattedSymbol = symbol.includes(':') ? symbol : 
+          symbol === 'SPY' ? 'AMEX:SPY' : 
+          `NASDAQ:${symbol}`
         
         // Create widget options
         const widgetOptions = {

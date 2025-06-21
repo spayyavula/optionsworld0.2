@@ -17,7 +17,7 @@ const tickerSymbols = [
   'MSFT',
   'TSLA',
   'AMZN',
-  'SPY',
+  'SPY', // SPY is on AMEX (NYSE), not NASDAQ
   'QQQ',
   'NVDA'
 ]

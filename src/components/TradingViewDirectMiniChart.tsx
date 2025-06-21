@@ -44,7 +44,9 @@ const TradingViewDirectMiniChart: React.FC<TradingViewDirectMiniChartProps> = ({
       chartContainer.style.textAlign = 'center'
       
       // Format symbol to ensure it has exchange prefix if needed
-      const formattedSymbol = symbol.includes(':') ? symbol : `NASDAQ:${symbol}`
+      const formattedSymbol = symbol.includes(':') ? symbol : 
+        symbol === 'SPY' ? 'AMEX:SPY' : 
+        `NASDAQ:${symbol}`
       
       // Construct the URL with parameters
       const baseUrl = 'https://www.tradingview.com/chart'
