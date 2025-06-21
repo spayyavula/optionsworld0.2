@@ -4,6 +4,7 @@ import SeoHelmet from './components/SeoHelmet'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
+import AgentDashboard from './pages/AgentDashboard'
 import Demo from './pages/Demo'
 import OptionsPortfolio from './pages/OptionsPortfolio'
 import OptionsTrading from './pages/OptionsTrading'
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/construction" element={<Construction />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/agent" element={<AgentDashboard />} />
             <Route path="/app" element={
               <Layout>
                 <Dashboard />

@@ -6,6 +6,7 @@ import {
   Info,
   Shield, 
   CheckCircle, 
+  Bot,
   Star,
   Play,
   ArrowRight,
@@ -218,6 +219,14 @@ export default function Landing() {
             <div className="bg-gray-800 p-8 rounded-xl hover:bg-gray-750 transition-colors">
               <Users className="h-12 w-12 text-indigo-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Community</h3>
+              <p className="text-gray-400">
+                Connect with other traders and share strategies
+              </p>
+            </div>
+            
+            <div className="bg-gray-800 p-8 rounded-xl hover:bg-gray-750 transition-colors">
+              <Bot className="h-12 w-12 text-yellow-500 mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-3">Agent API</h3>
               <p className="text-gray-400">
                 Connect with other traders and share strategies
               </p>
@@ -532,6 +541,7 @@ export default function Landing() {
                 <li><Link to="/app/trading" className="hover:text-white transition-colors">Trading Platform</Link></li>
                 <li><Link to="/app/learning" className="hover:text-white transition-colors">Learning Resources</Link></li>
                 <li><Link to="/app/strategies" className="hover:text-white transition-colors">Strategy Library</Link></li>
+                <li><Link to="/agent" className="hover:text-white transition-colors">Agent API</Link></li>
               </ul>
             </div>
 

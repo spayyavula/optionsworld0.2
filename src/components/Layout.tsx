@@ -14,6 +14,8 @@ import {
   BookOpen,
   BookMarked,
   Lightbulb
+  Bot,
+  Cpu
 } from 'lucide-react'
 
 const navigation = [
@@ -29,6 +31,7 @@ const navigation = [
   { name: 'Analytics', href: '/app/analytics', icon: PieChart },
   { name: 'Community', href: '/app/community', icon: Users },
   { name: 'Data Manager', href: '/app/data-manager', icon: Settings },
+  { name: 'Agent API', href: '/agent', icon: Bot },
   { name: 'Settings', href: '/app/settings', icon: Settings },
 ]
 
