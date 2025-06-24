@@ -614,6 +614,10 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+    </div>
+    
+  )
+}
 
       {/* Terms and Conditions Modal */}
       {showTermsModal && (
