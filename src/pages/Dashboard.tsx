@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb } from 'lucide-react'
+import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb, Calculator } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
-  Users, BookOpen, BookMarked, Lightbulb, Calculator
 import StockChartsWidget from '../components/StockChartsWidget'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import PageViewCounter from './PageViewCounter'
