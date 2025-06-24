@@ -475,6 +475,7 @@ export default function OptionsTrading() {
             </div>
             <div className="card-body">
               <StockChartsMiniWidget
+                symbol={selectedContractData.underlying_ticker}
                 width="100%"
                 height={300}
                 theme="light"
