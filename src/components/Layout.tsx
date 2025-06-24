@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
   BarChart3, Briefcase, TrendingUp, FileText, Eye, PieChart, 
-  Settings, Users, Menu, X, BookOpen, BookMarked, Lightbulb, 
+  Settings, Users, Menu, X, BookOpen, BookMarked, Lightbulb,
   Calculator,
   Bot, Cpu, AlertTriangle
  } from 'lucide-react'
@@ -14,8 +14,8 @@ const navigation = [
   { name: 'Options Trading', href: '/app/trading', icon: TrendingUp },
   { name: 'Options Learning', href: '/app/learning', icon: BookOpen },
   { name: 'Trading Journal', href: '/app/journal', icon: BookMarked },
-  { name: 'Options Arbitrage', href: '/app/arbitrage', icon: Calculator },
   { name: 'Options Strategies', href: '/app/strategies', icon: Lightbulb },
+  { name: 'Options Arbitrage', href: '/app/arbitrage', icon: Calculator },
   { name: 'Orders', href: '/app/orders', icon: FileText },
   { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
   { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
