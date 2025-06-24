@@ -157,6 +157,7 @@ export default function Landing() {
     }
     return { hasDiscount: false }
   }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
       {/* Hero Section */}
@@ -267,6 +268,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
       {/* Special Deals Section */}
       {showDeals && (
         <section className="py-20 bg-gray-800" id="deals">
@@ -614,10 +616,6 @@ export default function Landing() {
           </div>
         </div>
       </footer>
-    </div>
-    
-  )
-}
 
       {/* Terms and Conditions Modal */}
       {showTermsModal && (
