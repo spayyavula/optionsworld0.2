@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { CheckCircle, XCircle, Clock, CreditCard, Settings } from 'lucide-react'
 import { StripeService } from '../services/stripeService'
+import { supabase } from '../lib/supabase'
 
 interface SubscriptionStatusProps {
   className?: string
