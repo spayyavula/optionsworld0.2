@@ -276,7 +276,7 @@ export class PolygonOptionsDataService {
       console.log(`Next options data fetch scheduled for: ${nextRun.toISOString()}`)
       console.log(`Time until next run: ${Math.round(timeUntilRun / 1000 / 60)} minutes`)
       
-      window.setTimeout(async () => {
+      window.setTimeout.bind(window)(async () => {
         console.log('Running scheduled options data fetch...')
         await this.fetchAndStoreOptionsData()
         
@@ -289,7 +289,7 @@ export class PolygonOptionsDataService {
     scheduleNextRun()
     
     // Also run immediately on startup (for testing/initial data)
-    window.setTimeout(() => {
+    window.setTimeout.bind(window)(() => {
       console.log('Running initial options data fetch...')
       this.fetchAndStoreOptionsData()
     }, 5000) // Wait 5 seconds after startup
@@ -342,7 +342,7 @@ export class PolygonOptionsDataService {
   private static delay(ms: number): Promise<void> {
     return new Promise(resolve => {
       try {
-        window.setTimeout(resolve, Math.max(100, ms || 1000))
+        window.setTimeout.bind(window)(resolve, Math.max(100, ms || 1000))
       } catch (error) {
         console.error('Error in delay function:', error)
         resolve() // Resolve immediately if setTimeout fails

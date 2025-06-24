@@ -48,7 +48,7 @@ export class OptionsDataScheduler {
     
     if (this.currentTimeout) {
       try {
-        window.clearTimeout(this.currentTimeout)
+        window.clearTimeout.bind(window)(this.currentTimeout)
       } catch (error) {
         console.error('Error clearing timeout:', error)
       }
@@ -69,7 +69,7 @@ export class OptionsDataScheduler {
       console.log(`Next options data fetch scheduled for: ${nextFetchTime.toISOString()}`)
       console.log(`Time until next fetch: ${Math.round(timeUntilFetch / 1000 / 60)} minutes`)
 
-      this.currentTimeout = window.setTimeout(() => {
+      this.currentTimeout = window.setTimeout.bind(window)(() => {
         this.runDataFetch().catch(error => {
           console.error('Error in scheduled options data fetch:', error)
           // Continue scheduling even if this fetch failed
@@ -79,7 +79,7 @@ export class OptionsDataScheduler {
     } catch (error) {
       console.error('Error scheduling next fetch:', error)
       // Fallback: try again in 1 hour
-      this.currentTimeout = window.setTimeout(() => {
+      this.currentTimeout = window.setTimeout.bind(window)(() => {
         this.scheduleNextFetch()
       }, 60 * 60 * 1000)
     }
