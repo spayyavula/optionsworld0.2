@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb } from 'lucide-react'
 import { useTradingContext } from '../context/TradingContext'
-import { CommunityService } from '../services/communityService'
+  Users, BookOpen, BookMarked, Lightbulb, Calculator
 import StockChartsWidget from '../components/StockChartsWidget'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import PageViewCounter from './PageViewCounter'
@@ -274,6 +274,10 @@ export default function Dashboard() {
             <Link to="/journal" className="btn btn-secondary">
               <BookMarked className="h-4 w-4" />
               Trading Journal
+            </Link>
+            <Link to="/arbitrage" className="btn btn-secondary">
+              <Calculator className="h-4 w-4" />
+              Find Arbitrage
             </Link>
             <Link to="/agent" className="btn btn-secondary">
               <Bot className="h-4 w-4" />

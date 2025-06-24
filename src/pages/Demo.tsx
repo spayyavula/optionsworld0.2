@@ -2,19 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import StockChartsWidget from '../components/StockChartsWidget'
 import { 
-  ArrowRight, 
-  TrendingUp, 
-  BookOpen, 
-  Users, 
-  BarChart3, 
-  AlertTriangle,
-  FileText, 
-  Eye, 
-  PieChart,
-  Briefcase,
-  Lightbulb,
-  BookMarked,
-  ChevronRight
+  ArrowRight, TrendingUp, BookOpen, Users, BarChart3, AlertTriangle,
+  FileText, Eye, PieChart, Briefcase, Lightbulb, BookMarked, ChevronRight,
+  Calculator
 } from 'lucide-react'
 
 export default function Demo() {
@@ -366,6 +356,14 @@ export default function Demo() {
               Start Learning
             </Link>
           </div>
+          
+          <Link to="/arbitrage" className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all">
+            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
+              <Calculator className="h-4 w-4 mr-2 text-blue-600" />
+              Options Arbitrage
+            </h4>
+            <p className="text-sm text-gray-600">Find arbitrage opportunities using Black-Scholes pricing model.</p>
+          </Link>
         </div>
       </div>
     </div>

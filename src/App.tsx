@@ -13,6 +13,7 @@ import Orders from './pages/Orders'
 import OptionsChain from './pages/OptionsChain'
 import RegimeAnalysis from './pages/RegimeAnalysis'
 import Analytics from './pages/Analytics'
+import OptionsArbitrage from './pages/OptionsArbitrage'
 import OptionsLearning from './pages/OptionsLearning'
 import TradingJournal from './pages/TradingJournal'
 import OptionsStrategies from './pages/OptionsStrategies'
@@ -49,6 +50,7 @@ function App() {
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/watchlist" element={<OptionsChain />} />
                   <Route path="/regime" element={<RegimeAnalysis />} />
+                  <Route path="/arbitrage" element={<OptionsArbitrage />} />
                   <Route path="/learning" element={<OptionsLearning />} />
                   <Route path="/journal" element={<TradingJournal />} />
                   <Route path="/strategies" element={<OptionsStrategies />} />
