@@ -19,9 +19,15 @@ interface ConstantContactResponse {
 
 export class ConstantContactService {
   private static readonly API_BASE_URL = 'https://api.cc.email/v3'
-  private static readonly API_KEY = import.meta.env.VITE_CONSTANT_CONTACT_API_KEY
-  private static readonly ACCESS_TOKEN = import.meta.env.VITE_CONSTANT_CONTACT_ACCESS_TOKEN
-  private static readonly LIST_ID = import.meta.env.VITE_CONSTANT_CONTACT_LIST_ID
+  
+  // Lazy load environment variables
+  private static getEnvVars() {
+    return {
+      API_KEY: import.meta.env.VITE_CONSTANT_CONTACT_API_KEY,
+      ACCESS_TOKEN: import.meta.env.VITE_CONSTANT_CONTACT_ACCESS_TOKEN,
+      LIST_ID: import.meta.env.VITE_CONSTANT_CONTACT_LIST_ID
+    }
+  }
 
   /**
    * Subscribe an email to the Constant Contact list
@@ -32,8 +38,10 @@ export class ConstantContactService {
     lastName?: string
   ): Promise<{ success: boolean; message: string; contactId?: string }> {
     try {
+      const { API_KEY, ACCESS_TOKEN, LIST_ID } = this.getEnvVars()
+      
       // Validate environment variables
-      if (!this.API_KEY || !this.ACCESS_TOKEN || !this.LIST_ID) {
+      if (!API_KEY || !ACCESS_TOKEN || !LIST_ID) {
         console.warn('Constant Contact not configured, using mock subscription')
         return this.mockSubscription(email)
       }
@@ -43,7 +51,7 @@ export class ConstantContactService {
           address: email,
           permission_to_send: 'implicit'
         },
-        list_memberships: [this.LIST_ID]
+        list_memberships: [LIST_ID]
       }
 
       if (firstName) contact.first_name = firstName
@@ -52,9 +60,9 @@ export class ConstantContactService {
       const response = await fetch(`${this.API_BASE_URL}/contacts`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.ACCESS_TOKEN}`,
+          'Authorization': `Bearer ${ACCESS_TOKEN}`,
           'Content-Type': 'application/json',
-          'X-API-Key': this.API_KEY
+          'X-API-Key': API_KEY
         },
         body: JSON.stringify(contact)
       })
@@ -134,7 +142,9 @@ export class ConstantContactService {
    */
   static async getSubscriptionStatus(email: string): Promise<{ subscribed: boolean; contactId?: string }> {
     try {
-      if (!this.API_KEY || !this.ACCESS_TOKEN) {
+      const { API_KEY, ACCESS_TOKEN } = this.getEnvVars()
+      
+      if (!API_KEY || !ACCESS_TOKEN) {
         // Check localStorage in development
         const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]')
         return { subscribed: subscribers.includes(email) }
@@ -144,8 +154,8 @@ export class ConstantContactService {
         `${this.API_BASE_URL}/contacts?email=${encodeURIComponent(email)}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.ACCESS_TOKEN}`,
-            'X-API-Key': this.API_KEY
+            'Authorization': `Bearer ${ACCESS_TOKEN}`,
+            'X-API-Key': API_KEY
           }
         }
       )
@@ -172,7 +182,9 @@ export class ConstantContactService {
    */
   static async unsubscribeEmail(email: string): Promise<{ success: boolean; message: string }> {
     try {
-      if (!this.API_KEY || !this.ACCESS_TOKEN) {
+      const { API_KEY, ACCESS_TOKEN, LIST_ID } = this.getEnvVars()
+      
+      if (!API_KEY || !ACCESS_TOKEN) {
         // Remove from localStorage in development
         const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]')
         const filtered = subscribers.filter((sub: string) => sub !== email)
@@ -195,12 +207,12 @@ export class ConstantContactService {
 
       // Remove from list
       const response = await fetch(
-        `${this.API_BASE_URL}/contacts/${statusResponse.contactId}/list_memberships/${this.LIST_ID}`,
+        `${this.API_BASE_URL}/contacts/${statusResponse.contactId}/list_memberships/${LIST_ID}`,
         {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${this.ACCESS_TOKEN}`,
-            'X-API-Key': this.API_KEY
+            'Authorization': `Bearer ${ACCESS_TOKEN}`,
+            'X-API-Key': API_KEY
           }
         }
       )

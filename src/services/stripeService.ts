@@ -18,17 +18,25 @@ interface StripeProduct {
 }
 
 export class StripeService {
-  private static readonly PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-  private static readonly MONTHLY_PRICE_ID = import.meta.env.VITE_STRIPE_MONTHLY_PRICE_ID
-  private static readonly YEARLY_PRICE_ID = import.meta.env.VITE_STRIPE_YEARLY_PRICE_ID
-  private static readonly COFFEE_PRICE_ID = import.meta.env.VITE_STRIPE_COFFEE_PRICE_ID
+  // Lazy load environment variables
+  private static getEnvVars() {
+    return {
+      PUBLISHABLE_KEY: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
+      MONTHLY_PRICE_ID: import.meta.env.VITE_STRIPE_MONTHLY_PRICE_ID,
+      YEARLY_PRICE_ID: import.meta.env.VITE_STRIPE_YEARLY_PRICE_ID,
+      COFFEE_PRICE_ID: import.meta.env.VITE_STRIPE_COFFEE_PRICE_ID
+    }
+  }
+  
   private static readonly API_BASE_URL = '/api/stripe'
 
   /**
    * Initialize Stripe (loads Stripe.js)
    */
   static async initializeStripe() {
-    if (!this.PUBLISHABLE_KEY) {
+    const { PUBLISHABLE_KEY } = this.getEnvVars()
+    
+    if (!PUBLISHABLE_KEY) {
       console.warn('Stripe not configured')
       return null
     }
@@ -36,7 +44,7 @@ export class StripeService {
     try {
       // Dynamically import Stripe
       const { loadStripe } = await import('@stripe/stripe-js')
-      return await loadStripe(this.PUBLISHABLE_KEY)
+      return await loadStripe(PUBLISHABLE_KEY)
     } catch (error) {
       console.error('Failed to load Stripe:', error)
       return null
@@ -51,8 +59,10 @@ export class StripeService {
     customerEmail?: string,
     couponCode?: string
   ): Promise<void> {
+    const { MONTHLY_PRICE_ID, YEARLY_PRICE_ID } = this.getEnvVars()
+    
     try {
-      const priceId = plan === 'monthly' ? this.MONTHLY_PRICE_ID : this.YEARLY_PRICE_ID
+      const priceId = plan === 'monthly' ? MONTHLY_PRICE_ID : YEARLY_PRICE_ID
       
       if (!priceId) {
         throw new Error(`${plan} price ID not configured`)
@@ -120,8 +130,10 @@ export class StripeService {
     couponCode?: string,
     customerEmail?: string
   ): Promise<{ url: string }> {
+    const { MONTHLY_PRICE_ID, YEARLY_PRICE_ID } = this.getEnvVars()
+    
     try {
-      const priceId = plan === 'monthly' ? this.MONTHLY_PRICE_ID : this.YEARLY_PRICE_ID
+      const priceId = plan === 'monthly' ? MONTHLY_PRICE_ID : YEARLY_PRICE_ID
       
       if (!priceId) {
         throw new Error(`${plan} price ID not configured`)
@@ -170,8 +182,10 @@ export class StripeService {
    * Redirect to Stripe Checkout for one-time payment (Buy Me a Coffee)
    */
   static async redirectToCoffeeCheckout(customerEmail?: string): Promise<void> {
+    const { COFFEE_PRICE_ID } = this.getEnvVars()
+    
     try {
-      if (!this.COFFEE_PRICE_ID) {
+      if (!COFFEE_PRICE_ID) {
         throw new Error('Coffee price ID not configured')
       }
 
@@ -182,7 +196,7 @@ export class StripeService {
 
       const { error } = await stripe.redirectToCheckout({
         lineItems: [{
-          price: this.COFFEE_PRICE_ID,
+          price: COFFEE_PRICE_ID,
           quantity: 1
         }],
         mode: 'payment',

@@ -1,7 +1,10 @@
 import type { HistoricalData } from '../types/options'
 
-const ENABLE_DATA_PERSISTENCE = import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true'
-const RETENTION_DAYS = parseInt(import.meta.env.VITE_HISTORICAL_DATA_RETENTION_DAYS || '30')
+// Lazy load environment variables
+const getEnvVars = () => ({
+  ENABLE_DATA_PERSISTENCE: import.meta.env.VITE_ENABLE_DATA_PERSISTENCE === 'true',
+  RETENTION_DAYS: parseInt(import.meta.env.VITE_HISTORICAL_DATA_RETENTION_DAYS || '30')
+})
 
 interface StorageStats {
   stockDataPoints: number
@@ -29,6 +32,8 @@ export class HistoricalDataService {
    * Store historical data for a ticker in Supabase
    */
   static async storeHistoricalData(ticker: string, data: HistoricalData[]): Promise<void> {
+    const { ENABLE_DATA_PERSISTENCE } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, skipping data storage')
       return
@@ -82,6 +87,8 @@ export class HistoricalDataService {
    * Retrieve historical data for a ticker from Supabase
    */
   static async getHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
+    const { ENABLE_DATA_PERSISTENCE } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, returning empty data')
       return []
@@ -135,6 +142,8 @@ export class HistoricalDataService {
     underlyingTicker: string, 
     data: OptionsHistoricalDataPoint[]
   ): Promise<void> {
+    const { ENABLE_DATA_PERSISTENCE } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, skipping options data storage')
       return
@@ -193,6 +202,8 @@ export class HistoricalDataService {
     contractTicker: string, 
     days: number = 14
   ): Promise<OptionsHistoricalDataPoint[]> {
+    const { ENABLE_DATA_PERSISTENCE } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       console.log('Data persistence disabled, returning empty options data')
       return []
@@ -245,6 +256,8 @@ export class HistoricalDataService {
    * Clean up old historical data based on retention policy
    */
   static async cleanupOldData(): Promise<void> {
+    const { ENABLE_DATA_PERSISTENCE, RETENTION_DAYS } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       return
     }
@@ -291,6 +304,8 @@ export class HistoricalDataService {
    * Get data storage statistics
    */
   static async getStorageStats(): Promise<StorageStats> {
+    const { ENABLE_DATA_PERSISTENCE } = getEnvVars()
+    
     if (!ENABLE_DATA_PERSISTENCE) {
       return {
         stockDataPoints: 0,

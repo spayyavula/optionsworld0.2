@@ -1,9 +1,12 @@
 import type { OptionsContract, OptionsChainData, HistoricalData } from '../types/options'
  
-const POLYGON_API_KEY = import.meta.env.VITE_POLYGON_API_KEY || 'demo_api_key'
-const BASE_URL = import.meta.env.VITE_POLYGON_BASE_URL || 'https://api.polygon.io'
-const ENABLE_MOCK_DATA = import.meta.env.VITE_ENABLE_MOCK_DATA === 'true'
-const ENABLE_REAL_TIME_DATA = import.meta.env.VITE_ENABLE_REAL_TIME_DATA === 'true'
+// Lazy load environment variables
+const getEnvVars = () => ({
+  POLYGON_API_KEY: import.meta.env.VITE_POLYGON_API_KEY || 'demo_api_key',
+  BASE_URL: import.meta.env.VITE_POLYGON_BASE_URL || 'https://api.polygon.io',
+  ENABLE_MOCK_DATA: import.meta.env.VITE_ENABLE_MOCK_DATA === 'true',
+  ENABLE_REAL_TIME_DATA: import.meta.env.VITE_ENABLE_REAL_TIME_DATA === 'true'
+})
 
 // Top 5 most liquid options contracts (simulated data based on typical market leaders)
 const TOP_LIQUID_OPTIONS: OptionsContract[] = [
@@ -116,6 +119,8 @@ const TOP_LIQUID_OPTIONS: OptionsContract[] = [
 
 export class PolygonService {
   static async fetchOptionsChain(underlying: string): Promise<OptionsChainData> {
+    const { ENABLE_MOCK_DATA, ENABLE_REAL_TIME_DATA, BASE_URL, POLYGON_API_KEY } = getEnvVars()
+    
     if (ENABLE_MOCK_DATA || !ENABLE_REAL_TIME_DATA) {
       // Use simulated data for demo/development
       return this.getSimulatedOptionsChain(underlying)
@@ -185,6 +190,8 @@ export class PolygonService {
   }
 
   static async fetchHistoricalData(ticker: string, days: number = 14): Promise<HistoricalData[]> {
+    const { ENABLE_MOCK_DATA, ENABLE_REAL_TIME_DATA, BASE_URL, POLYGON_API_KEY } = getEnvVars()
+    
     try {
       // First try to get data from Supabase
       const { HistoricalDataService } = await import('./historicalDataService')
@@ -319,6 +326,8 @@ export class PolygonService {
    * Initialize historical data for all top liquid options
    */
   static async initializeHistoricalData(): Promise<void> {
+    const { ENABLE_MOCK_DATA, ENABLE_REAL_TIME_DATA } = getEnvVars()
+    
     console.log('Initializing historical data for top liquid options...')
     
     const tickers = [...new Set(TOP_LIQUID_OPTIONS.map(option => option.underlying_ticker))]

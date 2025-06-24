@@ -6,20 +6,27 @@ interface BuyMeCoffeeConfig {
 }
 
 export class BuyMeCoffeeService {
-  private static readonly USERNAME = import.meta.env.VITE_BUY_ME_COFFEE_USERNAME
-  private static readonly WIDGET_ID = import.meta.env.VITE_BUY_ME_COFFEE_WIDGET_ID
+  // Lazy load environment variables
+  private static getEnvVars() {
+    return {
+      USERNAME: import.meta.env.VITE_BUY_ME_COFFEE_USERNAME,
+      WIDGET_ID: import.meta.env.VITE_BUY_ME_COFFEE_WIDGET_ID
+    }
+  }
 
   /**
    * Open Buy Me a Coffee page in new tab
    */
   static openBuyMeCoffeePage(message?: string): void {
+    const { USERNAME } = this.getEnvVars()
+    
     // Check if we're in a browser environment
     if (typeof window === 'undefined') {
       console.warn('Buy Me a Coffee service called in non-browser environment')
       return
     }
 
-    if (!this.USERNAME) {
+    if (!USERNAME) {
       console.warn('Buy Me a Coffee username not configured, using mock payment')
       if (typeof confirm !== 'undefined' && confirm('Mock Buy Me a Coffee\n\nAmount: $5\n\nProceed with mock payment?')) {
         // Store mock payment
@@ -45,7 +52,7 @@ export class BuyMeCoffeeService {
       return
     }
 
-    const baseUrl = `https://www.buymeacoffee.com/${this.USERNAME}`
+    const baseUrl = `https://www.buymeacoffee.com/${USERNAME}`
     const url = message ? `${baseUrl}?message=${encodeURIComponent(message)}` : baseUrl
     
     window.open(url, '_blank', 'noopener,noreferrer')
@@ -55,13 +62,15 @@ export class BuyMeCoffeeService {
    * Create Buy Me a Coffee widget
    */
   static createWidget(config: Partial<BuyMeCoffeeConfig> = {}): HTMLElement | null {
-    if (!this.USERNAME) {
+    const { USERNAME } = this.getEnvVars()
+    
+    if (!USERNAME) {
       console.warn('Buy Me a Coffee not configured')
       return null
     }
 
     const {
-      username = this.USERNAME,
+      username = USERNAME,
       theme = 'default',
       message = 'Support our work!'
     } = config
@@ -105,13 +114,15 @@ export class BuyMeCoffeeService {
    * Load Buy Me a Coffee widget script
    */
   static async loadWidget(containerId: string, config: Partial<BuyMeCoffeeConfig> = {}): Promise<void> {
+    const { USERNAME, WIDGET_ID } = this.getEnvVars()
+    
     // Check if we're in a browser environment
     if (typeof window === 'undefined' || typeof document === 'undefined') {
       console.warn('Buy Me a Coffee widget called in non-browser environment')
       return
     }
 
-    if (!this.USERNAME || !this.WIDGET_ID) {
+    if (!USERNAME || !WIDGET_ID) {
       console.warn('Buy Me a Coffee widget not fully configured')
       return
     }
@@ -122,7 +133,7 @@ export class BuyMeCoffeeService {
       script.setAttribute('data-name', 'BMC-Widget')
       script.setAttribute('data-cfasync', 'false')
       script.src = 'https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js'
-      script.setAttribute('data-id', this.USERNAME)
+      script.setAttribute('data-id', USERNAME)
       script.setAttribute('data-description', config.message || 'Support our work!')
       script.setAttribute('data-message', config.message || 'Thanks for your support!')
       script.setAttribute('data-color', '#FFDD00')
@@ -252,7 +263,8 @@ export class BuyMeCoffeeService {
    * Check if Buy Me a Coffee is configured
    */
   static isConfigured(): boolean {
-    return !!this.USERNAME
+    const { USERNAME } = this.getEnvVars()
+    return !!USERNAME
   }
 
   /**
@@ -263,10 +275,11 @@ export class BuyMeCoffeeService {
     hasUsername: boolean
     hasWidgetId: boolean
   } {
+    const { USERNAME, WIDGET_ID } = this.getEnvVars()
     return {
       configured: this.isConfigured(),
-      hasUsername: !!this.USERNAME,
-      hasWidgetId: !!this.WIDGET_ID
+      hasUsername: !!USERNAME,
+      hasWidgetId: !!WIDGET_ID
     }
   }
 }

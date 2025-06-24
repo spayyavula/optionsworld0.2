@@ -1,6 +1,17 @@
 import type { TradingJournalEntry } from '../types/learning'
 import type { OptionsPosition } from '../types/options'
 
+// Lazy load environment variables
+const getEnvVars = () => ({
+  SLACK_WEBHOOK_URL: import.meta.env.VITE_SLACK_WEBHOOK_URL,
+  DISCORD_WEBHOOK_URL: import.meta.env.VITE_DISCORD_WEBHOOK_URL,
+  TELEGRAM_BOT_TOKEN: import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
+  TELEGRAM_CHAT_ID: import.meta.env.VITE_TELEGRAM_CHAT_ID,
+  TELEGRAM_CHANNEL: import.meta.env.VITE_TELEGRAM_CHANNEL,
+  WHATSAPP_GROUP_INVITE: import.meta.env.VITE_WHATSAPP_GROUP_INVITE,
+  FACEBOOK_GROUP_ID: import.meta.env.VITE_FACEBOOK_GROUP_ID
+})
+
 interface CommunityPlatform {
   id: string
   name: string
@@ -32,52 +43,65 @@ export class CommunityService {
   private static readonly STORAGE_KEY = 'community_data'
   private static readonly MESSAGES_KEY = 'community_messages'
   private static readonly PLATFORMS: CommunityPlatform[] = [
-    {
-      id: 'slack',
-      name: 'Slack',
-      icon: '💬',
-      color: '#4A154B',
-      url: import.meta.env.VITE_SLACK_WEBHOOK_URL,
-      isConfigured: !!import.meta.env.VITE_SLACK_WEBHOOK_URL
-    },
-    {
-      id: 'discord',
-      name: 'Discord',
-      icon: '🎮',
-      color: '#5865F2',
-      url: import.meta.env.VITE_DISCORD_WEBHOOK_URL,
-      isConfigured: !!import.meta.env.VITE_DISCORD_WEBHOOK_URL
-    },
-    {
-      id: 'telegram',
-      name: 'Telegram',
-      icon: '✈️',
-      color: '#0088CC',
-      url: `https://t.me/${import.meta.env.VITE_TELEGRAM_CHANNEL}`,
-      isConfigured: !!import.meta.env.VITE_TELEGRAM_BOT_TOKEN && !!import.meta.env.VITE_TELEGRAM_CHAT_ID
-    },
-    {
-      id: 'whatsapp',
-      name: 'WhatsApp',
-      icon: '📱',
-      color: '#25D366',
-      url: `https://chat.whatsapp.com/${import.meta.env.VITE_WHATSAPP_GROUP_INVITE}`,
-      isConfigured: !!import.meta.env.VITE_WHATSAPP_GROUP_INVITE
-    },
-    {
-      id: 'facebook',
-      name: 'Facebook',
-      icon: '📘',
-      color: '#1877F2',
-      url: `https://facebook.com/groups/${import.meta.env.VITE_FACEBOOK_GROUP_ID}`,
-      isConfigured: !!import.meta.env.VITE_FACEBOOK_GROUP_ID
-    }
+    // These will be initialized in the initializeData method
   ]
+  private static initializedPlatforms = false
 
   /**
    * Initialize community data
    */
   static initializeData(): void {
+    // Initialize platforms if not already done
+    if (!this.initializedPlatforms) {
+      const env = getEnvVars()
+      
+      this.PLATFORMS.length = 0 // Clear array
+      this.PLATFORMS.push(
+        {
+          id: 'slack',
+          name: 'Slack',
+          icon: '💬',
+          color: '#4A154B',
+          url: env.SLACK_WEBHOOK_URL,
+          isConfigured: !!env.SLACK_WEBHOOK_URL
+        },
+        {
+          id: 'discord',
+          name: 'Discord',
+          icon: '🎮',
+          color: '#5865F2',
+          url: env.DISCORD_WEBHOOK_URL,
+          isConfigured: !!env.DISCORD_WEBHOOK_URL
+        },
+        {
+          id: 'telegram',
+          name: 'Telegram',
+          icon: '✈️',
+          color: '#0088CC',
+          url: `https://t.me/${env.TELEGRAM_CHANNEL}`,
+          isConfigured: !!env.TELEGRAM_BOT_TOKEN && !!env.TELEGRAM_CHAT_ID
+        },
+        {
+          id: 'whatsapp',
+          name: 'WhatsApp',
+          icon: '📱',
+          color: '#25D366',
+          url: `https://chat.whatsapp.com/${env.WHATSAPP_GROUP_INVITE}`,
+          isConfigured: !!env.WHATSAPP_GROUP_INVITE
+        },
+        {
+          id: 'facebook',
+          name: 'Facebook',
+          icon: '📘',
+          color: '#1877F2',
+          url: `https://facebook.com/groups/${env.FACEBOOK_GROUP_ID}`,
+          isConfigured: !!env.FACEBOOK_GROUP_ID
+        }
+      )
+      
+      this.initializedPlatforms = true
+    }
+    
     // Initialize storage if not exists
     if (!localStorage.getItem(this.STORAGE_KEY)) {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
@@ -279,7 +303,7 @@ export class CommunityService {
    * Send message to Slack
    */
   private static async sendToSlack(message: string, type: string, symbol?: string): Promise<void> {
-    const webhookUrl = import.meta.env.VITE_SLACK_WEBHOOK_URL
+    const { SLACK_WEBHOOK_URL: webhookUrl } = getEnvVars()
     if (!webhookUrl) {
       console.warn('Slack webhook URL not configured')
       return
@@ -321,7 +345,7 @@ export class CommunityService {
    * Send message to Discord
    */
   private static async sendToDiscord(message: string, type: string, symbol?: string): Promise<void> {
-    const webhookUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL
+    const { DISCORD_WEBHOOK_URL: webhookUrl } = getEnvVars()
     if (!webhookUrl) {
       console.warn('Discord webhook URL not configured')
       return
@@ -367,8 +391,7 @@ export class CommunityService {
    * Send message to Telegram
    */
   private static async sendToTelegram(message: string, type: string): Promise<void> {
-    const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN
-    const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID
+    const { TELEGRAM_BOT_TOKEN: botToken, TELEGRAM_CHAT_ID: chatId } = getEnvVars()
     
     if (!botToken || !chatId) {
       console.warn('Telegram bot token or chat ID not configured')
@@ -402,8 +425,8 @@ export class CommunityService {
    * Share to WhatsApp (opens WhatsApp with pre-filled message)
    */
   private static shareToWhatsApp(message: string): void {
+    const { WHATSAPP_GROUP_INVITE: groupInvite } = getEnvVars()
     const encodedMessage = encodeURIComponent(message)
-    const groupInvite = import.meta.env.VITE_WHATSAPP_GROUP_INVITE
     
     if (groupInvite) {
       window.open(`https://chat.whatsapp.com/${groupInvite}`, '_blank')
@@ -416,8 +439,8 @@ export class CommunityService {
    * Share to Facebook (opens Facebook with pre-filled post)
    */
   private static shareToFacebook(message: string): void {
+    const { FACEBOOK_GROUP_ID: groupId } = getEnvVars()
     const encodedMessage = encodeURIComponent(message)
-    const groupId = import.meta.env.VITE_FACEBOOK_GROUP_ID
     
     if (groupId) {
       window.open(`https://facebook.com/groups/${groupId}`, '_blank')

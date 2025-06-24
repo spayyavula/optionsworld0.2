@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
   BarChart3, Briefcase, TrendingUp, FileText, Eye, PieChart, 
@@ -33,6 +33,11 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  
+  // Memoize the active navigation item to prevent unnecessary re-renders
+  const activeItem = useMemo(() => {
+    return navigation.find(item => item.href === location.pathname)
+  }, [location.pathname])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -117,7 +122,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex flex-1 items-center">
               <h2 className="text-lg font-semibold text-gray-900">
-                {navigation.find(item => item.href === location.pathname)?.name || 'Dashboard'}
+                {activeItem?.name || 'Dashboard'}
               </h2>
             </div>
             <div className="flex items-center gap-x-4 lg:gap-x-6">
