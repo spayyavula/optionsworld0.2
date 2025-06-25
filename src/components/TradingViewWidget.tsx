@@ -101,8 +101,8 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         "hotlist": true,
         "calendar": true, 
         "show_popup_button": true,
-        "popup_width": "1000",
-        "popup_height": "650",
+        "popup_width": 1000,
+        "popup_height": 650,
         "container_id": containerId
       }
       
