@@ -272,7 +272,7 @@ export class StripeService {
         id: 'monthly',
         name: 'Pro Monthly',
         description: 'Full access with advanced analytics and strategy backtesting',
-        price: 29,
+        price: BASE_PRICES.monthly,
         currency: 'USD',
         interval: 'month',
         type: 'subscription'
@@ -281,7 +281,7 @@ export class StripeService {
         id: 'yearly',
         name: 'Pro Yearly',
         description: 'Everything in Pro Monthly plus 1-on-1 coaching and exclusive webinars',
-        price: 290,
+        price: BASE_PRICES.yearly,
         currency: 'USD',
         interval: 'year',
         type: 'subscription'
@@ -435,4 +435,5 @@ export class StripeService {
     // This would be implemented on the server side
     console.log('Webhook event received:', event.type)
   }
+import { BASE_PRICES } from '../utils/priceSync'
 }

@@ -29,6 +29,7 @@ import { CouponService } from '../services/couponService'
 import DealsSection from '../components/DealsSection'
 import CouponInput from '../components/CouponInput'
 import TermsAgreement from '../components/TermsAgreement'
+import { BASE_PRICES, YEARLY_SAVINGS_PERCENT, formatPrice } from '../utils/priceSync'
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -359,7 +360,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Choose Your Learning Path
+              Choose Your Plan
             </h2>
             <p className="text-xl text-gray-400">
               Start free, upgrade when you're ready to deepen your knowledge
@@ -382,7 +383,7 @@ export default function Landing() {
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-white mb-2">Basic</h3>
                 <div className="text-4xl font-bold text-white mb-2">
-                  <span className="text-2xl">$</span>29
+                  <span className="text-2xl">$</span>{BASE_PRICES.monthly}
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
                 <p className="text-gray-400">Perfect for learning the basics</p>
@@ -438,12 +439,12 @@ export default function Landing() {
                   </div>
                 )}
                 <div className="text-4xl font-bold text-white mb-2">
-                  <span className="text-2xl">$</span>79
+                  <span className="text-2xl">$</span>{BASE_PRICES.enterprise}
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
                 {getDiscountInfo('monthly').hasDiscount && (
                   <div className="text-sm text-gray-400 line-through mb-2">
-                    Was $79/month
+                    Was ${BASE_PRICES.enterprise}/month
                   </div>
                 )}
                 <p className="text-gray-400">For dedicated learners</p>
@@ -497,12 +498,12 @@ export default function Landing() {
                   </div>
                 )}
                 <div className="text-4xl font-bold text-white mb-2">
-                  <span className="text-2xl">$</span>199
+                  <span className="text-2xl">$</span>{BASE_PRICES.yearly / 12}
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
                 {getDiscountInfo('yearly').hasDiscount && (
                   <div className="text-sm text-gray-400 line-through mb-2">
-                    Was $199/month
+                    Was ${BASE_PRICES.yearly / 12}/month
                   </div>
                 )}
                 <p className="text-gray-400">For educational institutions</p>

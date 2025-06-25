@@ -254,7 +254,7 @@ export class CouponService {
     if (coupon.type === 'percentage') {
       return `${coupon.value}% OFF`
     } else {
-      return `$${coupon.value} OFF`
+      return `${formatPrice(coupon.value)} OFF`
     }
   }
 
@@ -408,4 +408,5 @@ export class CouponService {
     localStorage.removeItem(this.STORAGE_KEY)
     localStorage.removeItem(this.DEALS_KEY)
   }
+import { formatPrice } from '../utils/priceSync';
 }

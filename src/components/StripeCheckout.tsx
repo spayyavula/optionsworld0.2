@@ -5,6 +5,7 @@ import { CouponService } from '../services/couponService'
 import CouponInput from './CouponInput'
 import TermsAgreement from './TermsAgreement'
 import { CheckCircle, CreditCard, ShieldCheck, AlertTriangle } from 'lucide-react'
+import { formatPrice } from '../utils/priceSync'
 
 interface StripeCheckoutProps {
   plan: 'monthly' | 'yearly'
@@ -92,7 +93,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         </h3>
         <div className="flex items-center mb-4">
           <div className="text-3xl font-bold text-gray-900">
-            ${finalPrice}
+            {formatPrice(finalPrice, 'USD').replace('$', '')}
             <span className="text-sm text-gray-500 ml-1">
               /{plan === 'monthly' ? 'month' : 'year'}
             </span>
@@ -107,9 +108,9 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         
         {appliedCoupon?.isValid && (
           <div className="text-sm text-gray-500 mb-4">
-            <span className="line-through">${originalPrice}</span>
+            <span className="line-through">{formatPrice(originalPrice)}</span>
             {' → '}
-            <span className="text-green-600 font-medium">${finalPrice}</span>
+            <span className="text-green-600 font-medium">{formatPrice(finalPrice)}</span>
             {' '}
             <span>({CouponService.formatDiscount(appliedCoupon.coupon)})</span>
           </div>

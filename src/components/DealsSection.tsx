@@ -1,6 +1,7 @@
 import React from 'react'
 import { Clock, Tag, Zap, Gift } from 'lucide-react'
 import { CouponService } from '../services/couponService'
+import { formatPrice } from '../utils/priceSync'
 
 interface DealsSectionProps {
   onSelectDeal?: (deal: any) => void
@@ -50,9 +51,9 @@ export default function DealsSection({ onSelectDeal, onClaimDeal, selectedPlan, 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="text-3xl font-bold">
-                  ${featuredDeal.discountedPrice}
+                  {formatPrice(featuredDeal.discountedPrice).replace('$', '')}
                   <span className="text-lg line-through text-red-200 ml-2">
-                    ${featuredDeal.originalPrice}
+                    {formatPrice(featuredDeal.originalPrice)}
                   </span>
                 </div>
                 <div className="bg-yellow-400 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
@@ -103,10 +104,10 @@ export default function DealsSection({ onSelectDeal, onClaimDeal, selectedPlan, 
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-xl font-bold text-gray-900">
-                  ${deal.discountedPrice}
+                  {formatPrice(deal.discountedPrice)}
                 </span>
                 <span className="text-sm line-through text-gray-500">
-                  ${deal.originalPrice}
+                  {formatPrice(deal.originalPrice)}
                 </span>
               </div>
               <div className="text-right">
