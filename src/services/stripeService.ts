@@ -146,7 +146,7 @@ export class StripeService {
       }
 
       // Create checkout session
-      const { error, id } = await stripe.redirectToCheckout({
+      const { error } = await stripe.redirectToCheckout({
         lineItems: [{
           price: priceId,
           quantity: 1
@@ -155,8 +155,6 @@ export class StripeService {
         successUrl: `${window.location.origin}/?subscription=success&plan=${plan}`,
         cancelUrl: `${window.location.origin}/?subscription=cancelled`,
         customerEmail,
-        allowPromotionCodes: true,
-        billingAddressCollection: 'auto'
       })
 
       if (error) {
