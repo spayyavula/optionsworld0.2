@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
   BarChart3, Briefcase, TrendingUp, FileText, PieChart, 
