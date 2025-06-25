@@ -22,6 +22,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import { ConstantContactService } from '../services/constantContactService'
 import { StripeService } from '../services/stripeService'
+import { useState, useEffect, useRef } from 'react'
 import Disclaimer from '../components/Disclaimer'
 import { BuyMeCoffeeService } from '../services/buyMeCoffeeService'
 import { CouponService } from '../services/couponService'
@@ -37,9 +38,13 @@ export default function Landing() {
   const [selectedDeal, setSelectedDeal] = useState<any>(null)
   const [appliedCoupon, setAppliedCoupon] = useState<any>(null)
   const [showDeals, setShowDeals] = useState(false)
+  const [testResults, setTestResults] = useState<string | null>(null)
+  const [testError, setTestError] = useState<string | null>(null)
+  const [isRunningTests, setIsRunningTests] = useState(false)
   const [subscriptionSuccess, setSubscriptionSuccess] = useState(false)
   const [showTermsModal, setShowTermsModal] = useState(false)
   const [pendingSubscription, setPendingSubscription] = useState<{plan: 'monthly' | 'yearly', couponCode?: string} | null>(null)
+  const errorLogRef = useRef<HTMLDivElement>(null)
 
   // Initialize coupon system
   React.useEffect(() => {
@@ -85,6 +90,60 @@ export default function Landing() {
     setShowTermsModal(false)
     setPendingSubscription(null)
   }
+
+  const runSubscriptionTests = async () => {
+    setIsRunningTests(true)
+    setTestResults(null)
+    setTestError(null)
+    
+    try {
+      // Run the subscription tests
+      const response = await fetch('/api/run-subscription-tests', {
+        method: 'POST',
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to run tests: ${errorText}`);
+      }
+      
+      const result = await response.json();
+      setTestResults(JSON.stringify(result, null, 2));
+      console.log('Subscription test results:', result);
+    } catch (error) {
+      console.error('Error running subscription tests:', error);
+      setTestError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsRunningTests(false);
+    }
+  };
+
+  const runE2ETests = async () => {
+    setIsRunningTests(true)
+    setTestResults(null)
+    setTestError(null)
+    
+    try {
+      // Run the E2E tests
+      const response = await fetch('/api/run-e2e-tests', {
+        method: 'POST',
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to run tests: ${errorText}`);
+      }
+      
+      const result = await response.json();
+      setTestResults(JSON.stringify(result, null, 2));
+      console.log('E2E test results:', result);
+    } catch (error) {
+      console.error('Error running E2E tests:', error);
+      setTestError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsRunningTests(false);
+    }
+  };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -522,6 +581,49 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Test Buttons Section */}
+      <section className="py-12 bg-gray-800" id="testing">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-6">
+            Testing Tools
+          </h2>
+          <p className="text-xl text-gray-400 mb-8">
+            Run subscription and E2E tests to verify functionality
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <button
+              onClick={runSubscriptionTests}
+              disabled={isRunningTests}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRunningTests ? 'Running Tests...' : 'Run Subscription Tests'}
+            </button>
+            <button
+              onClick={runE2ETests}
+              disabled={isRunningTests}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRunningTests ? 'Running Tests...' : 'Run E2E Tests'}
+            </button>
+          </div>
+
+          {testResults && (
+            <div className="bg-gray-900 p-4 rounded-lg text-left overflow-auto max-h-96 mb-6">
+              <h3 className="text-lg font-semibold text-green-400 mb-2">Test Results:</h3>
+              <pre className="text-green-300 text-sm whitespace-pre-wrap">{testResults}</pre>
+            </div>
+          )}
+
+          {testError && (
+            <div className="bg-gray-900 p-4 rounded-lg text-left overflow-auto max-h-96 mb-6" ref={errorLogRef}>
+              <h3 className="text-lg font-semibold text-red-400 mb-2">Test Error:</h3>
+              <pre className="text-red-300 text-sm whitespace-pre-wrap">{testError}</pre>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Support Section */}
       <section className="py-20 bg-gray-800" id="support">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -578,6 +680,7 @@ export default function Landing() {
                 <li><Link to="/app/learning" className="hover:text-white transition-colors">Learning Resources</Link></li>
                 <li><Link to="/app/strategies" className="hover:text-white transition-colors">Strategy Library</Link></li>
                 <li><Link to="/agent" className="hover:text-white transition-colors">Agent API</Link></li>
+                <li><Link to="/testing" className="hover:text-white transition-colors">Testing Tools</Link></li>
               </ul>
             </div>
 
@@ -612,6 +715,7 @@ export default function Landing() {
               <a href="#home" className="text-gray-500 hover:text-white transition-colors">Home</a>
               <a href="#features" className="text-gray-500 hover:text-white transition-colors">Features</a>
               <a href="#pricing" className="text-gray-500 hover:text-white transition-colors">Pricing</a>
+              <a href="#testing" className="text-gray-500 hover:text-white transition-colors">Testing</a>
               <a href="#support" className="text-gray-500 hover:text-white transition-colors">Support</a>
             </div>
           </div>

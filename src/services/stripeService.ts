@@ -146,25 +146,40 @@ export class StripeService {
       }
 
       // Create checkout session
-      const { error } = await stripe.redirectToCheckout({
-        lineItems: [{
-          price: priceId,
-          quantity: 1
-        }],
-        mode: 'subscription',
-        successUrl: `${window.location.origin}/?subscription=success&plan=${plan}`,
-        cancelUrl: `${window.location.origin}/?subscription=cancelled`,
-        customerEmail,
-      })
+      try {
+        const { error } = await stripe.redirectToCheckout({
+          lineItems: [{
+            price: priceId,
+            quantity: 1
+          }],
+          mode: 'subscription',
+          successUrl: `${window.location.origin}/?subscription=success&plan=${plan}`,
+          cancelUrl: `${window.location.origin}/?subscription=cancelled`,
+          customerEmail,
+        });
 
-      if (error) {
-        throw error
+        if (error) {
+          console.error('Stripe checkout error:', error);
+          throw new Error(`Stripe checkout error: ${error.message}`);
+        }
+      } catch (checkoutError) {
+        console.error('Error during redirectToCheckout:', checkoutError);
+        throw checkoutError;
       }
 
       // This is a placeholder since redirectToCheckout will navigate away
       return { url: '#' }
     } catch (error) {
-      console.error('Checkout session error:', error)
+      console.error('Checkout session error:', error);
+      
+      // Add more detailed error logging
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+      }
       
       // Fallback for development
       if (import.meta.env.DEV) {
@@ -172,7 +187,7 @@ export class StripeService {
         return { url: '#' }
       }
       
-      throw new Error('Failed to create checkout session')
+      throw error;
     }
   }
 

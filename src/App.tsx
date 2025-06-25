@@ -1,7 +1,9 @@
 import React, { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import SeoHelmet from './components/SeoHelmet'
+import ErrorBoundary from './components/ErrorBoundary'
 import Disclaimer from './components/Disclaimer'
+import ErrorDisplay from './components/ErrorDisplay'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import { OptionsProvider } from './context/OptionsContext'
@@ -40,45 +42,48 @@ const LoadingFallback = () => (
 function App() {
   return (
     <TradingProvider>
-      <SeoHelmet />
-      <Disclaimer variant="banner" />
-      <OptionsProvider>
-        <OptionsDataProvider>
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/construction" element={<Construction />} />
-              <Route path="/demo" element={<Demo />} />
-              <Route path="/agent" element={<AgentDashboard />} />
-              <Route path="/subscribe" element={<SubscriptionPage />} />
-              <Route path="/app" element={
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              } />
-              <Route path="/app/*" element={
-                <Layout>
-                  <Routes>
-                    <Route path="/portfolio" element={<OptionsPortfolio />} />
-                    <Route path="/trading" element={<OptionsTrading />} />
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/watchlist" element={<OptionsChain />} />
-                    <Route path="/regime" element={<RegimeAnalysis />} />
-                    <Route path="/arbitrage" element={<OptionsArbitrage />} />
-                    <Route path="/learning" element={<OptionsLearning />} />
-                    <Route path="/journal" element={<TradingJournal />} />
-                    <Route path="/strategies" element={<OptionsStrategies />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/community" element={<Community />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/data-manager" element={<OptionsDataManager />} />
-                  </Routes>
-                </Layout>
-              } />
-            </Routes>
-          </Suspense>
-        </OptionsDataProvider>
-      </OptionsProvider>
+      <ErrorBoundary>
+        <SeoHelmet />
+        <Disclaimer variant="banner" />
+        {import.meta.env.DEV && <ErrorDisplay />}
+        <OptionsProvider>
+          <OptionsDataProvider>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/construction" element={<Construction />} />
+                <Route path="/demo" element={<Demo />} />
+                <Route path="/agent" element={<AgentDashboard />} />
+                <Route path="/subscribe" element={<SubscriptionPage />} />
+                <Route path="/app" element={
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                } />
+                <Route path="/app/*" element={
+                  <Layout>
+                    <Routes>
+                      <Route path="/portfolio" element={<OptionsPortfolio />} />
+                      <Route path="/trading" element={<OptionsTrading />} />
+                      <Route path="/orders" element={<Orders />} />
+                      <Route path="/watchlist" element={<OptionsChain />} />
+                      <Route path="/regime" element={<RegimeAnalysis />} />
+                      <Route path="/arbitrage" element={<OptionsArbitrage />} />
+                      <Route path="/learning" element={<OptionsLearning />} />
+                      <Route path="/journal" element={<TradingJournal />} />
+                      <Route path="/strategies" element={<OptionsStrategies />} />
+                      <Route path="/analytics" element={<Analytics />} />
+                      <Route path="/community" element={<Community />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/data-manager" element={<OptionsDataManager />} />
+                    </Routes>
+                  </Layout>
+                } />
+              </Routes>
+            </Suspense>
+          </OptionsDataProvider>
+        </OptionsProvider>
+      </ErrorBoundary>
     </TradingProvider>
   )
 }

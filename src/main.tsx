@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
+import { setupGlobalErrorHandlers } from './utils/errorLogger'
 
 // Lazy initialize services
 const initializeServices = async () => {
@@ -26,6 +27,7 @@ const initializeServices = async () => {
   } catch (error) {
     console.error('Error initializing services:', error)
   }
+  setupGlobalErrorHandlers();
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
