@@ -323,7 +323,6 @@ export default function OptionsChain() {
               theme="light" 
               studies={["RSI", "MACD", "Volume"]}
               style="candles"
-              studies={["RSI", "MACD", "Volume"]}
             />
           </div>
         </div>

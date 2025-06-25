@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpR
 import { CommunityService } from '../services/communityService' 
 import { useTradingContext } from '../context/TradingContext'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import PageViewCounter from './PageViewCounter'
 import YahooFinanceTicker from '../components/YahooFinanceTicker'
 import TradingViewDirectTicker from '../components/TradingViewDirectTicker'
