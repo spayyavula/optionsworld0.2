@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { 
   TrendingUp, 
   TrendingDown, 
-  Activity, 
+  Activity,
+  ExternalLink,
   AlertTriangle, 
   Target, 
   Clock,
@@ -13,9 +14,9 @@ import {
   Zap
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
-import StockChartsWidget from '../components/StockChartsWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 import Disclaimer from '../components/Disclaimer'
+import TradingViewWidget from '../components/TradingViewWidget'
 
 export default function RegimeAnalysisPage() {
   const [analysis, setAnalysis] = useState<RegimeAnalysis | null>(null)
@@ -442,9 +443,14 @@ export default function RegimeAnalysisPage() {
 
       {/* Market Chart Analysis */}
       <div className="card">
-        <div className="card-header">
+          <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis (StockCharts)</h3>
+            <div>
+              <a href={`https://www.tradingview.com/chart/?symbol=${chartSymbol}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
+                <span>Open in TradingView</span>
+                <ExternalLink className="h-4 w-4 ml-1" />
+              </a>
+            </div>
             <div className="flex space-x-2">
               <select
                 className="form-select text-sm"
@@ -476,15 +482,14 @@ export default function RegimeAnalysisPage() {
           </div>
         </div>
         <div className="card-body">
-            <StockChartsWidget
-              symbol={chartSymbol || 'SPY'}
+            <TradingViewWidget
+              symbol={chartSymbol.includes(':') ? chartSymbol : `AMEX:${chartSymbol}`}
               width="100%"
               height={650}
-              timeframe={chartInterval}
+              interval={chartInterval}
               theme="light"
-              showToolbar={true}
-              showDrawings={true}
-              showIndicators={true}
+              style="candles"
+              studies={["RSI", "MACD", "Volume"]}
             />
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">

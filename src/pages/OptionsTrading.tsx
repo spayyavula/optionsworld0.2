@@ -3,7 +3,7 @@ import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2, Aler
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
-import StockChartsMiniWidget from '../components/StockChartsMiniWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import Disclaimer from '../components/Disclaimer'
 import type { OptionsContract } from '../types/options'
 
@@ -469,15 +469,25 @@ export default function OptionsTrading() {
           <div className="card">
             <div className="card-header">
               <h3 className="text-lg font-medium text-gray-900">
-                {selectedContractData.underlying_ticker} Chart
+                {selectedContractData.underlying_ticker} Chart 
+                <a 
+                  href={`https://www.tradingview.com/chart/?symbol=${selectedContractData.underlying_ticker}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-sm text-blue-600 hover:underline ml-2"
+                >
+                  Open in TradingView
+                </a>
               </h3>
             </div>
             <div className="card-body">
-              <StockChartsMiniWidget 
-                symbol={selectedContractData.underlying_ticker}
+              <TradingViewWidget
+                symbol={`NASDAQ:${selectedContractData.underlying_ticker}`}
                 width="100%"
                 height={300}
-                theme="light"
+                interval="D"
+                theme="light" 
+                style="area"
               />
             </div>
           </div>

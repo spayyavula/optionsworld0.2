@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-interface TradingViewDirectWidgetProps {
+interface TradingViewDirectWidgetProps { 
   symbol: string
   width?: string | number
   height?: number
@@ -40,7 +40,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create direct link container
       const linkContainer = document.createElement('div')
       linkContainer.className = 'tradingview-link-container'
-      linkContainer.style.width = '100%'
+      linkContainer.style.width = '100%' 
       linkContainer.style.height = '100%'
       linkContainer.style.display = 'flex'
       linkContainer.style.flexDirection = 'column'
@@ -90,7 +90,14 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Format symbol to ensure it has exchange prefix if needed
       const formattedSymbol = symbol.includes(':') ? symbol : 
         symbol === 'SPY' ? 'AMEX:SPY' : 
-        `NASDAQ:${symbol}`
+        symbol === 'QQQ' ? 'NASDAQ:QQQ' :
+        symbol === 'AAPL' ? 'NASDAQ:AAPL' :
+        symbol === 'MSFT' ? 'NASDAQ:MSFT' :
+        symbol === 'GOOGL' ? 'NASDAQ:GOOGL' :
+        symbol === 'AMZN' ? 'NASDAQ:AMZN' :
+        symbol === 'TSLA' ? 'NASDAQ:TSLA' :
+        symbol === 'NVDA' ? 'NASDAQ:NVDA' :
+        `NASDAQ:${symbol}` 
       
       // Construct the URL with parameters
       const baseUrl = 'https://www.tradingview.com/chart'
@@ -122,7 +129,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       linkButton.style.fontWeight = '500'
       linkButton.style.textDecoration = 'none'
       linkButton.style.transition = 'background-color 150ms'
-      linkButton.textContent = 'Open in TradingView'
+      linkButton.textContent = 'Open Advanced Chart'
       
       // Add hover effect
       linkButton.onmouseover = () => {
@@ -147,8 +154,8 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       linkContainer.appendChild(credentialsInfo)
       
       containerRef.current.appendChild(linkContainer)
-    } catch (error) {
-      console.error('Error initializing TradingView direct widget:', error)
+    } catch (error) { 
+      console.error('Error initializing TradingView widget:', error)
       
       // Show error message
       if (containerRef.current) {

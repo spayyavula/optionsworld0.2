@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-interface StockChartsMiniWidgetProps {
+interface StockChartsMiniWidgetProps { 
   symbol: string
   width?: string | number
   height?: string | number
@@ -41,7 +41,7 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       // Create mini chart container
       const chartContainer = document.createElement('div')
       chartContainer.className = 'stockcharts-mini-chart'
-      chartContainer.style.display = 'flex'
+      chartContainer.style.display = 'flex' 
       chartContainer.style.flexDirection = 'column'
       chartContainer.style.alignItems = 'center'
       chartContainer.style.justifyContent = 'center'
@@ -57,14 +57,9 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       
       // Construct the URL with parameters
       const baseUrl = 'https://stockcharts.com/h-sc/ui'
-      const params = new URLSearchParams({
-        s: formattedSymbol,
-        p: timeframe,
-        b: theme === 'dark' ? 'dark' : 'light',
-        g: 'false', // No indicators for mini chart
-        d: 'false', // No drawings for mini chart
-        t: 'false'  // No toolbar for mini chart
-      })
+      
+      // Create TradingView link instead
+      const tradingViewUrl = `https://www.tradingview.com/chart/?symbol=${formattedSymbol}`
       
       // Create symbol header
       const symbolHeader = document.createElement('div')
@@ -99,7 +94,7 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       
       // Create link button
       const linkButton = document.createElement('a')
-      linkButton.href = `${baseUrl}?${params.toString()}`
+      linkButton.href = tradingViewUrl
       linkButton.target = '_blank'
       linkButton.rel = 'noopener noreferrer'
       linkButton.style.display = 'inline-flex'
@@ -113,14 +108,14 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       linkButton.style.fontWeight = '500'
       linkButton.style.textDecoration = 'none'
       linkButton.style.transition = 'background-color 150ms'
-      linkButton.textContent = 'View Chart'
+      linkButton.textContent = 'View in TradingView'
       
       // Add note about account
       const accountNote = document.createElement('div')
       accountNote.style.marginTop = '0.5rem'
       accountNote.style.fontSize = '10px'
       accountNote.style.color = theme === 'dark' ? '#adb5bd' : '#6c757d'
-      accountNote.textContent = 'Requires StockCharts account'
+      accountNote.textContent = 'Open in TradingView for advanced charting'
       
       // Add hover effect
       linkButton.onmouseover = () => {
@@ -138,7 +133,7 @@ const StockChartsMiniWidget: React.FC<StockChartsMiniWidgetProps> = ({
       
       containerRef.current.appendChild(chartContainer)
     } catch (error) {
-      console.error('Error initializing StockCharts mini widget:', error)
+      console.error('Error initializing chart widget:', error)
       
       // Show error message
       if (containerRef.current) {

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Search, TrendingUp, TrendingDown, Calculator, Eye } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
-import StockChartsWidget from '../components/StockChartsWidget'
-import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import type { OptionsContract } from '../types/options'
 
 export default function OptionsChain() {
@@ -301,18 +300,25 @@ export default function OptionsChain() {
           <div className="card-header">
             <h3 className="text-lg font-medium text-gray-900">
               {selectedUnderlying} Chart Analysis
+              <a 
+                href={`https://www.tradingview.com/chart/?symbol=${selectedUnderlying}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-sm text-blue-600 hover:underline ml-2"
+              >
+                Open in TradingView
+              </a>
             </h3>
           </div>
           <div className="card-body">
-            <StockChartsWidget
-              symbol={selectedUnderlying || 'SPY'}
+            <TradingViewWidget
+              symbol={`NASDAQ:${selectedUnderlying || 'SPY'}`}
               width="100%"
               height={500}
-              timeframe="D"
+              interval="D"
               theme="light"
-              showToolbar={true}
-              showDrawings={true}
-              showIndicators={true}
+              style="candles"
+              studies={["RSI", "MACD", "Volume"]}
             />
           </div>
         </div>

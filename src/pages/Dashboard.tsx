@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb, Calculator } from 'lucide-react'
-import { useTradingContext } from '../context/TradingContext'
-import { CommunityService } from '../services/communityService'
-import StockChartsWidget from '../components/StockChartsWidget'
+import { CommunityService } from '../services/communityService' 
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import PageViewCounter from './PageViewCounter'
 import YahooFinanceTicker from '../components/YahooFinanceTicker'
@@ -137,17 +135,20 @@ export default function Dashboard() {
       <div className="card">
         <div className="card-header">
           <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            <a href="https://www.tradingview.com/chart/?symbol=AMEX:SPY" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              Open in TradingView
+            </a>
+          </p>
         </div>
         <div className="card-body">
-          <StockChartsWidget
-            symbol="SPY"
+          <TradingViewWidget
+            symbol="AMEX:SPY"
             width="100%"
             height={400}
-            timeframe="D"
+            interval="D"
             theme="light"
-            showToolbar={true}
-            showDrawings={true}
-            showIndicators={true}
+            style="candles"
           />
         </div>
       </div>
