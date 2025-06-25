@@ -260,7 +260,7 @@ test.describe('Stripe and Supabase Subscription E2E', () => {
         route.fulfill({
           status: 400,
           contentType: 'application/json',
-          body: JSON.stringify({ error: { message: 'Invalid payment method', type: 'invalid_request_error' } })
+          body: JSON.stringify({ error: { message: 'Invalid payment method' } })
         });
       } else {
         route.continue();
