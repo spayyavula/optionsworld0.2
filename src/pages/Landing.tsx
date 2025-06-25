@@ -30,7 +30,7 @@ import CouponInput from '../components/CouponInput'
 import TermsAgreement from '../components/TermsAgreement'
 
 export default function Landing() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('spayyavula@gmail.com')
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [selectedDeal, setSelectedDeal] = useState<any>(null)
