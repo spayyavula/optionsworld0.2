@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2, AlertTriangle } from 'lucide-react'
+import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2, AlertTriangle, Shield } from 'lucide-react'
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
@@ -249,7 +249,7 @@ export default function OptionsTrading() {
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-medium text-gray-900">{selectedContract}</h4>
+                      <h4 className="font-medium text-gray-900 text-lg">{selectedContract}</h4>
                       <p className="text-sm text-gray-500">
                         {selectedContractData?.underlying_ticker} ${selectedContractData?.strike_price} {selectedContractData?.contract_type?.toUpperCase()}
                       </p>
@@ -265,7 +265,7 @@ export default function OptionsTrading() {
                 </div>
 
                 {/* Greeks Display */}
-                <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Delta:</span>
                     <span className="font-medium">{selectedContractData?.delta.toFixed(3)}</span>
@@ -329,10 +329,16 @@ export default function OptionsTrading() {
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     min="1"
-                  />
-                  {existingPosition && tradeType === 'sell_to_close' && (
-                    <p className="text-sm text-gray-500 mt-1">
-                      Available: {existingPosition.quantity} contracts
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200 shadow-sm">
+                    <h4 className="font-medium text-blue-800 mb-2 text-sm">Learning Opportunity</h4>
+                    <p className="text-xs text-blue-700 leading-relaxed">
+                      Position adjustment is one of the most valuable skills to develop as a trader. Each adjustment technique has different risk/reward tradeoffs:
+                      <ul className="mt-2 space-y-1 ml-4">
+                        <li>• <span className="font-medium">Rolling Out:</span> Gives your thesis more time but costs additional premium</li>
+                        <li>• <span className="font-medium">Adjusting Strikes:</span> Changes your breakeven point and risk exposure</li>
+                        <li>• <span className="font-medium">Creating Spreads:</span> Reduces both risk and potential profit</li>
+                        <li>• <span className="font-medium">Adding Hedges:</span> Provides protection at the cost of additional capital</li>
+                      </ul>
                     </p>
                   )}
                 </div>
@@ -389,7 +395,7 @@ export default function OptionsTrading() {
                 {/* Risk Management Options */}
                 {quantity && (
                   <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200 mb-4">
-                    <h4 className="font-medium text-yellow-800 mb-2 flex items-center">
+                    <h4 className="font-medium text-yellow-800 mb-3 flex items-center">
                       <Shield className="h-4 w-4 mr-2" />
                       Risk Management Options
                     </h4>
@@ -428,8 +434,9 @@ export default function OptionsTrading() {
                       </div>
                     </div>
                     
-                    <div className="mt-2 text-xs text-yellow-700">
-                      <p>These risk management options help protect your position from excessive losses.</p>
+                    <div className="mt-3 text-xs text-yellow-700 bg-white p-2 rounded-md border border-yellow-100">
+                      <p className="font-medium">Learning Note:</p>
+                      <p>Risk management is a critical skill for successful trading. These options help you practice defensive position management techniques.</p>
                     </div>
                   </div>
                 )}
@@ -495,7 +502,7 @@ export default function OptionsTrading() {
                 <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                   <h4 className="font-medium text-blue-800 mb-1 text-sm">Learning Note</h4>
                   <p className="text-xs text-blue-700">
-                    Adjusting positions is an advanced skill that can help manage risk. Each adjustment has tradeoffs between risk reduction and potential reward. Practice these techniques in a paper trading environment first.
+                    Learning to adjust existing positions is a key skill for managing risk and improving trading outcomes.
                   </p>
                 </div>
               </div>
@@ -514,7 +521,7 @@ export default function OptionsTrading() {
                 <span className="text-gray-500">Buying Power:</span>
                 <span className="font-medium">{formatCurrency(state.buyingPower)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between bg-gray-50 p-2 rounded-md">
                 <span className="text-gray-500">Cash Balance:</span>
                 <span className="font-medium">{formatCurrency(state.balance)}</span>
               </div>
@@ -522,7 +529,7 @@ export default function OptionsTrading() {
                 <span className="text-gray-500">Total Value:</span>
                 <span className="font-medium">{formatCurrency(state.totalValue)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between bg-gray-50 p-2 rounded-md">
                 <span className="text-gray-500">Options Positions:</span>
                 <span className="font-medium">{state.positions.length}</span>
               </div>
@@ -542,7 +549,7 @@ export default function OptionsTrading() {
                   <span className="text-gray-500">Contracts Owned:</span>
                   <span className="font-medium">{existingPosition.quantity}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between bg-gray-50 p-2 rounded-md">
                   <span className="text-gray-500">Avg Price:</span>
                   <span className="font-medium">{formatCurrency(existingPosition.avgPrice)}</span>
                 </div>
@@ -553,7 +560,10 @@ export default function OptionsTrading() {
                 <div className="flex justify-between">
                   <span className="text-gray-500">Unrealized P&L:</span>
                   <span className={`font-medium ${existingPosition.unrealizedPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {formatCurrency(existingPosition.unrealizedPnL)} ({formatPercent(existingPosition.unrealizedPnLPercent / 100)})
+                    {formatCurrency(existingPosition.unrealizedPnL)} 
+                    <span className="ml-1 px-2 py-0.5 rounded-full text-xs bg-gray-100">
+                      {formatPercent(existingPosition.unrealizedPnLPercent / 100)}
+                    </span>
                   </span>
                 </div>
               </div>
