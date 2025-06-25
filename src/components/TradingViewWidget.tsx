@@ -75,7 +75,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       // Create the script element with embedded JSON
       const script = document.createElement('script')
       script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
-      script.type = 'text/javascript'
+      script.type = 'text/javascript' 
       script.async = true
       
       // Create widget options as a proper JSON string
@@ -106,10 +106,11 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         "container_id": containerId
       }
       
-      script.innerHTML = JSON.stringify(widgetOptions)
+      // Set the script content to JSON string
+      script.textContent = JSON.stringify(widgetOptions)
       
-      // Add script to document head for proper TradingView initialization
-      document.head.appendChild(script)
+      // Add script to container
+      widgetContainer.appendChild(script)
       scriptRef.current = script
     } catch (error) {
       console.error('Error initializing TradingView widget:', error)

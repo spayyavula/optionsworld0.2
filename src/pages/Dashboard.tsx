@@ -122,8 +122,8 @@ export default function Dashboard() {
       </div>
 
       {/* Market Ticker */}
-      <div className="card shadow-md border-blue-200">
-        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center">
+      <div className="card shadow-md border-blue-200 mb-6">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-3">
           <h3 className="text-xl font-semibold text-gray-900">Market Overview</h3>
           <div className="text-sm text-gray-500">
             <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-md">
@@ -142,9 +142,9 @@ export default function Dashboard() {
       </div>
 
       {/* Portfolio Performance Chart */}
-      <div className="card shadow-md border-blue-200">
-        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center">
-          <h3 className="text-xl font-semibold text-gray-900">Market Analysis</h3>
+      <div className="card shadow-md border-blue-200 mb-6">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-3">
+          <h3 className="text-xl font-semibold text-gray-900">Market Chart</h3>
           <p className="text-sm text-gray-500 mt-1">
             <a href="https://www.tradingview.com/chart/?symbol=AMEX:SPY" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
               <span>Open in TradingView</span>

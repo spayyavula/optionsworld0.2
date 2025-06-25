@@ -445,12 +445,13 @@ export default function RegimeAnalysisPage() {
       <div className="card shadow-md border-blue-200">
         <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
-            <div>
-              <a href={`https://www.tradingview.com/chart/?symbol=${chartSymbol}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
+            <h3 className="text-lg font-medium text-gray-900">
+              Market Chart Analysis
+              <a href={`https://www.tradingview.com/chart/?symbol=${chartSymbol}`} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline ml-2 inline-flex items-center">
                 <span>Open in TradingView</span>
                 <ExternalLink className="h-4 w-4 ml-1" />
               </a>
-            </div>
+            </h3>
             <div className="flex space-x-2">
               <select 
                 className="form-select text-sm"

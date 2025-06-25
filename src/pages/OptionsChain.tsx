@@ -300,7 +300,7 @@ export default function OptionsChain() {
 
       {/* Chart for Selected Underlying */}
       {selectedUnderlying && selectedUnderlying !== 'ALL' && (
-        <div className="card shadow-md border-blue-200">
+        <div className="card shadow-md border-blue-200 mb-6">
           <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
             <h3 className="text-lg font-medium text-gray-900">
               {selectedUnderlying} Chart Analysis

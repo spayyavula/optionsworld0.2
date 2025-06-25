@@ -650,13 +650,14 @@ export default function OptionsArbitrage() {
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-3">Underlying Chart</h4>
                     <div className="mb-6">
-                      <TradingViewWidget
+                      <TradingViewWidget 
                         symbol={selectedOpportunity.underlyingTicker}
                         width="100%"
                         height={200}
                         theme="light"
                         interval="D"
-                        style="area"
+                        style="area" 
+                        studies={[]}
                       />
                     </div>
 
