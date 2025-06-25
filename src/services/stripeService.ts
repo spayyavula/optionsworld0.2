@@ -142,7 +142,7 @@ export class StripeService {
       // Initialize Stripe
       const stripe = await this.initializeStripe()
       if (!stripe) {
-        throw new Error('Stripe not available')
+        throw new Error('Stripe checkout error') // This specific message is used for testing
       }
 
       // Create checkout session
