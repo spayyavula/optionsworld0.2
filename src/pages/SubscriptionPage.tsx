@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { 
   CheckCircle, 
   CreditCard, 
-  Calendar, 
   Shield, 
   Tag, 
   AlertTriangle,
@@ -13,6 +12,7 @@ import StripeCheckout from '../components/StripeCheckout'
 import DealsSection from '../components/DealsSection'
 import { StripeService } from '../services/stripeService'
 import { CouponService } from '../services/couponService'
+import { BASE_PRICES, YEARLY_SAVINGS_PERCENT, formatPrice, getPlanDetails } from '../utils/priceSync'
 
 export default function SubscriptionPage() {
   const navigate = useNavigate()
@@ -43,23 +43,16 @@ export default function SubscriptionPage() {
   const handleClaimDeal = async (deal: any) => {
     try {
       // Redirect to checkout with the deal's coupon code
-      const { url } = await StripeService.createCheckoutSession(
-        deal.plan, 
-        deal.couponCode
-      )
+      const { url } = await StripeService.createCheckoutSession(deal.plan, deal.couponCode)
       window.location.href = url
     } catch (error) {
       console.error('Failed to claim deal:', error)
       alert('Failed to process deal. Please try again.')
     }
   }
-  
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
+
+  // Get plan details for the selected plan
+  const planDetails = getPlanDetails(selectedPlan)
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -94,30 +87,22 @@ export default function SubscriptionPage() {
         {/* Plan Selection Tabs */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex rounded-md shadow-sm">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan('monthly')}
-              className={`relative inline-flex items-center px-4 py-2 rounded-l-md border ${
-                selectedPlan === 'monthly'
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              <Calendar className="h-5 w-5 mr-2" />
-              Monthly
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedPlan('yearly')}
-              className={`relative inline-flex items-center px-4 py-2 rounded-r-md border ${
-                selectedPlan === 'yearly'
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-              }`}
-            >
-              <Calendar className="h-5 w-5 mr-2" />
-              Yearly (Save 20%)
-            </button>
+            {['monthly', 'yearly'].map((plan) => (
+              <button
+                key={plan}
+                type="button"
+                onClick={() => setSelectedPlan(plan as 'monthly' | 'yearly')}
+                className={`relative inline-flex items-center px-4 py-2 ${
+                  plan === 'monthly' ? 'rounded-l-md' : 'rounded-r-md'
+                } border ${
+                  selectedPlan === plan
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {plan === 'monthly' ? 'Monthly' : `Yearly (Save ${YEARLY_SAVINGS_PERCENT}%)`}
+              </button>
+            ))}
           </div>
         </div>
         
@@ -133,71 +118,26 @@ export default function SubscriptionPage() {
           {/* Plan Features */}
           <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-6">
-              {selectedPlan === 'monthly' ? 'Monthly Plan' : 'Annual Plan'} Features
+              {planDetails.name} Features
             </h3>
             
             <div className="space-y-4">
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-gray-900">Full Trading Platform Access</h4>
-                  <p className="text-sm text-gray-600">
-                    Access all trading features, including options trading, portfolio management, and advanced analytics
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-gray-900">Real-time Market Data</h4>
-                  <p className="text-sm text-gray-600">
-                    Get real-time market data and quotes for stocks and options
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-gray-900">Advanced Analytics</h4>
-                  <p className="text-sm text-gray-600">
-                    Access detailed performance analytics, risk metrics, and portfolio insights
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-gray-900">Community Integration</h4>
-                  <p className="text-sm text-gray-600">
-                    Share trades and insights with the community across multiple platforms
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-gray-900">Learning Resources</h4>
-                  <p className="text-sm text-gray-600">
-                    Access premium educational content and strategy guides
-                  </p>
-                </div>
-              </div>
-              
-              {selectedPlan === 'yearly' && (
+              {planDetails.features.map((feature, index) => (
                 <div className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium text-gray-900">Priority Support</h4>
+                    <h4 className="font-medium text-gray-900">{feature}</h4>
                     <p className="text-sm text-gray-600">
-                      Get priority support and personalized assistance
+                      {index === 0 && 'Access all trading features, including options trading, portfolio management, and advanced analytics'}
+                      {index === 1 && 'Get detailed insights into your trading performance and portfolio allocation'}
+                      {index === 2 && 'Share trades and insights with the community across multiple platforms'}
+                      {index === 3 && 'Get help when you need it with our responsive support team'}
+                      {index === 4 && 'Access exclusive educational content to improve your trading skills'}
+                      {index === 5 && 'Get personalized assistance from our dedicated team'}
                     </p>
                   </div>
                 </div>
-              )}
+              ))}
             </div>
             
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
