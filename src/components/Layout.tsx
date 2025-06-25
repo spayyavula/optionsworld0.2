@@ -1,29 +1,62 @@
 import React, { useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
-  BarChart3, Briefcase, TrendingUp, FileText, Eye, PieChart, 
-  Settings, Users, Menu, X, BookOpen, BookMarked, Lightbulb,
-  Calculator,
-  Bot, Cpu, AlertTriangle
+  BarChart3, Briefcase, TrendingUp, FileText, PieChart, 
+  Settings, Users, Menu, X, BookOpen, Lightbulb,
+  Calculator, Bot, AlertTriangle, ChevronDown, ChevronRight
  } from 'lucide-react'
 import Disclaimer from './Disclaimer'
 
-const navigation = [
-  { name: 'Dashboard', href: '/app', icon: BarChart3 },
-  { name: 'Options Portfolio', href: '/app/portfolio', icon: Briefcase },
-  { name: 'Options Trading', href: '/app/trading', icon: TrendingUp },
-  { name: 'Options Learning', href: '/app/learning', icon: BookOpen },
-  { name: 'Trading Journal', href: '/app/journal', icon: BookMarked },
-  { name: 'Options Strategies', href: '/app/strategies', icon: Lightbulb },
-  { name: 'Options Arbitrage', href: '/app/arbitrage', icon: Calculator },
-  { name: 'Orders', href: '/app/orders', icon: FileText },
-  { name: 'Options Chain', href: '/app/watchlist', icon: Eye },
-  { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
-  { name: 'Analytics', href: '/app/analytics', icon: PieChart },
-  { name: 'Community', href: '/app/community', icon: Users },
-  { name: 'Data Manager', href: '/app/data-manager', icon: Settings },
-  { name: 'Agent API', href: '/agent', icon: Bot },
-  { name: 'Settings', href: '/app/settings', icon: Settings },
+// Define menu categories with their items
+const menuCategories = [
+  {
+    name: 'Main',
+    items: [
+      { name: 'Dashboard', href: '/app', icon: BarChart3 }
+    ]
+  },
+  {
+    name: 'Trading',
+    icon: TrendingUp,
+    items: [
+      { name: 'Portfolio', href: '/app/portfolio', icon: Briefcase },
+      { name: 'Trading', href: '/app/trading', icon: TrendingUp },
+      { name: 'Options Chain', href: '/app/watchlist', icon: PieChart },
+      { name: 'Orders', href: '/app/orders', icon: FileText }
+    ]
+  },
+  {
+    name: 'Analysis',
+    icon: PieChart,
+    items: [
+      { name: 'Analytics', href: '/app/analytics', icon: PieChart },
+      { name: 'Regime Analysis', href: '/app/regime', icon: PieChart },
+      { name: 'Options Arbitrage', href: '/app/arbitrage', icon: Calculator }
+    ]
+  },
+  {
+    name: 'Education',
+    icon: BookOpen,
+    items: [
+      { name: 'Learning', href: '/app/learning', icon: BookOpen },
+      { name: 'Strategies', href: '/app/strategies', icon: Lightbulb },
+      { name: 'Journal', href: '/app/journal', icon: FileText }
+    ]
+  },
+  {
+    name: 'Community',
+    items: [
+      { name: 'Community', href: '/app/community', icon: Users }
+    ]
+  },
+  {
+    name: 'System',
+    items: [
+      { name: 'Data Manager', href: '/app/data-manager', icon: Settings },
+      { name: 'Agent API', href: '/agent', icon: Bot },
+      { name: 'Settings', href: '/app/settings', icon: Settings }
+    ]
+  }
 ]
 
 interface LayoutProps {
@@ -33,11 +66,37 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [expandedCategories, setExpandedCategories] = React.useState<string[]>(['Main'])
   
   // Memoize the active navigation item to prevent unnecessary re-renders
   const activeItem = useMemo(() => {
-    return navigation.find(item => item.href === location.pathname)
+    // Flatten all items to find the active one
+    const allItems = menuCategories.flatMap(category => category.items)
+    return allItems.find(item => item.href === location.pathname)
   }, [location.pathname])
+
+  // Toggle category expansion
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(categoryName)
+        ? prev.filter(name => name !== categoryName)
+        : [...prev, categoryName]
+    )
+  }
+
+  // Check if an item is active to expand its category automatically
+  useEffect(() => {
+    if (activeItem) {
+      // Find which category contains the active item
+      const activeCategory = menuCategories.find(category => 
+        category.items.some(item => item.href === location.pathname)
+      )
+      
+      if (activeCategory && !expandedCategories.includes(activeCategory.name)) {
+        setExpandedCategories(prev => [...prev, activeCategory.name])
+      }
+    }
+  }, [location.pathname, activeItem])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,25 +114,73 @@ export default function Layout({ children }: LayoutProps) {
             </button>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
-              const Icon = item.icon
-              const isActive = location.pathname === item.href
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
-                    isActive
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
-                  {item.name}
-                </Link>
-              )
-            })}
+            {menuCategories.map((category) => (
+              <div key={category.name} className="space-y-1">
+                {category.items.length > 1 ? (
+                  <>
+                    <button
+                      onClick={() => toggleCategory(category.name)}
+                      className="w-full flex items-center justify-between px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      <div className="flex items-center">
+                        {category.icon && <category.icon className="mr-3 h-5 w-5 text-gray-400" />}
+                        <span>{category.name}</span>
+                      </div>
+                      {expandedCategories.includes(category.name) ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
+                    </button>
+                    
+                    {expandedCategories.includes(category.name) && (
+                      <div className="ml-4 space-y-1 border-l border-gray-200 pl-3">
+                        {category.items.map((item) => {
+                          const Icon = item.icon
+                          const isActive = location.pathname === item.href
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              onClick={() => setSidebarOpen(false)}
+                              className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                                isActive
+                                  ? 'bg-blue-50 text-blue-700'
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              }`}
+                            >
+                              <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                              {item.name}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Single items don't need expansion
+                  category.items.map((item) => {
+                    const Icon = item.icon
+                    const isActive = location.pathname === item.href
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        onClick={() => setSidebarOpen(false)}
+                        className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
+                      >
+                        <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                        {item.name}
+                      </Link>
+                    )
+                  })
+                )}
+              </div>
+            ))}
           </nav>
         </div>
       </div>
@@ -85,24 +192,71 @@ export default function Layout({ children }: LayoutProps) {
             <h1 className="text-xl font-bold text-gray-900">Paper Trading</h1>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
-              const Icon = item.icon
-              const isActive = location.pathname === item.href
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
-                    isActive
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
-                  {item.name}
-                </Link>
-              )
-            })}
+            {menuCategories.map((category) => (
+              <div key={category.name} className="space-y-1">
+                {category.items.length > 1 ? (
+                  <>
+                    <button
+                      onClick={() => toggleCategory(category.name)}
+                      className="w-full flex items-center justify-between px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      <div className="flex items-center">
+                        {category.icon && <category.icon className="mr-3 h-5 w-5 text-gray-400" />}
+                        <span>{category.name}</span>
+                      </div>
+                      {expandedCategories.includes(category.name) ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
+                    </button>
+                    
+                    {expandedCategories.includes(category.name) && (
+                      <div className="ml-4 space-y-1 border-l border-gray-200 pl-3">
+                        {category.items.map((item) => {
+                          const Icon = item.icon
+                          const isActive = location.pathname === item.href
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                                isActive
+                                  ? 'bg-blue-50 text-blue-700'
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              }`}
+                            >
+                              <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                              {item.name}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Single items don't need expansion
+                  category.items.map((item) => {
+                    const Icon = item.icon
+                    const isActive = location.pathname === item.href
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
+                      >
+                        <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-blue-500' : 'text-gray-400'}`} />
+                        {item.name}
+                      </Link>
+                    )
+                  })
+                )}
+              </div>
+            ))}
           </nav>
         </div>
       </div>
