@@ -247,4 +247,31 @@ test.describe('Stripe and Supabase Subscription E2E', () => {
     await expect(page).toHaveURL('/subscribe');
     await expect(page.locator('h1')).toContainText('Choose Your Subscription Plan');
   });
+
+  test('should handle Stripe payment errors gracefully', async ({ page }) => {
+    // 1. Click "Proceed to Checkout" to trigger terms modal
+    await page.click('button:has-text("Proceed to Checkout")');
+    
+    // 2. Mock a Stripe error
+    await page.route('**', route => {
+      const url = route.request().url();
+      if (url.includes('stripe')) {
+        // Simulate a Stripe error
+        route.fulfill({
+          status: 400,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: { message: 'Invalid payment method', type: 'invalid_request_error' } })
+        });
+      } else {
+        route.continue();
+      }
+    });
+    
+    // 3. Accept terms and proceed to checkout
+    await page.click('input[type="checkbox"]');
+    await page.click('button:has-text("I Accept")');
+    
+    // 4. Verify error message is displayed
+    await expect(page.locator('text=Invalid payment method')).toBeVisible();
+  });
 });
