@@ -5,18 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    minify: true,
-    cssMinify: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'chart-vendor': ['recharts'],
-          'ui-vendor': ['lucide-react', 'clsx'],
-          'date-utils': ['date-fns']
-        }
-      }
-    }
+    minify: 'esbuild',
+    cssMinify: true
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'lucide-react']
