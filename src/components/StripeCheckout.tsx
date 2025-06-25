@@ -51,6 +51,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
         console.error('Checkout error details:', err)
         // Use the specific error message for testing purposes
         setError(err?.message === 'Stripe checkout error' ? 'Invalid payment method' : 'Failed to initialize checkout')
+      }
     } catch (err) {
       console.error('Checkout error:', err)
       setError(`Failed to initialize checkout: ${err instanceof Error ? err.message : 'Unknown error'}`)
