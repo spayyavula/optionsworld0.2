@@ -108,8 +108,8 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       
       script.innerHTML = JSON.stringify(widgetOptions)
       
-      // Add script to container
-      widgetContainer.appendChild(script)
+      // Add script to document head for proper TradingView initialization
+      document.head.appendChild(script)
       scriptRef.current = script
     } catch (error) {
       console.error('Error initializing TradingView widget:', error)
