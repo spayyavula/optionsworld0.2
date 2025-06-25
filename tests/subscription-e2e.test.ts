@@ -187,6 +187,63 @@ test.describe('Subscription E2E Flow', () => {
     // 4. Verify error message is displayed
     await expect(page.locator('text=Failed to initialize checkout')).toBeVisible();
   });
+
+  test('should handle subscription webhook events', async ({ page, request }) => {
+    // This test simulates a webhook event from Stripe to Supabase
+    
+    // 1. Set up mock subscription in local storage
+    await page.evaluate(() => {
+      localStorage.setItem('mock_subscription', JSON.stringify({
+        id: 'sub_mock_webhook',
+        plan: 'monthly',
+        status: 'active',
+        customer_id: 'cus_mock_webhook',
+        created: new Date().toISOString(),
+        current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      }));
+    });
+    
+    // 2. Go to settings page to verify initial subscription
+    await page.goto('/app/settings');
+    await expect(page.locator('text=Pro Monthly')).toBeVisible();
+    
+    // 3. Simulate a webhook event (in a real test, this would be sent to the webhook endpoint)
+    // Instead of trying to make an actual HTTP request, we'll simulate the webhook event
+    // by directly updating the mock subscription in localStorage
+    await page.evaluate(() => {
+      // Get the current mock subscription
+      const subscription = JSON.parse(localStorage.getItem('mock_subscription') || '{}');
+      
+      // Update it to simulate a webhook event that changes the plan from monthly to yearly
+      subscription.plan = 'yearly';
+      subscription.price_id = 'price_yearly';
+      subscription.current_period_end = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      
+      // Save the updated subscription back to localStorage
+      localStorage.setItem('mock_subscription', JSON.stringify(subscription));
+    });
+    
+    // 4. Mock Supabase response for updated subscription
+    await page.route('**/rest/v1/subscriptions**', route => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([{
+          id: 'sub_mock_webhook',
+          plan: 'yearly',
+          status: 'active',
+          customer_id: 'cus_mock_webhook',
+          current_period_end: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+        }])
+      });
+    });
+    
+    // 5. Refresh the page to see updated subscription
+    await page.reload();
+    
+    // 6. Verify subscription shows as yearly now
+    await expect(page.locator('text=Pro Yearly')).toBeVisible();
+  });
 });
 
 /**

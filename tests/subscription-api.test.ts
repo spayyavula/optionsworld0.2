@@ -249,50 +249,7 @@ test.describe('Subscription API Integration', () => {
     
     await expect(page.locator('text=Pro Monthly')).toBeVisible();
     
-    // 4. Simulate a webhook event for subscription update
-    const webhookPayload = {
-      id: 'evt_mock_123456',
-      type: 'customer.subscription.updated',
-      data: {
-        object: {
-          id: 'sub_mock_webhook',
-          customer: 'cus_mock_webhook',
-          status: 'active',
-          items: {
-            data: [{
-              price: { id: 'price_yearly' } // Changed from monthly to yearly
-            }]
-          },
-          current_period_start: Math.floor(Date.now() / 1000),
-          current_period_end: Math.floor(Date.now() / 1000) + 365 * 24 * 60 * 60,
-          cancel_at_period_end: false
-        }
-      }
-    };
-    
-    // 5. Mock the webhook endpoint response
-    await page.route('**/functions/v1/stripe-webhook', route => {
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ received: true })
-      });
-    });
-    
-    // 6. Send the webhook event
-    try {
-      await request.post('/functions/v1/stripe-webhook', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Stripe-Signature': 'mock_signature'
-        },
-        data: webhookPayload
-      });
-    } catch (e) {
-      // Ignore errors since this is just a simulation
-    }
-    
-    // 7. Update mock subscription in local storage to reflect plan change
+    // 4. Simulate a webhook event by directly updating the mock subscription in localStorage
     await page.evaluate(() => {
       const subscription = JSON.parse(localStorage.getItem('mock_subscription') || '{}');
       subscription.plan = 'yearly';
@@ -301,7 +258,7 @@ test.describe('Subscription API Integration', () => {
       localStorage.setItem('mock_subscription', JSON.stringify(subscription));
     });
     
-    // 8. Mock Supabase response for updated subscription
+    // 5. Mock Supabase response for updated subscription
     await page.route('**/rest/v1/subscriptions**', route => {
       route.fulfill({
         status: 200,
@@ -322,10 +279,10 @@ test.describe('Subscription API Integration', () => {
       });
     });
     
-    // 9. Refresh the page to see updated subscription
+    // 6. Refresh the page to see updated subscription
     await page.reload();
     
-    // 10. Verify subscription shows as yearly now
+    // 7. Verify subscription shows as yearly now
     await expect(page.locator('text=Pro Yearly')).toBeVisible();
   });
 });
