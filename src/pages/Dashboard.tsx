@@ -135,7 +135,7 @@ export default function Dashboard() {
           <TradingViewDirectTicker 
             symbols={tickerSymbols}
             width="100%" 
-            height={80}
+            height={160}
             darkMode={false}
           />
         </div>
