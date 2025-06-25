@@ -303,9 +303,9 @@ export default function Dashboard() {
       {/* Learning Resources */}
       <div className="card">
         <div className="card-header flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
+          <h3 className="text-xl font-semibold text-gray-900 flex items-center">
             <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
-            Learning Resources
+            Develop Your Trading Expertise
           </h3>
           <Link to="/learning" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
             View all
@@ -316,26 +316,26 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Link to="/learning" className="p-4 border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
-                <BookOpen className="h-5 w-5 text-blue-600" />
-                <h4 className="font-medium text-blue-900">Options Fundamentals</h4>
+                <BookOpen className="h-6 w-6 text-blue-600" />
+                <h4 className="font-medium text-blue-900">Master the Fundamentals</h4>
               </div>
-              <p className="text-sm text-blue-700">Learn the basics of options trading with our structured courses.</p>
+              <p className="text-sm text-blue-700">Build a strong foundation in options trading concepts through structured learning.</p>
             </Link>
             
             <Link to="/strategies" className="p-4 border border-green-200 bg-gradient-to-br from-green-50 to-green-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
-                <Lightbulb className="h-5 w-5 text-green-600" />
-                <h4 className="font-medium text-green-900">Strategy Library</h4>
+                <Lightbulb className="h-6 w-6 text-green-600" />
+                <h4 className="font-medium text-green-900">Develop Trading Strategies</h4>
               </div>
-              <p className="text-sm text-green-700">Explore and implement proven options trading strategies.</p>
+              <p className="text-sm text-green-700">Learn to create and test strategies for different market conditions.</p>
             </Link> 
             
             <Link to="/journal" className="p-4 border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
-                <BookMarked className="h-5 w-5 text-purple-600" />
-                <h4 className="font-medium text-purple-900">Trading Journal</h4>
+                <BookMarked className="h-6 w-6 text-purple-600" />
+                <h4 className="font-medium text-purple-900">Reflect & Improve</h4>
               </div>
-              <p className="text-sm text-purple-700">Document and analyze your trades to improve performance.</p>
+              <p className="text-sm text-purple-700">Document your learning journey and analyze trades to build expertise.</p>
             </Link>
           </div>
         </div>

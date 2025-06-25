@@ -289,12 +289,12 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Page content */}
         <main className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"> 
             {/* Persistent mini disclaimer for trading pages */}
-            <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-2 text-sm text-yellow-700 flex items-center">
-              <AlertTriangle className="h-4 w-4 text-yellow-600 mr-2 flex-shrink-0" />
+            <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-2 text-sm text-blue-700 flex items-center">
+              <BookOpen className="h-4 w-4 text-blue-600 mr-2 flex-shrink-0" />
               <p>
-                <strong>Disclaimer:</strong> This platform is for educational purposes only. Options trading involves significant risk.
+                <strong>Learning Focus:</strong> This platform is designed to help you develop trading expertise, not to maximize profits. Focus on learning and skill development.
               </p>
             </div>
             

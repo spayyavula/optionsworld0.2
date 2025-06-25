@@ -172,10 +172,10 @@ export default function Landing() {
           )}
           <div className="text-center">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Master Options Trading
+              Learn to Be an Expert Trader
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Advanced analytics, real-time data, and AI-powered insights to maximize your options trading profits
+              Advanced analytics, real-time data, and AI-powered insights to develop your options trading expertise
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
@@ -202,10 +202,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Everything You Need to Succeed
+              Everything You Need to Learn
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Professional-grade tools and insights that give you the edge in options trading
+              Professional-grade tools and insights that help you develop trading expertise
             </p>
           </div>
 
@@ -214,7 +214,7 @@ export default function Landing() {
               <TrendingUp className="h-12 w-12 text-blue-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Real-Time Analytics</h3>
               <p className="text-gray-400">
-                Advanced charting and technical analysis tools with real-time market data
+                Learn technical analysis with advanced charting tools and real-time market data
               </p>
             </div>
 
@@ -222,7 +222,7 @@ export default function Landing() {
               <Target className="h-12 w-12 text-green-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Strategy Builder</h3>
               <p className="text-gray-400">
-                Create, test, and optimize complex options strategies with our intuitive builder
+                Learn to create and test complex options strategies with our intuitive builder
               </p>
             </div>
 
@@ -230,7 +230,7 @@ export default function Landing() {
               <Shield className="h-12 w-12 text-purple-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Risk Management</h3>
               <p className="text-gray-400">
-                Sophisticated risk analysis and portfolio protection tools
+                Master risk analysis and portfolio protection techniques
               </p>
             </div>
 
@@ -238,7 +238,7 @@ export default function Landing() {
               <BarChart3 className="h-12 w-12 text-yellow-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Performance Tracking</h3>
               <p className="text-gray-400">
-                Detailed analytics on your trading performance and P&L
+                Track your learning progress with detailed performance analytics
               </p>
             </div>
 
@@ -246,7 +246,7 @@ export default function Landing() {
               <BookOpen className="h-12 w-12 text-red-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Educational Resources</h3>
               <p className="text-gray-400">
-                Comprehensive learning materials and trading courses
+                Comprehensive learning materials designed for traders at all levels
               </p>
             </div>
 
@@ -254,7 +254,7 @@ export default function Landing() {
               <Users className="h-12 w-12 text-indigo-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Community</h3>
               <p className="text-gray-400">
-                Connect with other traders and share strategies
+                Learn from other traders and share your trading journey
               </p>
             </div>
             
@@ -262,7 +262,7 @@ export default function Landing() {
               <Bot className="h-12 w-12 text-yellow-500 mb-4" />
               <h3 className="text-xl font-semibold text-white mb-3">Agent API</h3>
               <p className="text-gray-400">
-                Connect with other traders and share strategies
+                Explore automated trading concepts with our educational API
               </p>
             </div>
           </div>
@@ -299,10 +299,10 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Choose Your Plan
+              Choose Your Learning Path
             </h2>
             <p className="text-xl text-gray-400">
-              Start free, upgrade when you're ready to scale
+              Start free, upgrade when you're ready to deepen your knowledge
             </p>
           </div>
 
@@ -325,25 +325,25 @@ export default function Landing() {
                   <span className="text-2xl">$</span>29
                   <span className="text-lg text-gray-400">/month</span>
                 </div>
-                <p className="text-gray-400">Perfect for beginners</p>
+                <p className="text-gray-400">Perfect for learning the basics</p>
               </div>
 
               <ul className="space-y-4 mb-8">
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Real-time market data
+                  Educational market data
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Basic analytics
+                  Basic learning modules
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  5 watchlists
+                  5 practice portfolios
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Email support
+                  Learning support
                 </li>
               </ul>
 
@@ -386,7 +386,7 @@ export default function Landing() {
                     Was $79/month
                   </div>
                 )}
-                <p className="text-gray-400">For serious traders</p>
+                <p className="text-gray-400">For dedicated learners</p>
               </div>
 
               <ul className="space-y-4 mb-8">
@@ -396,19 +396,19 @@ export default function Landing() {
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Advanced analytics
+                  Advanced learning modules
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Unlimited watchlists
+                  Unlimited practice portfolios
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Strategy builder
+                  Strategy learning tools
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Priority support
+                  Priority learning support
                 </li>
               </ul>
 
@@ -445,7 +445,7 @@ export default function Landing() {
                     Was $199/month
                   </div>
                 )}
-                <p className="text-gray-400">For institutions</p>
+                <p className="text-gray-400">For educational institutions</p>
               </div>
 
               <ul className="space-y-4 mb-8">
@@ -455,15 +455,15 @@ export default function Landing() {
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Custom integrations
+                  Custom learning paths
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  Dedicated support
+                  Dedicated instructor support
                 </li>
                 <li className="flex items-center text-gray-300">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  White-label options
+                  Educational white-label options
                 </li>
               </ul>
 

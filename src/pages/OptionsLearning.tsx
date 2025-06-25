@@ -324,20 +324,21 @@ export default function OptionsLearning() {
   return (
     <div className="space-y-6">
       {/* Educational Disclaimer */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
           <div className="flex-shrink-0">
-            <AlertTriangle className="h-5 w-5 text-blue-600" />
+            <BookOpen className="h-5 w-5 text-blue-600" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-blue-800">Educational Content Disclaimer</h3>
+            <h3 className="text-sm font-medium text-blue-800">Learning-Focused Approach</h3>
             <div className="mt-2 text-sm text-blue-700">
               <p>
-                The educational content provided is for informational purposes only and does not constitute financial advice. 
-                Options trading involves significant risk of loss and may not be suitable for all investors.
+                Our educational content is designed to help you develop trading expertise, not to maximize profits.
+                Focus on understanding concepts, building skills, and developing your own trading approach.
               </p>
               <p className="mt-1">
-                Always conduct your own research and consider seeking advice from a licensed financial advisor before making investment decisions.
+                The goal is to become a knowledgeable trader through practice and continuous learning, not to make quick profits.
+                Take time to master each concept before moving to the next level.
               </p>
             </div>
           </div>
@@ -345,23 +346,23 @@ export default function OptionsLearning() {
       </div>
       
       {/* Header */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Options Trading Learning Path</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Trading Expertise Development Path</h2>
               <p className="text-gray-600 mt-2">
-                Master options trading with our comprehensive, structured learning program
+                Develop trading expertise through our comprehensive, structured learning program
               </p>
             </div>
-            <BookOpen className="h-12 w-12 text-blue-600" />
+            <BookOpen className="h-12 w-12 text-blue-700" />
           </div>
         </div>
       </div>
 
       {/* Progress Overview */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+        <div className="card shadow-md border-blue-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -376,7 +377,7 @@ export default function OptionsLearning() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-yellow-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -391,31 +392,31 @@ export default function OptionsLearning() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-green-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <BarChart3 className="h-8 w-8 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Quiz Average</p>
+                <p className="text-sm font-medium text-gray-500">Knowledge Score</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.averageQuizScore.toFixed(0)}%</p>
-                <p className="text-sm text-gray-500">Across all quizzes</p>
+                <p className="text-sm text-gray-500">Your learning progress</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-purple-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Award className="h-8 w-8 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Achievements</p>
+                <p className="text-sm font-medium text-gray-500">Skill Achievements</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.achievements}</p>
-                <p className="text-sm text-gray-500">Unlocked</p>
+                <p className="text-sm text-gray-500">Skills mastered</p>
               </div>
             </div>
           </div>
@@ -423,9 +424,9 @@ export default function OptionsLearning() {
       </div>
 
       {/* Learning Modules */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Learning Modules</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
+          <h3 className="text-lg font-medium text-gray-900">Expertise Development Modules</h3>
         </div>
         <div className="card-body">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
