@@ -18,7 +18,7 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
   useEffect(() => {
     // Clean up function
     const cleanup = () => {
-      if (containerRef.current) {
+      if (containerRef.current && containerRef.current.innerHTML) {
         containerRef.current.innerHTML = ''
       }
     }
@@ -29,6 +29,9 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
     if (!containerRef.current) return
     
     try {
+      // Clear any existing content first
+      containerRef.current.innerHTML = '';
+      
       // Create ticker container
       const tickerContainer = document.createElement('div')
       tickerContainer.className = 'tradingview-ticker'
@@ -89,7 +92,9 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
       
       // For demo purposes, update with mock data
       window.setTimeout(() => {
-        symbols.forEach(symbol => {
+        if (!containerRef.current) return; // Check if component is still mounted
+        
+        symbols.forEach((symbol) => {
           const priceElement = document.getElementById(`${symbol}-price`)
           const changeElement = document.getElementById(`${symbol}-change`)
           
@@ -106,7 +111,7 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
             changeElement.style.backgroundColor = mockChange >= 0 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'
           }
         })
-      }, 1000)
+      }, 1000); // 1 second delay for mock data update
     } catch (error) {
       console.error('Error initializing TradingView ticker:', error)
       
@@ -117,15 +122,15 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
     }
     
     return cleanup
-  }, [symbols, width, height, darkMode])
+  }, [symbols, width, height, darkMode]); // Dependencies array
 
   return (
     <div 
       ref={containerRef}
       className="tradingview-ticker-container"
       style={{ 
-        width: typeof width === 'number' ? `${width}px` : width, 
-        height: typeof height === 'number' ? `${height}px` : height,
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height, 
         borderRadius: '0.5rem',
         overflow: 'hidden'
       }}
