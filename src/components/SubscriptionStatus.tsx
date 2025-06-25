@@ -87,7 +87,7 @@ export default function SubscriptionStatus({ className = '' }: SubscriptionStatu
   }
 
   const handleUpgrade = () => {
-    window.location.href = '/?upgrade=true'
+    window.location.href = '/subscribe'
   }
 
   if (loading) {

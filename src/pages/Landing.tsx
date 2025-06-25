@@ -19,7 +19,7 @@ import {
   Tag,
   CreditCard
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ConstantContactService } from '../services/constantContactService'
 import { StripeService } from '../services/stripeService'
 import Disclaimer from '../components/Disclaimer'
@@ -30,6 +30,7 @@ import CouponInput from '../components/CouponInput'
 import TermsAgreement from '../components/TermsAgreement'
 
 export default function Landing() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('spayyavula@gmail.com')
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -348,7 +349,7 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('monthly')}
+                onClick={() => navigate('/subscribe')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Get Started
@@ -413,7 +414,7 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('monthly')}
+                onClick={() => navigate('/subscribe')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Upgrade to Pro
@@ -468,7 +469,7 @@ export default function Landing() {
               </ul>
 
               <button 
-                onClick={() => handleSubscribe('yearly')}
+                onClick={() => navigate('/subscribe?plan=yearly')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 Contact Sales
