@@ -1,3 +1,5 @@
+import { formatPrice } from '../utils/priceSync'
+
 interface Coupon {
   id: string
   code: string
@@ -408,5 +410,4 @@ export class CouponService {
     localStorage.removeItem(this.STORAGE_KEY)
     localStorage.removeItem(this.DEALS_KEY)
   }
-import { formatPrice } from '../utils/priceSync';
 }
