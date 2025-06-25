@@ -1,3 +1,5 @@
+import { BASE_PRICES } from '../utils/priceSync'
+
 interface StripeCheckoutOptions {
   priceId: string
   successUrl?: string
@@ -435,5 +437,4 @@ export class StripeService {
     // This would be implemented on the server side
     console.log('Webhook event received:', event.type)
   }
-import { BASE_PRICES } from '../utils/priceSync'
 }
