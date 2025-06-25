@@ -300,7 +300,7 @@ export default function OptionsChain() {
 
       {/* Chart for Selected Underlying */}
       {selectedUnderlying && selectedUnderlying !== 'ALL' && (
-        <div className="card shadow-md border-blue-200 mb-6">
+        <div className="card shadow-md border-blue-200 mb-6"> 
           <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
             <h3 className="text-lg font-medium text-gray-900">
               {selectedUnderlying} Chart Analysis
@@ -317,8 +317,8 @@ export default function OptionsChain() {
           <div className="card-body">
             <TradingViewWidget
               symbol={`NASDAQ:${selectedUnderlying || 'SPY'}`}
-              width="100%"
-              height={500}
+              width="100%" 
+              height={650}
               interval="D"
               theme="light" 
               studies={["RSI", "MACD", "Volume"]}

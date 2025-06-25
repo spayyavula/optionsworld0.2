@@ -132,7 +132,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         height: typeof height === 'number' ? `${height}px` : height,
         borderRadius: '0.5rem',
         overflow: 'hidden',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
       }}
     />
   )

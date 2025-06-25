@@ -492,7 +492,7 @@ export default function RegimeAnalysisPage() {
             <TradingViewWidget
               symbol={chartSymbol.includes(':') ? chartSymbol : `AMEX:${chartSymbol}`}
               width="100%"
-              height={650}
+             height={700}
               interval={chartInterval}
               theme="light"
               style="candles"
