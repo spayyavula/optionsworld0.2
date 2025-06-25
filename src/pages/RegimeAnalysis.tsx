@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import { RegimeAnalysisService } from '../services/regimeAnalysisService'
 import StockChartsWidget from '../components/StockChartsWidget'
-import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import type { RegimeAnalysis, MarketData, TradingStrategy } from '../types/regimes'
 import Disclaimer from '../components/Disclaimer'
 
