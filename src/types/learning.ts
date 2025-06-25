@@ -106,6 +106,8 @@ export interface StrategyTemplate {
   worstMarketConditions: string[]
   timeDecay: 'positive' | 'negative' | 'neutral'
   volatilityImpact: 'positive' | 'negative' | 'neutral'
+  instructions?: string[]
+  examples?: string[]
 }
 
 export interface StrategyLeg {
