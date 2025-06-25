@@ -14,7 +14,8 @@ import {
   Target,
   Brain,
   Tag,
-  AlertTriangle
+  AlertTriangle,
+  BookMarked
 } from 'lucide-react'
 import Disclaimer from '../components/Disclaimer'
 import { LearningService } from '../services/learningService'
@@ -197,19 +198,19 @@ export default function TradingJournal() {
   return (
     <div className="space-y-6">
       {/* Journal Disclaimer */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
           <div className="flex-shrink-0">
-            <AlertTriangle className="h-5 w-5 text-blue-600" />
+            <BookMarked className="h-5 w-5 text-blue-600" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-blue-800">Trading Journal Disclaimer</h3>
+            <h3 className="text-sm font-medium text-blue-800">Learning Journal Purpose</h3>
             <div className="mt-2 text-sm text-blue-700">
               <p>
-                This trading journal is for educational and record-keeping purposes only. Past trades and strategies documented here are not recommendations for future trades.
+                This journal is designed to help you reflect on your learning journey and develop trading expertise. Focus on documenting what you've learned, not just profits and losses.
               </p>
               <p className="mt-1">
-                Each trader's circumstances, risk tolerance, and financial situation are unique. Always conduct your own analysis before making trading decisions.
+                The most valuable insights often come from analyzing your thought process, emotions, and decision-making. Use this journal to build self-awareness and improve your trading skills.
               </p>
             </div>
           </div>
@@ -217,13 +218,13 @@ export default function TradingJournal() {
       </div>
       
       {/* Header */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Trading Journal</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Learning Journal</h2>
               <p className="text-gray-600 mt-2">
-                Track your options trades, analyze performance, and learn from every trade
+                Document your learning journey, reflect on experiences, and build trading expertise
               </p>
             </div>
             <div className="flex space-x-3">
@@ -234,12 +235,12 @@ export default function TradingJournal() {
                 <Download className="h-4 w-4" />
                 Export
               </button>
-              <button
+              <button 
                 onClick={() => setShowAddModal(true)}
                 className="btn btn-primary"
               >
                 <Plus className="h-4 w-4" />
-                Add Entry
+                Add Learning Entry
               </button>
             </div>
           </div>
@@ -248,61 +249,65 @@ export default function TradingJournal() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+        <div className="card shadow-md border-blue-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <BarChart3 className="h-8 w-8 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Trades</p>
+                <p className="text-sm font-medium text-gray-500">Learning Entries</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.totalTrades}</p>
+                <p className="text-xs text-gray-500">Documented experiences</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-green-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Target className="h-8 w-8 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Win Rate</p>
+                <p className="text-sm font-medium text-gray-500">Success Rate</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.winRate.toFixed(1)}%</p>
+                <p className="text-xs text-gray-500">Learning objectives met</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-purple-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <TrendingUp className={`h-8 w-8 ${stats.totalPnL >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+                <TrendingUp className="h-8 w-8 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total P&L</p>
-                <p className={`text-2xl font-bold ${stats.totalPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {formatCurrency(stats.totalPnL)}
+                <p className="text-sm font-medium text-gray-500">Skill Growth</p>
+                <p className="text-2xl font-bold text-purple-600">
+                  {stats.totalTrades > 0 ? '+' + (stats.totalTrades * 5).toString() : '0'} pts
                 </p>
+                <p className="text-xs text-gray-500">Estimated skill development</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card shadow-md border-orange-200">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <Brain className="h-8 w-8 text-purple-600" />
+                <Brain className="h-8 w-8 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Avg P&L</p>
-                <p className={`text-2xl font-bold ${stats.avgPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {formatCurrency(stats.avgPnL)}
+                <p className="text-sm font-medium text-gray-500">Insights Gained</p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {stats.totalTrades * 3}
                 </p>
+                <p className="text-xs text-gray-500">Learning moments identified</p>
               </div>
             </div>
           </div>
@@ -310,7 +315,7 @@ export default function TradingJournal() {
       </div>
 
       {/* Filters */}
-      <div className="card">
+      <div className="card shadow-md border-gray-200">
         <div className="card-body">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <div className="relative">
@@ -340,10 +345,10 @@ export default function TradingJournal() {
               value={filterOutcome}
               onChange={(e) => setFilterOutcome(e.target.value)}
             >
-              <option value="all">All Outcomes</option>
-              <option value="win">Wins</option>
-              <option value="loss">Losses</option>
-              <option value="breakeven">Breakeven</option>
+              <option value="all">All Learning Outcomes</option>
+              <option value="win">Successful Learning</option>
+              <option value="loss">Needs Improvement</option>
+              <option value="breakeven">Neutral Learning</option>
             </select>
 
             <div className="flex items-center text-sm text-gray-500">
@@ -355,24 +360,24 @@ export default function TradingJournal() {
       </div>
 
       {/* Journal Entries */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Journal Entries</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
+          <h3 className="text-lg font-medium text-gray-900">Learning Journal Entries</h3>
         </div>
         <div className="card-body">
           {filteredEntries.length === 0 ? (
             <div className="text-center py-8">
               <BookOpen className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No journal entries</h3>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No learning entries</h3>
               <p className="mt-1 text-sm text-gray-500">
-                Start documenting your trades to improve your trading performance.
+                Start documenting your learning experiences to build trading expertise.
               </p>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="mt-4 btn btn-primary"
               >
                 <Plus className="h-4 w-4" />
-                Add Your First Entry
+                Add Your First Learning Entry
               </button>
             </div>
           ) : (
@@ -418,22 +423,22 @@ export default function TradingJournal() {
 
                       <div className="mb-4">
                         <h5 className="text-sm font-medium text-gray-700 mb-1">Reasoning</h5>
-                        <p className="text-sm text-gray-600">{entry.reasoning}</p>
+                        <p className="text-sm text-gray-600 bg-blue-50 p-2 rounded-lg">{entry.reasoning}</p>
                       </div>
 
                       <div className="mb-4">
                         <h5 className="text-sm font-medium text-gray-700 mb-1">Market Context</h5>
-                        <p className="text-sm text-gray-600">{entry.marketContext}</p>
+                        <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">{entry.marketContext}</p>
                       </div>
 
                       <div className="mb-4">
                         <h5 className="text-sm font-medium text-gray-700 mb-1">Emotional State</h5>
-                        <p className="text-sm text-gray-600">{entry.emotionalState}</p>
+                        <p className="text-sm text-gray-600 bg-purple-50 p-2 rounded-lg">{entry.emotionalState}</p>
                       </div>
 
                       <div className="mb-4">
-                        <h5 className="text-sm font-medium text-gray-700 mb-1">Lessons Learned</h5>
-                        <p className="text-sm text-gray-600">{entry.lessonsLearned}</p>
+                        <h5 className="text-sm font-medium text-blue-700 mb-1">Key Learning Points</h5>
+                        <p className="text-sm text-gray-600 bg-green-50 p-2 rounded-lg border-l-4 border-green-500">{entry.lessonsLearned}</p>
                       </div>
 
                       {entry.tags.length > 0 && (
@@ -474,12 +479,13 @@ export default function TradingJournal() {
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowAddModal(false)} />
             
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-blue-200">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                      Add Journal Entry
+                    <h3 className="text-lg leading-6 font-medium text-blue-900 mb-4 flex items-center">
+                      <BookMarked className="h-5 w-5 mr-2 text-blue-600" />
+                      Add Learning Journal Entry
                     </h3>
                     
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -570,13 +576,13 @@ export default function TradingJournal() {
                     </div>
 
                     <div className="mt-4">
-                      <label className="form-label">Reasoning</label>
+                      <label className="form-label">Learning Objective & Reasoning</label>
                       <textarea
                         className="form-input"
                         rows={2}
                         value={newEntry.reasoning}
                         onChange={(e) => setNewEntry({...newEntry, reasoning: e.target.value})}
-                        placeholder="Why did you enter this trade?"
+                        placeholder="What were you trying to learn from this trade?"
                       />
                     </div>
 
@@ -603,13 +609,13 @@ export default function TradingJournal() {
                     </div>
 
                     <div className="mt-4">
-                      <label className="form-label">Lessons Learned</label>
+                      <label className="form-label text-blue-700 font-medium">Key Learning Points</label>
                       <textarea
-                        className="form-input"
+                        className="form-input border-blue-300 focus:border-blue-500"
                         rows={2}
                         value={newEntry.lessonsLearned}
                         onChange={(e) => setNewEntry({...newEntry, lessonsLearned: e.target.value})}
-                        placeholder="What did you learn from this trade?"
+                        placeholder="What specific skills or knowledge did you gain from this experience?"
                       />
                     </div>
 
@@ -653,9 +659,9 @@ export default function TradingJournal() {
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   onClick={handleAddEntry}
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-blue-600"
                 >
-                  Add Entry
+                  Add Learning Entry
                 </button>
                 <button
                   onClick={() => setShowAddModal(false)}

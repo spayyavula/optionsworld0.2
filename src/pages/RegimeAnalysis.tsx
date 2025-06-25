@@ -78,17 +78,17 @@ export default function RegimeAnalysisPage() {
       {/* Analysis Disclaimer */}
       <div className="bg-gradient-to-r from-purple-50 to-purple-100 border border-purple-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
-          <div className="flex-shrink-0">
-            <AlertTriangle className="h-5 w-5 text-purple-600" />
+          <div className="flex-shrink-0"> 
+            <BookOpen className="h-5 w-5 text-purple-600" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-purple-800">Market Analysis Disclaimer</h3>
+            <h3 className="text-sm font-medium text-purple-800">Market Analysis Learning Tool</h3>
             <div className="mt-2 text-sm text-purple-700">
               <p>
-                The market regime analysis provided is based on simulated data and algorithmic interpretations. It is for educational purposes only and not a prediction of future market behavior.
+                This market regime analysis tool is designed to help you learn how to identify different market conditions. Focus on understanding the patterns and indicators, not on predicting market movements.
               </p>
               <p className="mt-1">
-                Market conditions can change rapidly and unpredictably. No analysis system can guarantee accurate forecasts of market movements or regime changes.
+                Developing the skill to recognize market regimes is more valuable than trying to predict exact market movements. Use this as a learning exercise to build your market awareness.
               </p>
             </div>
           </div>
@@ -98,9 +98,9 @@ export default function RegimeAnalysisPage() {
       {/* Current Regime Overview */}
       <div className="card shadow-md border-blue-200">
         <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
-          <h2 className="text-2xl font-bold text-gray-900">Market Regime Analysis</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Market Regime Learning Tool</h2>
           <p className="text-gray-600 mt-2">
-            Understanding market conditions to optimize your trading strategies
+            Learn to identify market conditions to develop appropriate trading approaches
           </p>
         </div>
         <div className="card-body">
@@ -253,8 +253,8 @@ export default function RegimeAnalysisPage() {
       <div className="card shadow-md border-blue-200">
         <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <Target className="h-5 w-5 mr-2" />
-            Recommended Strategies for {analysis.currentRegime.name}
+            <BookOpen className="h-5 w-5 mr-2" />
+            Learning Strategies for {analysis.currentRegime.name} Conditions
           </h3>
         </div>
         <div className="card-body">
@@ -268,22 +268,27 @@ export default function RegimeAnalysisPage() {
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold text-gray-900">{strategy.name}</h4>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getRiskColor(strategy.riskLevel)}`}>
-                    {strategy.riskLevel} risk
+                    {strategy.riskLevel} complexity
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">{strategy.description}</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="bg-green-50 p-2 rounded-md">
-                    <span className="text-gray-500">Expected Return:</span>
-                    <div className="font-medium text-green-600">+{strategy.expectedReturn}%</div>
+                    <span className="text-gray-500">Learning Focus:</span>
+                    <div className="font-medium text-green-600">
+                      {strategy.type === 'bullish' ? 'Directional Analysis' : 
+                       strategy.type === 'bearish' ? 'Risk Management' :
+                       strategy.type === 'neutral' ? 'Patience & Timing' :
+                       'Volatility Assessment'}
+                    </div>
                   </div>
                   <div>
-                    <span className="text-gray-500">Win Rate:</span>
-                    <div className="font-medium">{strategy.winRate}%</div>
+                    <span className="text-gray-500">Skill Development:</span>
+                    <div className="font-medium">{strategy.winRate/10} points</div>
                   </div>
                   <div className="bg-red-50 p-2 rounded-md">
-                    <span className="text-gray-500">Max Drawdown:</span>
-                    <div className="font-medium text-red-600">-{strategy.maxDrawdown}%</div>
+                    <span className="text-gray-500">Challenge Level:</span>
+                    <div className="font-medium text-red-600">{strategy.maxDrawdown/5}/10</div>
                   </div>
                   <div>
                     <span className="text-gray-500">Timeframe:</span>
@@ -291,7 +296,7 @@ export default function RegimeAnalysisPage() {
                   </div>
                 </div>
                 <button className="w-full mt-4 btn btn-primary text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
-                  Learn Strategy
+                  Study This Approach
                 </button>
               </div>
             ))}
@@ -539,46 +544,47 @@ export default function RegimeAnalysisPage() {
       {/* Educational Content */}
       <div className="card shadow-md border-blue-200">
         <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
-          <h3 className="text-lg font-medium text-gray-900">Trading Different Regimes</h3>
+          <h3 className="text-lg font-medium text-gray-900">Learning to Navigate Different Market Regimes</h3>
         </div>
         <div className="card-body">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="p-4 bg-green-50 rounded-lg border border-green-200">
               <h4 className="font-semibold text-green-800 mb-2">Bull Markets</h4>
+              <h4 className="font-semibold text-green-800 mb-2">Bull Market Skills</h4>
               <p className="text-sm text-green-700 mb-3">
-                Focus on call strategies, covered calls, and momentum plays. 
-                Avoid fighting the trend with bearish strategies.
+                Learn to identify uptrends and develop skills for capitalizing on momentum.
+                Practice managing position sizing in trending markets.
               </p>
               <ul className="text-xs text-green-600 space-y-1">
-                <li>• Buy calls on dips</li>
-                <li>• Use bull call spreads</li>
-                <li>• Write covered calls for income</li>
+                <li>• Learn to identify trend strength</li>
+                <li>• Practice entry timing on pullbacks</li>
+                <li>• Develop position management skills</li>
               </ul>
             </div>
 
             <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-              <h4 className="font-semibold text-red-800 mb-2">Bear Markets</h4>
+              <h4 className="font-semibold text-red-800 mb-2">Bear Market Skills</h4>
               <p className="text-sm text-red-700 mb-3">
-                Emphasize protective strategies, put spreads, and hedging. 
-                Capital preservation becomes priority.
+                Develop risk management skills and learn to identify downtrends.
+                Practice patience and capital preservation techniques.
               </p>
               <ul className="text-xs text-red-600 space-y-1">
-                <li>• Buy protective puts</li>
-                <li>• Use bear put spreads</li>
-                <li>• Consider cash positions</li>
+                <li>• Learn to spot warning signs</li>
+                <li>• Practice hedging techniques</li>
+                <li>• Develop risk assessment skills</li>
               </ul>
             </div>
 
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h4 className="font-semibold text-blue-800 mb-2">Sideways Markets</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">Sideways Market Skills</h4>
               <p className="text-sm text-blue-700 mb-3">
-                Income strategies work best. Focus on time decay and 
-                range-bound strategies.
+                Learn to identify consolidation patterns and develop patience.
+                Practice strategies that benefit from time decay.
               </p>
               <ul className="text-xs text-blue-600 space-y-1">
-                <li>• Sell iron condors</li>
-                <li>• Use covered calls</li>
-                <li>• Trade range breakouts</li>
+                <li>• Learn to identify support/resistance</li>
+                <li>• Practice premium collection strategies</li>
+                <li>• Develop pattern recognition skills</li>
               </ul>
             </div>
           </div>

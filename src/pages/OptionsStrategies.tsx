@@ -85,19 +85,19 @@ export default function OptionsStrategies() {
   return (
     <div className="space-y-6">
       {/* Strategy Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
           <div className="flex-shrink-0">
-            <AlertTriangle className="h-5 w-5 text-yellow-600" />
+            <BookOpen className="h-5 w-5 text-blue-600" />
           </div>
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-yellow-800">Strategy Risk Disclaimer</h3>
+            <h3 className="text-sm font-medium text-blue-800">Strategy Learning Approach</h3>
             <div className="mt-2 text-sm text-yellow-700">
               <p>
-                The options strategies presented here are for educational purposes only. Each strategy carries its own risk profile and potential for loss.
+                These options strategies are presented as learning tools to help you develop trading expertise. Focus on understanding each strategy's mechanics and appropriate use cases.
               </p>
               <p className="mt-1">
-                No strategy guarantees profits or protection against losses. Always understand the risks involved before implementing any trading strategy.
+                The goal is to build your strategic thinking skills, not to find a "perfect" strategy. Learning when and how to apply different approaches is key to developing expertise.
               </p>
             </div>
           </div>
@@ -105,22 +105,22 @@ export default function OptionsStrategies() {
       </div>
       
       {/* Header */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Options Strategies</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Options Strategy Learning Center</h2>
               <p className="text-gray-600 mt-2">
-                Learn and implement proven options trading strategies
+                Master different trading approaches to develop your strategic expertise
               </p>
             </div>
-            <BookOpen className="h-12 w-12 text-blue-600" />
+            <Lightbulb className="h-12 w-12 text-blue-600" />
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="card">
+      <div className="card shadow-md border-gray-200">
         <div className="card-body">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -155,9 +155,9 @@ export default function OptionsStrategies() {
       </div>
 
       {/* Strategies */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Available Strategies</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
+          <h3 className="text-lg font-medium text-gray-900">Strategies to Master</h3>
         </div>
         <div className="card-body">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -177,13 +177,16 @@ export default function OptionsStrategies() {
                 
                 <div className="grid grid-cols-2 gap-4 text-sm mb-4">
                   <div>
-                    <span className="text-gray-500">Max Risk:</span>
-                    <div className="font-medium text-red-600">${strategy.maxRisk}</div>
+                    <span className="text-gray-500">Learning Difficulty:</span>
+                    <div className="font-medium text-blue-600">{strategy.complexity}</div>
                   </div>
                   <div>
-                    <span className="text-gray-500">Max Profit:</span>
+                    <span className="text-gray-500">Skill Development:</span>
                     <div className="font-medium text-green-600">
-                      {strategy.maxProfit === Infinity ? 'Unlimited' : `$${strategy.maxProfit}`}
+                      {strategy.type === 'bullish' ? 'Directional Analysis' : 
+                       strategy.type === 'bearish' ? 'Risk Management' :
+                       strategy.type === 'neutral' ? 'Patience & Timing' :
+                       'Volatility Assessment'}
                     </div>
                   </div>
                 </div>
@@ -203,9 +206,9 @@ export default function OptionsStrategies() {
                       e.stopPropagation();
                       setSelectedStrategy(strategy);
                     }}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center"
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center bg-blue-50 px-3 py-1 rounded-lg"
                   >
-                    Details
+                    Learn Strategy
                     <ArrowRight className="ml-1 h-3 w-3" />
                   </button>
                 </div>
