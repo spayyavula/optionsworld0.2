@@ -23,7 +23,6 @@ const tickerSymbols = [
 
 export default function Dashboard() {
   const { state } = useTradingContext()
-  const { state } = useTradingContext()
   const communityStats = CommunityService.getCommunityStats()
   const recentMessages = CommunityService.getRecentMessages().slice(0, 3)
 
