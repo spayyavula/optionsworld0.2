@@ -123,7 +123,7 @@ export default function Dashboard() {
 
       {/* Market Ticker */}
       <div className="card shadow-md border-blue-200 mb-6">
-        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-3">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-4">
           <h3 className="text-xl font-semibold text-gray-900">Market Overview</h3>
           <div className="text-sm text-gray-500">
             <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-md">
@@ -134,8 +134,8 @@ export default function Dashboard() {
         <div className="card-body">
           <TradingViewDirectTicker 
             symbols={tickerSymbols}
-            width="100%"
-            height={60}
+            width="100%" 
+            height={80}
             darkMode={false}
           />
         </div>
@@ -143,7 +143,7 @@ export default function Dashboard() {
 
       {/* Portfolio Performance Chart */}
       <div className="card shadow-md border-blue-200 mb-6">
-        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-3">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center py-4">
           <h3 className="text-xl font-semibold text-gray-900">Market Chart</h3>
           <p className="text-sm text-gray-500 mt-1">
             <a href="https://www.tradingview.com/chart/?symbol=AMEX:SPY" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
@@ -155,8 +155,8 @@ export default function Dashboard() {
         <div className="card-body">
           <TradingViewWidget
             symbol="AMEX:SPY"
-            width="100%"
-            height={400}
+            width="100%" 
+            height={600}
             interval="D"
             theme="light"
             studies={["RSI", "MACD", "Volume"]}

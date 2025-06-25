@@ -34,7 +34,7 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
       tickerContainer.className = 'tradingview-ticker'
       tickerContainer.style.display = 'flex' 
       tickerContainer.style.overflowX = 'auto'
-      tickerContainer.style.padding = '10px 0'
+      tickerContainer.style.padding = '15px 0'
       tickerContainer.style.backgroundColor = darkMode ? '#1a1a1a' : '#f1f5f9'
       tickerContainer.style.borderRadius = '0.5rem'
       tickerContainer.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'
@@ -50,32 +50,34 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
         symbolElement.style.flexDirection = 'column'
         symbolElement.style.alignItems = 'center'
         symbolElement.style.justifyContent = 'center'
-        symbolElement.style.padding = '8px 15px'
-        symbolElement.style.minWidth = '120px'
+        symbolElement.style.padding = '10px 20px'
+        symbolElement.style.minWidth = '140px'
         symbolElement.style.textDecoration = 'none'
         symbolElement.style.color = darkMode ? '#e0e0e0' : '#333'
         
         // Symbol name
         const symbolName = document.createElement('div')
         symbolName.textContent = symbol
-        symbolName.style.fontWeight = '700'
+        symbolName.style.fontWeight = '800'
         symbolName.style.backgroundColor = darkMode ? '#2a2a2a' : '#e2e8f0'
-        symbolName.style.padding = '2px 8px'
-        symbolName.style.fontSize = '14px'
+        symbolName.style.padding = '3px 10px'
+        symbolName.style.fontSize = '16px'
+        symbolName.style.borderRadius = '4px'
         symbolName.style.marginBottom = '5px'
         
         // Create placeholder for price and change (will be filled with mock data)
         const priceElement = document.createElement('div')
         priceElement.id = `${symbol}-price`
         priceElement.textContent = 'Loading...'
-        priceElement.style.fontSize = '15px'
-        priceElement.style.fontWeight = '600'
+        priceElement.style.fontSize = '18px'
+        priceElement.style.fontWeight = '700'
         
         const changeElement = document.createElement('div')
         changeElement.id = `${symbol}-change`
         changeElement.textContent = ''
-        changeElement.style.fontWeight = '500'
-        changeElement.style.fontSize = '12px'
+        changeElement.style.fontWeight = '600'
+        changeElement.style.fontSize = '14px'
+        changeElement.style.marginTop = '3px'
         
         symbolElement.appendChild(symbolName)
         symbolElement.appendChild(priceElement)
@@ -95,11 +97,13 @@ const TradingViewDirectTicker: React.FC<TradingViewDirectTickerProps> = ({
             const mockPrice = Math.floor(Math.random() * 1000) + 100
             const mockChange = (Math.random() * 10) - 5
             const mockChangePercent = (mockChange / mockPrice) * 100
-            
+
             priceElement.textContent = `$${mockPrice.toFixed(2)}`
             changeElement.textContent = `${mockChange >= 0 ? '+' : ''}${mockChange.toFixed(2)} (${mockChange >= 0 ? '+' : ''}${mockChangePercent.toFixed(2)}%)`
             changeElement.style.color = mockChange >= 0 ? '#22c55e' : '#ef4444'
-            changeElement.style.padding = '2px 6px'
+            changeElement.style.padding = '3px 8px'
+            changeElement.style.borderRadius = '4px'
+            changeElement.style.backgroundColor = mockChange >= 0 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'
           }
         })
       }, 1000)
