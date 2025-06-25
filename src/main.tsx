@@ -4,10 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 import { setupGlobalErrorHandlers } from './utils/errorLogger'
+import { setupMockApi } from './setupMockApi'
 
 // Lazy initialize services
 const initializeServices = async () => {
   try {
+    // Setup mock API in development
+    if (import.meta.env.DEV) {
+      setupMockApi()
+    }
+    
     // Import services dynamically
     const { OptionsDataScheduler } = await import('./services/optionsDataScheduler')
     const { LearningService } = await import('./services/learningService')
