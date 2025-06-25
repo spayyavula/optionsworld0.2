@@ -23,6 +23,7 @@ export interface TradingStrategy {
   name: string
   description: string
   regimeId: string
+  type: 'bullish' | 'bearish' | 'neutral' | 'volatility'
   timeframe: 'short' | 'medium' | 'long'
   riskLevel: 'low' | 'medium' | 'high'
   expectedReturn: number

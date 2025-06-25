@@ -220,8 +220,8 @@ export class LearningService {
         breakeven: [0], // Lower strike plus net debit
         bestMarketConditions: ['Moderate bull', 'Low to moderate volatility'],
         worstMarketConditions: ['Bear trending', 'Sideways with time decay'],
-        timeDecay: 'slightly negative',
-        volatilityImpact: 'slightly positive'
+        timeDecay: 'negative',
+        volatilityImpact: 'positive'
       },
       {
         id: 'put_credit_spread',
@@ -303,8 +303,8 @@ export class LearningService {
         breakeven: [0], // Higher strike minus net debit
         bestMarketConditions: ['Moderate bear', 'Low to moderate volatility'],
         worstMarketConditions: ['Bull trending', 'Sideways with time decay'],
-        timeDecay: 'slightly negative',
-        volatilityImpact: 'slightly positive'
+        timeDecay: 'negative',
+        volatilityImpact: 'positive'
       },
       {
         id: 'call_credit_spread',
@@ -439,7 +439,7 @@ export class LearningService {
         breakeven: [0, 0], // Complex, depends on volatility
         bestMarketConditions: ['Sideways', 'Stable volatility'],
         worstMarketConditions: ['Strong directional moves', 'Volatility collapse'],
-        timeDecay: 'positive near expiration',
+        timeDecay: 'positive',
         volatilityImpact: 'positive'
       },
       {
@@ -531,7 +531,7 @@ export class LearningService {
         breakeven: [0, 0], // Two breakeven points
         bestMarketConditions: ['Precise price target', 'Low volatility'],
         worstMarketConditions: ['Strong directional moves', 'High volatility'],
-        timeDecay: 'positive near expiration', 
+        timeDecay: 'positive',
         volatilityImpact: 'negative',
         instructions: [
           "Select a stock with a clear price target",

@@ -46,7 +46,7 @@ export interface PracticalExercise {
 }
 
 export interface ExerciseRequirement {
-  type: 'place-order' | 'analyze-greeks' | 'calculate-pnl' | 'identify-strategy'
+  type: 'place-order' | 'analyze-greeks' | 'calculate-pnl' | 'identify-strategy' | 'analyze-adjustment'
   description: string
   criteria: any
 }

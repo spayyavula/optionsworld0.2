@@ -14,7 +14,8 @@ import {
   Clock,
   Zap,
   Play,
-  Lightbulb
+  Lightbulb,
+  Shield
 } from 'lucide-react'
 import Disclaimer from '../components/Disclaimer' 
 import { LearningService } from '../services/learningService'
