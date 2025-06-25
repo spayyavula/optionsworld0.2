@@ -149,7 +149,7 @@ export class StripeService {
       try {
         const { error } = await stripe.redirectToCheckout({
           lineItems: [{
-            price: priceId === 'price_monthly' ? 'invalid_price_id' : priceId, // Use invalid ID to trigger error for testing
+            price: priceId,
             quantity: 1
           }],
           mode: 'subscription',
@@ -160,7 +160,7 @@ export class StripeService {
 
         if (error) {
           console.error('Stripe checkout error:', error);
-          throw new Error('Stripe checkout error');
+          throw new Error('Stripe checkout error'); // This specific message is used for testing
         }
       } catch (checkoutError) {
         console.error('Error during redirectToCheckout:', checkoutError);
