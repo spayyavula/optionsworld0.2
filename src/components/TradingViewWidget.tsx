@@ -107,6 +107,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       }
       
       script.innerHTML = JSON.stringify(widgetOptions)
+      script.innerHTML = 'new TradingView.widget(' + JSON.stringify(widgetOptions) + ');'
       
       // Add script to document head for proper TradingView initialization
       document.head.appendChild(script)
