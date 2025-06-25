@@ -150,6 +150,7 @@ export default function Dashboard() {
               <span>Open in TradingView</span>
               <ArrowUpRight className="ml-1 h-4 w-4" />
             </a>
+          </p>
         </div>
         <div className="card-body">
           <TradingViewWidget
