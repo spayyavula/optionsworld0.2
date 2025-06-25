@@ -446,7 +446,7 @@ export class LearningService {
         id: 'iron_condor',
         name: 'Iron Condor',
         description: 'Sell call and put spreads for range-bound profit',
-        type: 'neutral',
+        type: 'neutral', 
         complexity: 'advanced',
         legs: [
           {
@@ -482,9 +482,19 @@ export class LearningService {
         maxProfit: 150, // Net credit
         breakeven: [0, 0], // Two breakeven points
         bestMarketConditions: ['Sideways', 'Low volatility'],
-        worstMarketConditions: ['High volatility', 'Strong directional moves'],
+        worstMarketConditions: ['High volatility', 'Strong directional moves'], 
         timeDecay: 'positive',
-        volatilityImpact: 'negative'
+        volatilityImpact: 'negative',
+        instructions: [
+          "Identify a stock or ETF that's trading in a range",
+          "Sell an OTM put spread below support",
+          "Sell an OTM call spread above resistance",
+          "Aim for 30-45 days until expiration",
+          "Consider taking profits at 50% of max profit"
+        ],
+        examples: [
+          "SPY is trading at $450 with support at $440 and resistance at $460. Sell the $435/$430 put spread and the $465/$470 call spread for a total credit of $1.50. Max profit is $150 per contract if SPY stays between $435 and $465."
+        ]
       }
       ,
       {
@@ -521,8 +531,18 @@ export class LearningService {
         breakeven: [0, 0], // Two breakeven points
         bestMarketConditions: ['Precise price target', 'Low volatility'],
         worstMarketConditions: ['Strong directional moves', 'High volatility'],
-        timeDecay: 'positive near expiration',
-        volatilityImpact: 'negative'
+        timeDecay: 'positive near expiration', 
+        volatilityImpact: 'negative',
+        instructions: [
+          "Select a stock with a clear price target",
+          "Buy a lower strike call, sell two middle strike calls, buy a higher strike call",
+          "Keep all strikes equidistant (e.g., $5 apart)",
+          "Maximum profit occurs if stock is at middle strike at expiration",
+          "Consider closing early if profit reaches 50-75% of maximum"
+        ],
+        examples: [
+          "AAPL is trading at $180 and you expect it to be at $185 in 30 days. Buy the $175 call, sell two $185 calls, and buy the $195 call for a net debit of $3.00. Max profit of $7.00 occurs if AAPL is exactly at $185 at expiration."
+        ]
       }
     ]
   }
@@ -554,7 +574,7 @@ export class LearningService {
   private static getDefaultModules(): LearningModule[] {
     return [
       {
-        id: 'options_basics', 
+        id: 'options_basics',
         title: 'Options Trading Fundamentals',
         description: 'Learn the basic concepts of options trading including calls, puts, and key terminology',
         difficulty: 'beginner',
@@ -702,6 +722,25 @@ export class LearningService {
             }
           ],
           passingScore: 80
+        },
+        practicalExercise: {
+          id: 'risk_adjustment_exercise',
+          title: 'Practice Position Adjustment',
+          description: 'Apply risk management techniques to an existing position',
+          scenario: 'You bought 1 SPY $580 call for $5.00. After a week, SPY has dropped to $570 and your call is now worth $2.50. How would you adjust this position?',
+          requirements: [
+            {
+              type: 'analyze-adjustment',
+              description: 'Choose the best adjustment strategy',
+              criteria: { position: 'long_call', market: 'bearish' }
+            }
+          ],
+          hints: [
+            'Consider the remaining time to expiration',
+            'Think about your conviction in the original trade idea',
+            'Evaluate the cost vs. benefit of each adjustment technique'
+          ],
+          solution: 'Converting to a spread by selling a higher strike call would reduce your risk exposure while allowing some profit potential if SPY recovers. Alternatively, rolling out to a later expiration gives your trade more time to work.'
         },
         completed: false,
         progress: 0
