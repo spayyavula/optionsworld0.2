@@ -1,6 +1,6 @@
 # Paper Trading Platform with Options Trading
 
-A comprehensive paper trading platform built with React, TypeScript, and Vite, featuring both stock and options trading simulation with Polygon.io integration.
+A comprehensive paper trading platform built with React, TypeScript, and Vite, featuring both stock and options trading simulation with Polygon.io integration and Supabase for data persistence.
 
 ## 🚀 Features
 
@@ -29,12 +29,26 @@ A comprehensive paper trading platform built with React, TypeScript, and Vite, f
 - Historical data storage and retrieval
 - Real-time price updates
 
+### Subscription System
+- Subscription management with Stripe integration
+- Coupon system for discounts and promotions
+- Subscription status tracking
+- Terms and conditions acceptance flow
+
+### Error Handling & Testing
+- Enhanced error logging and display
+- Error boundary for graceful error handling
+- Testing tools for subscription and E2E tests
+- Comprehensive test suite for all major features
+
 ## 🛠️ Setup
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+ (specified in package.json engines)
+- npm 8+ (specified in package.json engines)
 - npm or yarn
 - Polygon.io API key (optional, for real data)
+- Supabase account (optional, for data persistence)
 
 ### Installation
 
@@ -53,6 +67,13 @@ cp .env.example .env
 VITE_POLYGON_API_KEY=your_actual_api_key_here
 VITE_ENABLE_REAL_TIME_DATA=true
 VITE_ENABLE_MOCK_DATA=false
+
+# For Supabase integration:
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# For Stripe integration:
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
 ```
 
 3. **Start the development server:**
@@ -94,6 +115,8 @@ VITE_WHATSAPP_GROUP_INVITE=your_whatsapp_group_invite_code
 # Facebook Configuration
 VITE_FACEBOOK_GROUP_ID=your_facebook_group_id
 ```
+
+> **Note:** In development mode, these integrations are mocked for testing purposes. No actual API calls are made to external services.
 
 ### Setting Up Webhooks
 
@@ -145,6 +168,13 @@ To run the community features standalone:
 | `VITE_OPTIONS_UPDATE_INTERVAL` | Price update frequency (ms) | `5000` |
 | `VITE_MAX_HISTORICAL_DAYS` | Historical data range | `14` |
 | `VITE_DEFAULT_PORTFOLIO_VALUE` | Starting portfolio value | `100000` |
+| `VITE_SUPABASE_URL` | Supabase project URL | - |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key | - |
+| `VITE_ENABLE_DATA_PERSISTENCE` | Enable data persistence with Supabase | `true` |
+| `VITE_HISTORICAL_DATA_RETENTION_DAYS` | Days to retain historical data | `30` |
+| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key | - |
+| `VITE_STRIPE_MONTHLY_PRICE_ID` | Stripe monthly subscription price ID | - |
+| `VITE_STRIPE_YEARLY_PRICE_ID` | Stripe yearly subscription price ID | - |
 
 ### Community Platform Variables
 
@@ -206,6 +236,35 @@ For production use, consider these security practices:
 4. Consider using a backend service to proxy webhook requests
 5. Rotate webhook URLs and API keys periodically
 
+## 🧪 Testing Tools
+
+The platform includes built-in testing tools accessible from the landing page:
+
+### Subscription Tests
+
+Test the subscription system with mock data:
+
+```bash
+# Run subscription tests
+npm run test:subscription
+```
+
+### E2E Tests
+
+Run end-to-end tests for the entire application:
+
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Run with UI
+npm run test:e2e:ui
+
+# Run specific test files
+npx playwright test tests/subscription.spec.ts
+npx playwright test tests/options-trading.spec.ts
+```
+
 ## 🧪 Testing
 
 ### Unit Tests
@@ -234,6 +293,8 @@ npx playwright test tests/options-portfolio.spec.ts
 - Order placement and management
 - Mobile responsiveness
 - Data persistence
+- Subscription and payment flows
+- Error handling and recovery
 
 ## 📊 Options Trading Features
 
@@ -275,6 +336,13 @@ npx playwright test tests/options-portfolio.spec.ts
 - **Sell to Open**: Enter new short positions (coming soon)
 - **Buy to Close**: Close existing short positions (coming soon)
 
+### Subscription Features
+- **Tiered Plans**: Monthly and yearly subscription options
+- **Coupon System**: Apply discount codes at checkout
+- **Special Deals**: Limited-time offers with automatic discounts
+- **Secure Checkout**: Powered by Stripe
+- **Subscription Management**: View and manage subscription status
+
 ## 🏗️ Architecture
 
 ### Project Structure
@@ -285,6 +353,7 @@ src/
 ├── pages/              # Page components
 ├── services/           # API and data services
 ├── types/              # TypeScript type definitions
+├── utils/              # Utility functions and error handling
 └── tests/              # E2E test files
 ```
 
@@ -297,6 +366,9 @@ src/
 - **TradingView** - Advanced charting and technical analysis
 - **Playwright** - E2E testing
 - **Polygon.io** - Market data API
+- **Supabase** - Database and authentication
+- **Stripe** - Payment processing
+- **Tailwind CSS** - Utility-first CSS framework
 
 ## 🔧 Development
 
@@ -325,6 +397,27 @@ VITE_ENABLE_REAL_TIME_DATA=true
 VITE_ENABLE_MOCK_DATA=false
 ```
 
+### Enabling Data Persistence
+To use Supabase for data persistence:
+1. Create a Supabase project at [Supabase](https://supabase.com)
+2. Update your `.env` file:
+```bash
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_ENABLE_DATA_PERSISTENCE=true
+```
+
+### Setting Up Stripe Integration
+To enable subscription features:
+1. Create a Stripe account at [Stripe](https://stripe.com)
+2. Create products and prices in the Stripe dashboard
+3. Update your `.env` file:
+```bash
+VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+VITE_STRIPE_MONTHLY_PRICE_ID=your_monthly_price_id
+VITE_STRIPE_YEARLY_PRICE_ID=your_yearly_price_id
+```
+
 ## 📱 Mobile Support
 
 The platform is fully responsive and includes:
@@ -345,12 +438,23 @@ npm run build
 npm run preview
 ```
 
+### Deploy to Netlify
+The project is configured for easy deployment to Netlify:
+
+1. Connect your GitHub repository to Netlify
+2. Set up the build command: `npm run build`
+3. Set the publish directory: `dist`
+4. Configure environment variables in the Netlify dashboard
+5. Deploy!
+
 ## 📈 Performance
 
 - **Real-time Updates**: Configurable update intervals
 - **Data Persistence**: Local storage for offline capability
 - **Lazy Loading**: Optimized component loading
 - **Responsive Design**: Mobile-first approach
+- **Error Handling**: Comprehensive error boundaries and logging
+- **Testing Tools**: Built-in testing utilities for development
 
 ## 🤝 Contributing
 
