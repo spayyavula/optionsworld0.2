@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 interface TradingViewWidgetProps {
   symbol: string
   width?: string | number
-  height?: string | number
+  height?: number
   interval?: string
   theme?: 'light' | 'dark'
   style?: 'candles' | 'line' | 'area' | 'bars'
@@ -13,13 +13,14 @@ interface TradingViewWidgetProps {
   allow_symbol_change?: boolean
   container_id?: string
   studies?: string[]
+  autosize?: boolean
 }
 
 const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   symbol,
   width = '100%',
-  height = 400,
-  interval = '1d',
+  height = 500,
+  interval = 'D',
   theme = 'light',
   style = 'candles',
   locale = 'en',
@@ -27,7 +28,8 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   enable_publishing = false,
   allow_symbol_change = true,
   container_id,
-  studies = []
+  studies = [],
+  autosize = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const scriptRef = useRef<HTMLScriptElement | null>(null)
@@ -80,8 +82,8 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         "toolbar_bg": toolbar_bg,
         "enable_publishing": enable_publishing,
         "allow_symbol_change": allow_symbol_change,
-        "width": "100%",
-        "height": "100%",
+        "width": autosize ? "100%" : typeof width === 'number' ? `${width}px` : width,
+        "height": autosize ? "100%" : typeof height === 'number' ? `${height}px` : height,
         "save_image": true,
         "studies": studies,
         "hide_top_toolbar": false,
@@ -106,7 +108,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
     }
     
     return cleanup
-  }, [symbol, width, height, interval, theme, style, locale, toolbar_bg, enable_publishing, allow_symbol_change, studies])
+  }, [symbol, width, height, interval, theme, style, locale, toolbar_bg, enable_publishing, allow_symbol_change, studies, autosize])
 
   // Generate unique container ID
   const containerId = container_id || `tradingview_${Math.random().toString(36).substring(2, 11)}`
