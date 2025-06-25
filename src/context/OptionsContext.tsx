@@ -166,19 +166,19 @@ export function OptionsProvider({ children }: { children: React.ReactNode }) {
           
           // Schedule next update
           if (isActive) {
-            timeoutId = setTimeout(updatePrices, updateInterval)
+            timeoutId = window.setTimeout(updatePrices, updateInterval)
           }
         } catch (error) {
           console.error('Error updating options prices:', error)
           // Schedule retry on error
           if (isActive) {
-            timeoutId = setTimeout(updatePrices, updateInterval)
+            timeoutId = window.setTimeout(updatePrices, updateInterval)
           }
         }
       }
       
       // Start the update cycle
-      timeoutId = setTimeout(updatePrices, updateInterval)
+      timeoutId = window.setTimeout(updatePrices, updateInterval)
     } catch (error) {
       console.error('Error setting up options price updates:', error)
     }
