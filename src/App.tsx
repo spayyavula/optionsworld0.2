@@ -26,6 +26,7 @@ const Community = lazy(() => import('./pages/Community'))
 const Settings = lazy(() => import('./pages/Settings'))
 const OptionsDataManager = lazy(() => import('./pages/OptionsDataManager'))
 const Construction = lazy(() => import('./pages/Construction'))
+const SubscriptionPage = lazy(() => import('./pages/SubscriptionPage'))
 
 // Loading component for Suspense
 const LoadingFallback = () => (
@@ -49,6 +50,7 @@ function App() {
               <Route path="/construction" element={<Construction />} />
               <Route path="/demo" element={<Demo />} />
               <Route path="/agent" element={<AgentDashboard />} />
+              <Route path="/subscribe" element={<SubscriptionPage />} />
               <Route path="/app" element={
                 <Layout>
                   <Dashboard />
