@@ -74,46 +74,46 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       
       // Create the script element with embedded JSON
       const script = document.createElement('script')
-      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js'
+      script.src = 'https://s3.tradingview.com/tv.js'
       script.type = 'text/javascript' 
       script.async = true
       
-      // Create widget options as a proper JSON string
-      const widgetOptions = {
-        "symbol": formattedSymbol,
-        "interval": interval,
-        "timezone": "Etc/UTC",
-        "theme": theme,
-        "style": style,
-        "locale": locale,
-        "toolbar_bg": toolbar_bg,
-        "enable_publishing": enable_publishing,
-        "allow_symbol_change": allow_symbol_change,
-        "width": autosize ? "100%" : typeof width === 'number' ? `${width}px` : width,
-        "height": autosize ? "100%" : typeof height === 'number' ? `${height}px` : height,
-        "save_image": true,
-        "studies": studies,
-        "hide_top_toolbar": false,
-        "hide_legend": false,
-        "withdateranges": true,
-        "hide_side_toolbar": false,
-        "details": true,
-        "hotlist": true,
-        "calendar": true, 
-        "show_popup_button": true,
-        "popup_width": 1000,
-        "popup_height": 650,
-        "container_id": containerId
-      }
-      
-      // Set the script content to JSON string
-      script.textContent = JSON.stringify(widgetOptions)
-      
-      // Add script to container
-      widgetContainer.appendChild(script)
-      scriptRef.current = script
+      // Create a new TradingView widget
+      script.onload = () => {
+        if (typeof window.TradingView !== 'undefined') {
+          new window.TradingView.widget({
+            "autosize": autosize,
+            "symbol": formattedSymbol,
+            "interval": interval,
+            "timezone": "Etc/UTC",
+            "theme": theme,
+            "style": style,
+            "locale": locale,
+            "toolbar_bg": toolbar_bg,
+            "enable_publishing": enable_publishing,
+            "allow_symbol_change": allow_symbol_change,
+            "container_id": containerId,
+            "width": autosize ? "100%" : typeof width === 'number' ? width : width,
+            "height": autosize ? "100%" : typeof height === 'number' ? height : height,
+            "save_image": true,
+            "studies": studies,
+            "show_popup_button": true,
+            "popup_width": "1000",
+            "popup_height": "650"
+          });
+        }
+      };
+
+      // Add script to document head
+      document.head.appendChild(script);
+      scriptRef.current = script;
     } catch (error) {
       console.error('Error initializing TradingView widget:', error)
+      
+      // Show error message
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #888;">Failed to load TradingView widget</div>'
+      }
     }
     
     return cleanup

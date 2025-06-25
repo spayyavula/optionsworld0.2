@@ -13,7 +13,8 @@ import {
   DollarSign,
   Clock,
   Zap,
-  Play
+  Play,
+  Lightbulb
 } from 'lucide-react'
 import Disclaimer from '../components/Disclaimer'
 import { LearningService } from '../services/learningService'
@@ -157,10 +158,10 @@ export default function OptionsStrategies() {
       {/* Strategies */}
       <div className="card shadow-md border-blue-200">
         <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
-          <h3 className="text-lg font-medium text-gray-900">Strategies to Master</h3>
+          <h3 className="text-lg font-medium text-gray-900">Comprehensive Strategy Library</h3>
         </div>
         <div className="card-body">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-4">
             {filteredStrategies.map((strategy) => (
               <div
                 key={strategy.id}
@@ -214,6 +215,52 @@ export default function OptionsStrategies() {
                 </div>
               </div>
             ))}
+          </div>
+          
+          {/* Additional Strategies Section */}
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Advanced Strategy Combinations</h3>
+            <p className="text-gray-600 mb-4">
+              Beyond the basic strategies, traders can combine multiple approaches to create custom strategies tailored to specific market conditions and risk profiles.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <h4 className="font-medium text-blue-700">Calendar Spreads</h4>
+                <p className="text-sm text-gray-600 mb-2">Sell near-term option, buy longer-term option at same strike.</p>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Complexity: Advanced</span>
+                  <span>Market View: Neutral</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <h4 className="font-medium text-blue-700">Diagonal Spreads</h4>
+                <p className="text-sm text-gray-600 mb-2">Combines different strikes and expirations for enhanced flexibility.</p>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Complexity: Advanced</span>
+                  <span>Market View: Directional</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <h4 className="font-medium text-blue-700">Butterflies</h4>
+                <p className="text-sm text-gray-600 mb-2">Combines bull and bear spreads with shared middle strike.</p>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Complexity: Advanced</span>
+                  <span>Market View: Precise Range</span>
+                </div>
+              </div>
+              
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <h4 className="font-medium text-blue-700">Ratio Spreads</h4>
+                <p className="text-sm text-gray-600 mb-2">Unequal number of long and short options for asymmetric payoffs.</p>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>Complexity: Advanced</span>
+                  <span>Market View: Directional</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -363,39 +410,78 @@ export default function OptionsStrategies() {
 
                     <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                       <Zap className="h-4 w-4 mr-2" />
-                      Implementation Guide
+                      Implementation & Risk Management
                     </h4>
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
-                      <h5 className="font-medium text-blue-900 mb-2">When to Use</h5>
-                      <ul className="text-sm text-blue-800 space-y-1">
-                        <li>• Use in {selectedStrategy.type} market conditions</li>
-                        <li>• Best when implied volatility is {selectedStrategy.volatilityImpact === 'positive' ? 'low' : selectedStrategy.volatilityImpact === 'negative' ? 'high' : 'moderate'}</li>
-                        <li>• Ideal for {selectedStrategy.complexity} level traders</li>
-                        <li>• {selectedStrategy.timeDecay === 'positive' ? 'Benefits from time passing' : selectedStrategy.timeDecay === 'negative' ? 'Loses value as time passes' : 'Minimal time decay impact'}</li>
-                      </ul>
+                    <div className="space-y-4">
+                      {selectedStrategy.instructions.map((instruction, index) => (
+                        <div key={index} className="flex items-start space-x-3">
+                          <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">
+                            {index + 1}
+                          </div>
+                          <p className="text-sm text-gray-600">{instruction}</p>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* New Risk Adjustment Section */}
+                    <div className="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                      <h5 className="font-medium text-blue-900 mb-3">Adjusting for Risk Reduction</h5>
+                      <div className="space-y-3">
+                        <div className="bg-white p-3 rounded-lg shadow-sm">
+                          <h6 className="font-medium text-gray-900 mb-1">Position Sizing</h6>
+                          <p className="text-sm text-gray-600">Start with smaller position sizes (1-2% of portfolio) to limit exposure while learning the strategy.</p>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg shadow-sm">
+                          <h6 className="font-medium text-gray-900 mb-1">Stop Loss Management</h6>
+                          <p className="text-sm text-gray-600">Set mental or actual stop losses at 50% of maximum risk to prevent larger drawdowns.</p>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg shadow-sm">
+                          <h6 className="font-medium text-gray-900 mb-1">Rolling Positions</h6>
+                          <p className="text-sm text-gray-600">If a position moves against you, consider rolling to a different expiration or strike to reduce risk.</p>
+                        </div>
+                        
+                        <div className="bg-white p-3 rounded-lg shadow-sm">
+                          <h6 className="font-medium text-gray-900 mb-1">Adding Protective Legs</h6>
+                          <p className="text-sm text-gray-600">Convert to a spread by adding an opposing option to cap risk in case of adverse moves.</p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
-                      <h5 className="font-medium text-yellow-900 mb-2">Risk Management</h5>
-                      <ul className="text-sm text-yellow-800 space-y-1">
-                        <li>• Maximum risk: ${selectedStrategy.maxRisk} per contract</li>
-                        <li>• Set stop loss at 50% of max loss</li>
-                        <li>• Take profit at 50% of max profit</li>
-                        <li>• Consider closing position if market conditions change</li>
-                      </ul>
-                    </div>
+                    {/* Example */}
+                    {selectedStrategy.examples.length > 0 && (
+                      <div className="mt-6">
+                        <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                          <Play className="h-4 w-4 mr-2" />
+                          Example
+                        </h4>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <p className="text-sm text-gray-600">{selectedStrategy.examples[0]}</p>
+                        </div>
+                      </div>
+                    )}
 
                     <button
                       onClick={() => {
                         setShowImplementModal(true)
                       }}
-                      className="w-full btn btn-primary"
+                      className="w-full btn btn-primary mt-6"
                     >
                       <Zap className="h-4 w-4" />
                       Implement This Strategy
                     </button>
                   </div>
                 </div>
+              </div>
+              
+              <div className="bg-gray-50 px-6 py-3 sm:flex sm:flex-row-reverse border-t border-gray-200">
+                <button
+                  onClick={() => setSelectedStrategy(null)}
+                  className="btn btn-secondary"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
@@ -494,6 +580,80 @@ export default function OptionsStrategies() {
           </div>
         </div>
       )}
+      
+      {/* Risk Management Education Section */}
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
+          <h3 className="text-lg font-medium text-gray-900">Risk Management for Options Strategies</h3>
+        </div>
+        <div className="card-body">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Adjusting Existing Trades</h4>
+              <p className="text-gray-600 mb-4">
+                Learning to adjust existing positions is a critical skill for managing risk in options trading. 
+                Instead of simply closing losing positions, consider these adjustment techniques:
+              </p>
+              
+              <div className="space-y-3">
+                <div className="border-l-4 border-blue-500 pl-4 py-2">
+                  <h5 className="font-medium text-gray-900">Rolling Out in Time</h5>
+                  <p className="text-sm text-gray-600">Close current position and reestablish with a later expiration to give your thesis more time to play out.</p>
+                </div>
+                
+                <div className="border-l-4 border-blue-500 pl-4 py-2">
+                  <h5 className="font-medium text-gray-900">Rolling Up or Down</h5>
+                  <p className="text-sm text-gray-600">Adjust strike prices to reduce risk or lock in partial profits as the underlying moves.</p>
+                </div>
+                
+                <div className="border-l-4 border-blue-500 pl-4 py-2">
+                  <h5 className="font-medium text-gray-900">Adding Protective Legs</h5>
+                  <p className="text-sm text-gray-600">Convert a naked position to a spread by adding an opposing option to define and limit risk.</p>
+                </div>
+                
+                <div className="border-l-4 border-blue-500 pl-4 py-2">
+                  <h5 className="font-medium text-gray-900">Legging Out</h5>
+                  <p className="text-sm text-gray-600">For multi-leg strategies, close individual legs at different times to manage risk and capture profits.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Risk Reduction Techniques</h4>
+              
+              <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200 mb-4">
+                <h5 className="font-medium text-green-800 mb-2">Position Sizing</h5>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• Start small: 1-2% of portfolio per position</li>
+                  <li>• Scale in gradually rather than all at once</li>
+                  <li>• Increase size only after demonstrating consistent success</li>
+                  <li>• Reduce size during high volatility periods</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200 mb-4">
+                <h5 className="font-medium text-yellow-800 mb-2">Diversification</h5>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Use multiple strategies across different underlyings</li>
+                  <li>• Balance directional exposure (bullish/bearish)</li>
+                  <li>• Vary expirations to reduce time-specific risk</li>
+                  <li>• Mix high and low volatility strategies</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
+                <h5 className="font-medium text-red-800 mb-2">Exit Planning</h5>
+                <ul className="text-sm text-red-700 space-y-1">
+                  <li>• Define profit targets before entering trades</li>
+                  <li>• Set maximum loss thresholds</li>
+                  <li>• Consider time-based exits for theta strategies</li>
+                  <li>• Plan for early exits if thesis is invalidated</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

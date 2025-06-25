@@ -355,7 +355,7 @@ export default function OptionsTrading() {
 
                 {/* Order Summary */}
                 {quantity && (
-                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 mb-4">
                     <h4 className="font-medium text-gray-900 mb-2 flex items-center">
                       <Calculator className="h-4 w-4 mr-2" />
                       Order Summary
@@ -385,6 +385,54 @@ export default function OptionsTrading() {
                     </div>
                   </div>
                 )}
+                
+                {/* Risk Management Options */}
+                {quantity && (
+                  <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200 mb-4">
+                    <h4 className="font-medium text-yellow-800 mb-2 flex items-center">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Risk Management Options
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id="use-stop-loss" 
+                          className="h-4 w-4 text-blue-600 rounded mr-2" 
+                        />
+                        <label htmlFor="use-stop-loss" className="text-gray-700">
+                          Set stop loss at 50% of max loss
+                        </label>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id="use-take-profit" 
+                          className="h-4 w-4 text-blue-600 rounded mr-2" 
+                        />
+                        <label htmlFor="use-take-profit" className="text-gray-700">
+                          Set take profit at 50% of max gain
+                        </label>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <input 
+                          type="checkbox" 
+                          id="use-spread" 
+                          className="h-4 w-4 text-blue-600 rounded mr-2" 
+                        />
+                        <label htmlFor="use-spread" className="text-gray-700">
+                          Convert to spread to reduce risk
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-2 text-xs text-yellow-700">
+                      <p>These risk management options help protect your position from excessive losses.</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Place Order Button */}
                 <button
@@ -405,6 +453,55 @@ export default function OptionsTrading() {
             )}
           </div>
         </div>
+
+        {/* Risk Adjustment Panel for Existing Positions */}
+        {selectedContract && existingPosition && (
+          <div className="card shadow-md border-yellow-200 mb-6">
+            <div className="card-header bg-gradient-to-r from-yellow-50 to-yellow-100">
+              <h3 className="text-lg font-medium text-gray-900">Position Risk Adjustment</h3>
+            </div>
+            <div className="card-body">
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Adjust your existing position to manage risk and potentially improve outcomes.
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
+                    <h4 className="font-medium text-gray-900 mb-1">Roll Out (Extend Time)</h4>
+                    <p className="text-xs text-gray-500 mb-2">Move to a later expiration date to give your position more time.</p>
+                    <button className="w-full btn btn-secondary text-xs py-1">Roll Position Out</button>
+                  </div>
+                  
+                  <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
+                    <h4 className="font-medium text-gray-900 mb-1">Roll Up/Down (Adjust Strike)</h4>
+                    <p className="text-xs text-gray-500 mb-2">Change the strike price to adjust risk/reward profile.</p>
+                    <button className="w-full btn btn-secondary text-xs py-1">Adjust Strike Price</button>
+                  </div>
+                  
+                  <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
+                    <h4 className="font-medium text-gray-900 mb-1">Convert to Spread</h4>
+                    <p className="text-xs text-gray-500 mb-2">Add an opposing leg to create a spread and define risk.</p>
+                    <button className="w-full btn btn-secondary text-xs py-1">Create Spread</button>
+                  </div>
+                  
+                  <div className="p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer">
+                    <h4 className="font-medium text-gray-900 mb-1">Add Hedge</h4>
+                    <p className="text-xs text-gray-500 mb-2">Add a complementary position to offset some risk.</p>
+                    <button className="w-full btn btn-secondary text-xs py-1">Add Hedge</button>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                  <h4 className="font-medium text-blue-800 mb-1 text-sm">Learning Note</h4>
+                  <p className="text-xs text-blue-700">
+                    Adjusting positions is an advanced skill that can help manage risk. Each adjustment has tradeoffs between risk reduction and potential reward. Practice these techniques in a paper trading environment first.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Account Info */}
         <div className="card shadow-md border-blue-200">

@@ -171,7 +171,7 @@ export class LearningService {
   static getStrategyTemplates(): StrategyTemplate[] {
     return [
       {
-        id: 'long_call',
+        id: 'long_call', 
         name: 'Long Call',
         description: 'Buy a call option to profit from upward price movement',
         type: 'bullish',
@@ -192,6 +192,66 @@ export class LearningService {
         worstMarketConditions: ['Bear trending', 'Sideways with time decay'],
         timeDecay: 'negative',
         volatilityImpact: 'positive'
+      },
+      {
+        id: 'call_debit_spread',
+        name: 'Call Debit Spread',
+        description: 'Buy a lower strike call and sell a higher strike call to reduce cost and define risk',
+        type: 'bullish',
+        complexity: 'intermediate',
+        legs: [
+          {
+            action: 'buy',
+            optionType: 'call',
+            strike: 0, // Lower strike
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'sell',
+            optionType: 'call',
+            strike: 0, // Higher strike
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 200, // Net debit paid
+        maxProfit: 300, // Spread width minus net debit
+        breakeven: [0], // Lower strike plus net debit
+        bestMarketConditions: ['Moderate bull', 'Low to moderate volatility'],
+        worstMarketConditions: ['Bear trending', 'Sideways with time decay'],
+        timeDecay: 'slightly negative',
+        volatilityImpact: 'slightly positive'
+      },
+      {
+        id: 'put_credit_spread',
+        name: 'Put Credit Spread',
+        description: 'Sell a higher strike put and buy a lower strike put to collect premium with defined risk',
+        type: 'bullish',
+        complexity: 'intermediate',
+        legs: [
+          {
+            action: 'sell',
+            optionType: 'put',
+            strike: 0, // Higher strike
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'buy',
+            optionType: 'put',
+            strike: 0, // Lower strike
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 400, // Spread width minus net credit
+        maxProfit: 100, // Net credit received
+        breakeven: [0], // Short put strike minus net credit
+        bestMarketConditions: ['Bullish', 'Neutral', 'Decreasing volatility'],
+        worstMarketConditions: ['Bearish', 'Increasing volatility'],
+        timeDecay: 'positive',
+        volatilityImpact: 'negative'
       },
       {
         id: 'long_put',
@@ -217,6 +277,66 @@ export class LearningService {
         volatilityImpact: 'positive'
       },
       {
+        id: 'put_debit_spread',
+        name: 'Put Debit Spread',
+        description: 'Buy a higher strike put and sell a lower strike put to reduce cost and define risk',
+        type: 'bearish',
+        complexity: 'intermediate',
+        legs: [
+          {
+            action: 'buy',
+            optionType: 'put',
+            strike: 0, // Higher strike
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'sell',
+            optionType: 'put',
+            strike: 0, // Lower strike
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 200, // Net debit paid
+        maxProfit: 300, // Spread width minus net debit
+        breakeven: [0], // Higher strike minus net debit
+        bestMarketConditions: ['Moderate bear', 'Low to moderate volatility'],
+        worstMarketConditions: ['Bull trending', 'Sideways with time decay'],
+        timeDecay: 'slightly negative',
+        volatilityImpact: 'slightly positive'
+      },
+      {
+        id: 'call_credit_spread',
+        name: 'Call Credit Spread',
+        description: 'Sell a lower strike call and buy a higher strike call to collect premium with defined risk',
+        type: 'bearish',
+        complexity: 'intermediate',
+        legs: [
+          {
+            action: 'sell',
+            optionType: 'call',
+            strike: 0, // Lower strike
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'buy',
+            optionType: 'call',
+            strike: 0, // Higher strike
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 400, // Spread width minus net credit
+        maxProfit: 100, // Net credit received
+        breakeven: [0], // Short call strike plus net credit
+        bestMarketConditions: ['Bearish', 'Neutral', 'Decreasing volatility'],
+        worstMarketConditions: ['Bullish', 'Increasing volatility'],
+        timeDecay: 'positive',
+        volatilityImpact: 'negative'
+      },
+      {
         id: 'covered_call',
         name: 'Covered Call',
         description: 'Own stock and sell call options for income',
@@ -236,6 +356,29 @@ export class LearningService {
         breakeven: [0], // Stock price - premium
         bestMarketConditions: ['Sideways', 'Mild bullish'],
         worstMarketConditions: ['Strong bull', 'Strong bear'],
+        timeDecay: 'positive',
+        volatilityImpact: 'negative'
+      },
+      {
+        id: 'cash_secured_put',
+        name: 'Cash-Secured Put',
+        description: 'Sell a put option while setting aside cash to buy shares if assigned',
+        type: 'neutral',
+        complexity: 'intermediate',
+        legs: [
+          {
+            action: 'sell',
+            optionType: 'put',
+            strike: 0, // At or below current price
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 0, // Strike price minus premium (substantial)
+        maxProfit: 100, // Premium received
+        breakeven: [0], // Strike price minus premium
+        bestMarketConditions: ['Sideways', 'Mild bullish', 'Decreasing volatility'],
+        worstMarketConditions: ['Strong bear', 'Increasing volatility'],
         timeDecay: 'positive',
         volatilityImpact: 'negative'
       },
@@ -268,6 +411,36 @@ export class LearningService {
         worstMarketConditions: ['Bear trending', 'High volatility'],
         timeDecay: 'neutral',
         volatilityImpact: 'negative'
+      },
+      {
+        id: 'calendar_spread',
+        name: 'Calendar Spread',
+        description: 'Sell near-term option and buy longer-term option at same strike',
+        type: 'neutral',
+        complexity: 'advanced',
+        legs: [
+          {
+            action: 'sell',
+            optionType: 'call',
+            strike: 0, // At-the-money
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'buy',
+            optionType: 'call',
+            strike: 0, // Same strike
+            expiration: '60d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 250, // Net debit paid
+        maxProfit: 350, // Variable based on volatility changes
+        breakeven: [0, 0], // Complex, depends on volatility
+        bestMarketConditions: ['Sideways', 'Stable volatility'],
+        worstMarketConditions: ['Strong directional moves', 'Volatility collapse'],
+        timeDecay: 'positive near expiration',
+        volatilityImpact: 'positive'
       },
       {
         id: 'iron_condor',
@@ -313,6 +486,44 @@ export class LearningService {
         timeDecay: 'positive',
         volatilityImpact: 'negative'
       }
+      ,
+      {
+        id: 'butterfly_spread',
+        name: 'Butterfly Spread',
+        description: 'Buy one lower strike option, sell two middle strike options, buy one higher strike option',
+        type: 'neutral',
+        complexity: 'advanced',
+        legs: [
+          {
+            action: 'buy',
+            optionType: 'call',
+            strike: 0, // Lower strike
+            expiration: '30d',
+            quantity: 1
+          },
+          {
+            action: 'sell',
+            optionType: 'call',
+            strike: 0, // Middle strike
+            expiration: '30d',
+            quantity: 2
+          },
+          {
+            action: 'buy',
+            optionType: 'call',
+            strike: 0, // Higher strike
+            expiration: '30d',
+            quantity: 1
+          }
+        ],
+        maxRisk: 100, // Net debit paid
+        maxProfit: 400, // Distance between strikes minus net debit
+        breakeven: [0, 0], // Two breakeven points
+        bestMarketConditions: ['Precise price target', 'Low volatility'],
+        worstMarketConditions: ['Strong directional moves', 'High volatility'],
+        timeDecay: 'positive near expiration',
+        volatilityImpact: 'negative'
+      }
     ]
   }
 
@@ -343,7 +554,7 @@ export class LearningService {
   private static getDefaultModules(): LearningModule[] {
     return [
       {
-        id: 'options_basics',
+        id: 'options_basics', 
         title: 'Options Trading Fundamentals',
         description: 'Learn the basic concepts of options trading including calls, puts, and key terminology',
         difficulty: 'beginner',
@@ -424,6 +635,73 @@ export class LearningService {
             'Factor in the premium paid'
           ],
           solution: 'The $185 call would be profitable as it would be worth $5 ($190 - $185) at expiration, minus the premium paid.'
+        },
+        completed: false,
+        progress: 0
+      },
+      {
+        id: 'risk_adjustment',
+        title: 'Risk Management & Position Adjustment',
+        description: 'Learn how to manage risk and adjust existing positions to reduce exposure',
+        difficulty: 'intermediate',
+        estimatedTime: 60,
+        prerequisites: ['options_basics', 'options_greeks'],
+        objectives: [
+          'Understand position sizing principles',
+          'Learn techniques for adjusting existing trades',
+          'Master defensive position management',
+          'Develop a risk management framework'
+        ],
+        content: [
+          {
+            type: 'text',
+            title: 'Position Sizing Fundamentals',
+            content: 'Position sizing is your first line of defense in risk management. Never risk more than 1-5% of your portfolio on a single options trade. For beginners, start with 1% and gradually increase as you gain experience. Remember that options can expire worthless, so proper position sizing is crucial for long-term success.'
+          },
+          {
+            type: 'text',
+            title: 'Rolling Techniques',
+            content: 'Rolling is a powerful adjustment technique that involves closing your current position and opening a new one with different parameters. You can roll out (to a later expiration), roll up/down (to a different strike), or both. This gives your trade more time to work or adjusts your risk profile as market conditions change.'
+          },
+          {
+            type: 'text',
+            title: 'Adding Protective Legs',
+            content: 'When a trade moves against you, consider adding protective legs to limit further losses. For example, if you bought a call that\'s losing value, you could sell a higher strike call to create a spread, defining your maximum loss. This reduces both risk and profit potential but can be a smart defensive move.'
+          },
+          {
+            type: 'example',
+            title: 'Rolling Example',
+            content: 'You bought an AAPL $180 call expiring in 30 days for $5.00. After 15 days, AAPL is still at $175 and your call is worth $2.50. Instead of taking the loss, you could roll out to a 60-day $180 call for $7.00. By selling your current call for $2.50 and buying the new one, your net additional cost is $4.50 ($7.00 - $2.50), and you now have more time for your thesis to play out.'
+          }
+        ],
+        quiz: {
+          id: 'risk_adjustment_quiz',
+          questions: [
+            {
+              id: 'q1',
+              question: 'What is the primary purpose of position sizing?',
+              type: 'multiple-choice',
+              options: ['Maximize profits', 'Limit risk exposure', 'Increase leverage', 'Reduce commissions'],
+              correctAnswer: 'Limit risk exposure',
+              explanation: 'Position sizing is primarily about limiting risk exposure to ensure that no single trade can significantly damage your portfolio.'
+            },
+            {
+              id: 'q2',
+              question: 'When rolling an options position "out", you are:',
+              type: 'multiple-choice',
+              options: ['Moving to a higher strike price', 'Moving to a lower strike price', 'Moving to a later expiration date', 'Adding more contracts'],
+              correctAnswer: 'Moving to a later expiration date',
+              explanation: 'Rolling "out" means extending the time horizon by moving to a later expiration date.'
+            },
+            {
+              id: 'q3',
+              question: 'True or False: Adding a protective leg to a position always increases your maximum profit potential.',
+              type: 'true-false',
+              correctAnswer: 'False',
+              explanation: 'Adding a protective leg typically reduces both risk AND profit potential, creating a more balanced risk/reward profile.'
+            }
+          ],
+          passingScore: 80
         },
         completed: false,
         progress: 0
