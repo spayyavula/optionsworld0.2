@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import StockChartsWidget from '../components/StockChartsWidget'
+import TradingViewWidget from '../components/TradingViewWidget'
 import { 
   ArrowRight, TrendingUp, BookOpen, Users, BarChart3, AlertTriangle,
   FileText, Eye, PieChart, Briefcase, Lightbulb, BookMarked, ChevronRight,
