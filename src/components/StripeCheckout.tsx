@@ -46,13 +46,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       const couponCode = appliedCoupon?.coupon?.code
       try {
         const { url } = await StripeService.createCheckoutSession(plan, couponCode)
-        
-        // Redirect to Stripe Checkout
-        window.location.href = url
-      } catch (checkoutError) {
-        console.error('Checkout error details:', checkoutError);
-        setError(`Failed to initialize checkout: ${checkoutError instanceof Error ? checkoutError.message : 'Unknown error'}`);
-      }
+      console.error('Error details:', error);
       
     } catch (err) {
       console.error('Checkout error:', err)
