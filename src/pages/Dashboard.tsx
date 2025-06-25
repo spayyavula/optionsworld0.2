@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { TrendingUp, TrendingDown, Bot, DollarSign, PieChart, Activity, ArrowUpRight, Users, BookOpen, BookMarked, Lightbulb, Calculator } from 'lucide-react'
 import { CommunityService } from '../services/communityService' 
+import { useTradingContext } from '../context/TradingContext'
 import TradingViewDirectWidget from '../components/TradingViewDirectWidget'
 import PageViewCounter from './PageViewCounter'
 import YahooFinanceTicker from '../components/YahooFinanceTicker'
@@ -21,6 +22,7 @@ const tickerSymbols = [
 ]
 
 export default function Dashboard() {
+  const { state } = useTradingContext()
   const { state } = useTradingContext()
   const communityStats = CommunityService.getCommunityStats()
   const recentMessages = CommunityService.getRecentMessages().slice(0, 3)
@@ -53,30 +55,31 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Portfolio Overview Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <DollarSign className="h-8 w-8 text-blue-600" />
+                <DollarSign className="h-10 w-10 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Value</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.totalValue)}</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Value</p>
+                <p className="text-3xl font-bold text-gray-900">{formatCurrency(state.totalValue)}</p>
+                <p className="text-xs text-gray-500 mt-1">Updated {new Date().toLocaleTimeString()}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <Activity className={`h-8 w-8 ${state.dayChange >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+                <Activity className={`h-10 w-10 ${state.dayChange >= 0 ? 'text-green-600' : 'text-red-600'}`} />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Day Change</p>
-                <p className={`text-2xl font-bold ${state.dayChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Day Change</p>
+                <p className={`text-3xl font-bold ${state.dayChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatCurrency(state.dayChange)}
                 </p>
                 <p className={`text-sm ${state.dayChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -87,29 +90,31 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <PieChart className="h-8 w-8 text-purple-600" />
+                <PieChart className="h-10 w-10 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Buying Power</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.buyingPower)}</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Buying Power</p>
+                <p className="text-3xl font-bold text-gray-900">{formatCurrency(state.buyingPower)}</p>
+                <p className="text-xs text-gray-500 mt-1">Available for trading</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <TrendingUp className="h-8 w-8 text-orange-600" />
+                <TrendingUp className="h-10 w-10 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Positions</p>
-                <p className="text-2xl font-bold text-gray-900">{state.positions.length}</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Positions</p>
+                <p className="text-3xl font-bold text-gray-900">{state.positions.length}</p>
+                <p className="text-xs text-gray-500 mt-1">Active investments</p>
               </div>
             </div>
           </div>
@@ -117,9 +122,14 @@ export default function Dashboard() {
       </div>
 
       {/* Market Ticker */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center">
+          <h3 className="text-xl font-semibold text-gray-900">Market Overview</h3>
+          <div className="text-sm text-gray-500">
+            <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-md">
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+            </span>
+          </div>
         </div>
         <div className="card-body">
           <TradingViewDirectTicker 
@@ -132,14 +142,14 @@ export default function Dashboard() {
       </div>
 
       {/* Portfolio Performance Chart */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-medium text-gray-900">Market Overview</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100 flex justify-between items-center">
+          <h3 className="text-xl font-semibold text-gray-900">Market Analysis</h3>
           <p className="text-sm text-gray-500 mt-1">
-            <a href="https://www.tradingview.com/chart/?symbol=AMEX:SPY" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-              Open in TradingView
+            <a href="https://www.tradingview.com/chart/?symbol=AMEX:SPY" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
+              <span>Open in TradingView</span>
+              <ArrowUpRight className="ml-1 h-4 w-4" />
             </a>
-          </p>
         </div>
         <div className="card-body">
           <TradingViewWidget
@@ -148,14 +158,15 @@ export default function Dashboard() {
             height={400}
             interval="D"
             theme="light"
+            studies={["RSI", "MACD", "Volume"]}
             style="candles"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Market Movers */}
-        <div className="card">
+        {/* Market Movers with enhanced styling */}
+        <div className="card shadow-md border-blue-200">
           <div className="card-header">
             <h3 className="text-lg font-medium text-gray-900">Market Movers</h3>
           </div>
@@ -163,7 +174,7 @@ export default function Dashboard() {
             <div className="space-y-4">
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Top Gainers</h4>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {topGainers.map((stock) => (
                     <div key={stock.symbol} className="flex items-center justify-between">
                       <div>
@@ -171,10 +182,10 @@ export default function Dashboard() {
                         <p className="text-sm text-gray-500">{formatCurrency(stock.price)}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-green-600 font-medium">
+                        <p className="text-green-600 font-medium bg-green-50 px-2 py-1 rounded-md">
                           {formatPercent(stock.changePercent)}
                         </p>
-                        <p className="text-sm text-green-600">
+                        <p className="text-sm text-green-600 mt-1">
                           +{formatCurrency(stock.change)}
                         </p>
                       </div>
@@ -185,7 +196,7 @@ export default function Dashboard() {
 
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Top Losers</h4>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {topLosers.map((stock) => (
                     <div key={stock.symbol} className="flex items-center justify-between">
                       <div>
@@ -193,10 +204,10 @@ export default function Dashboard() {
                         <p className="text-sm text-gray-500">{formatCurrency(stock.price)}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-red-600 font-medium">
+                        <p className="text-red-600 font-medium bg-red-50 px-2 py-1 rounded-md">
                           {formatPercent(stock.changePercent)}
                         </p>
-                        <p className="text-sm text-red-600">
+                        <p className="text-sm text-red-600 mt-1">
                           {formatCurrency(stock.change)}
                         </p>
                       </div>
@@ -209,7 +220,7 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Activity */}
-        <div className="card">
+        <div className="card shadow-md border-blue-200">
           <div className="card-header flex items-center justify-between">
             <h3 className="text-lg font-medium text-gray-900">Recent Orders</h3>
             <Link to="/orders" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
@@ -222,7 +233,7 @@ export default function Dashboard() {
               <p className="text-gray-500 text-center py-4">No recent orders</p>
             ) : (
               <div className="space-y-3">
-                {recentOrders.map((order) => (
+                {recentOrders.map((order, index) => (
                   <div key={order.id} className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-gray-900">
@@ -232,7 +243,7 @@ export default function Dashboard() {
                         {order.quantity} shares • {format(order.timestamp, 'MMM dd, HH:mm')}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right bg-gray-50 px-3 py-1 rounded-md">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                         order.status === 'filled' 
                           ? 'bg-green-100 text-green-800'
@@ -254,8 +265,8 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Quick Actions</h3>
         </div>
         <div className="card-body">
@@ -263,28 +274,28 @@ export default function Dashboard() {
             <Link to="/trading" className="btn btn-primary">
               <TrendingUp className="h-4 w-4" />
               Start Trading
-            </Link>
-            <Link to="/portfolio" className="btn btn-secondary">
+            </Link> 
+            <Link to="/portfolio" className="btn btn-secondary bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50">
               <PieChart className="h-4 w-4" />
               View Portfolio
             </Link>
-            <Link to="/learning" className="btn btn-secondary">
+            <Link to="/learning" className="btn btn-secondary bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50">
               <BookOpen className="h-4 w-4" />
               Start Learning
             </Link>
-            <Link to="/journal" className="btn btn-secondary">
+            <Link to="/journal" className="btn btn-secondary bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50">
               <BookMarked className="h-4 w-4" />
               Trading Journal
             </Link>
-            <Link to="/arbitrage" className="btn btn-secondary">
+            <Link to="/arbitrage" className="btn btn-secondary bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50">
               <Calculator className="h-4 w-4" />
               Find Arbitrage
             </Link>
-            <Link to="/agent" className="btn btn-secondary">
+            <Link to="/agent" className="btn btn-secondary bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50">
               <Bot className="h-4 w-4" />
               Agent API
             </Link>
-          </div>
+          </div> 
         </div>
       </div>
       
@@ -292,7 +303,7 @@ export default function Dashboard() {
       <div className="card">
         <div className="card-header flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <BookOpen className="h-5 w-5 mr-2" />
+            <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
             Learning Resources
           </h3>
           <Link to="/learning" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
@@ -302,7 +313,7 @@ export default function Dashboard() {
         </div>
         <div className="card-body">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <Link to="/learning" className="p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+            <Link to="/learning" className="p-4 border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
                 <BookOpen className="h-5 w-5 text-blue-600" />
                 <h4 className="font-medium text-blue-900">Options Fundamentals</h4>
@@ -310,15 +321,15 @@ export default function Dashboard() {
               <p className="text-sm text-blue-700">Learn the basics of options trading with our structured courses.</p>
             </Link>
             
-            <Link to="/strategies" className="p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+            <Link to="/strategies" className="p-4 border border-green-200 bg-gradient-to-br from-green-50 to-green-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
                 <Lightbulb className="h-5 w-5 text-green-600" />
                 <h4 className="font-medium text-green-900">Strategy Library</h4>
               </div>
               <p className="text-sm text-green-700">Explore and implement proven options trading strategies.</p>
-            </Link>
+            </Link> 
             
-            <Link to="/journal" className="p-4 border border-purple-200 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+            <Link to="/journal" className="p-4 border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg hover:shadow-md transition-all">
               <div className="flex items-center space-x-3 mb-2">
                 <BookMarked className="h-5 w-5 text-purple-600" />
                 <h4 className="font-medium text-purple-900">Trading Journal</h4>
@@ -334,7 +345,7 @@ export default function Dashboard() {
         <div className="card">
           <div className="card-header flex items-center justify-between">
             <h3 className="text-lg font-medium text-gray-900 flex items-center">
-              <Users className="h-5 w-5 mr-2" />
+              <Users className="h-5 w-5 mr-2 text-blue-600" />
               Community Activity
             </h3>
             <Link to="/community" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
@@ -342,7 +353,7 @@ export default function Dashboard() {
               <ArrowUpRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          <div className="card-body">
+          <div className="card-body bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">{communityStats.totalMembers.toLocaleString()}</div>
@@ -362,7 +373,7 @@ export default function Dashboard() {
               <div className="space-y-3">
                 <h4 className="font-medium text-gray-900">Recent Messages</h4>
                 {recentMessages.map((message) => (
-                  <div key={message.id} className="border-l-4 border-blue-500 pl-3 py-2">
+                  <div key={message.id} className="border-l-4 border-blue-500 pl-3 py-2 bg-white rounded-r-lg shadow-sm">
                     <div className="flex items-center space-x-2 mb-1">
                       <span className="font-medium text-gray-900 text-sm">{message.author}</span>
                       <span className="text-xs text-gray-500">
@@ -380,7 +391,7 @@ export default function Dashboard() {
       
       {/* Page View Counter */}
       <div className="card">
-        <div className="card-header">
+        <div className="card-header bg-gradient-to-r from-gray-50 to-gray-100">
           <h3 className="text-lg font-medium text-gray-900">Site Statistics</h3>
         </div>
         <div className="card-body">

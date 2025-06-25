@@ -75,58 +75,62 @@ export default function OptionsChain() {
   return (
     <div className="space-y-6">
       {/* Options Chain Statistics */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <Eye className="h-8 w-8 text-blue-600" />
+                <Eye className="h-10 w-10 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Contracts</p>
-                <p className="text-2xl font-bold text-gray-900">{chainStats.totalContracts}</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Contracts</p>
+                <p className="text-3xl font-bold text-gray-900">{chainStats.totalContracts}</p>
+                <p className="text-xs text-gray-500 mt-1">Available for trading</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <Calculator className="h-8 w-8 text-green-600" />
+                <Calculator className="h-10 w-10 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Avg Implied Vol</p>
-                <p className="text-2xl font-bold text-gray-900">{formatPercent(chainStats.avgIV)}</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Avg Implied Vol</p>
+                <p className="text-3xl font-bold text-gray-900">{formatPercent(chainStats.avgIV)}</p>
+                <p className="text-xs text-gray-500 mt-1">Market volatility indicator</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <TrendingUp className="h-8 w-8 text-purple-600" />
+                <TrendingUp className="h-10 w-10 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Volume</p>
-                <p className="text-2xl font-bold text-gray-900">{(chainStats.totalVolume / 1000).toFixed(0)}K</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Volume</p>
+                <p className="text-3xl font-bold text-gray-900">{(chainStats.totalVolume / 1000).toFixed(0)}K</p>
+                <p className="text-xs text-gray-500 mt-1">Daily trading activity</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <TrendingDown className="h-8 w-8 text-orange-600" />
+                <TrendingDown className="h-10 w-10 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Open Interest</p>
-                <p className="text-2xl font-bold text-gray-900">{(chainStats.totalOI / 1000).toFixed(0)}K</p>
+                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Open Interest</p>
+                <p className="text-3xl font-bold text-gray-900">{(chainStats.totalOI / 1000).toFixed(0)}K</p>
+                <p className="text-xs text-gray-500 mt-1">Total outstanding contracts</p>
               </div>
             </div>
           </div>
@@ -134,8 +138,8 @@ export default function OptionsChain() {
       </div>
 
       {/* Options Chain Table */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-medium text-gray-900">Options Chain</h3>
             <div className="flex space-x-4">
@@ -160,7 +164,7 @@ export default function OptionsChain() {
             </div>
           </div>
         </div>
-        <div className="card-body">
+        <div className="card-body p-0">
           {sortedContracts.length === 0 ? (
             <div className="text-center py-8">
               <Calculator className="mx-auto h-12 w-12 text-gray-400" />
@@ -173,7 +177,7 @@ export default function OptionsChain() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-b-lg">
               <table className="table">
                 <thead>
                   <tr>
@@ -197,7 +201,7 @@ export default function OptionsChain() {
                     return (
                       <tr 
                         key={contract.ticker}
-                        className={hasPosition ? 'bg-blue-50' : ''}
+                        className={hasPosition ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-gray-50'}
                       >
                         <td>
                           <div className="flex items-center">
@@ -211,7 +215,7 @@ export default function OptionsChain() {
                         </td>
                         <td>
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            contract.contract_type === 'call' 
+                            contract.contract_type === 'call'
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
                           }`}>
@@ -219,7 +223,7 @@ export default function OptionsChain() {
                           </span>
                         </td>
                         <td className="font-medium">{contract.underlying_ticker}</td>
-                        <td>{formatCurrency(contract.strike_price)}</td>
+                        <td className="font-medium">{formatCurrency(contract.strike_price)}</td>
                         <td className="text-sm text-gray-500">{contract.expiration_date}</td>
                         <td>
                           <div className="text-sm">
@@ -227,7 +231,7 @@ export default function OptionsChain() {
                             <div className="text-green-600">{formatCurrency(contract.ask)}</div>
                           </div>
                         </td>
-                        <td className="font-medium">{formatCurrency(contract.last)}</td>
+                        <td className="font-medium bg-gray-50">{formatCurrency(contract.last)}</td>
                         <td className="text-sm">
                           {(contract.volume / 1000).toFixed(1)}K
                         </td>
@@ -235,7 +239,7 @@ export default function OptionsChain() {
                           {(contract.open_interest / 1000).toFixed(1)}K
                         </td>
                         <td className="font-medium">
-                          {formatPercent(contract.implied_volatility)}
+                          <span className="bg-purple-50 px-2 py-1 rounded-md">{formatPercent(contract.implied_volatility)}</span>
                         </td>
                         <td className="text-xs">
                           <div>Δ: <span className={contract.delta >= 0 ? 'text-green-600' : 'text-red-600'}>{contract.delta.toFixed(3)}</span></div>
@@ -260,8 +264,8 @@ export default function OptionsChain() {
       </div>
 
       {/* Options Education */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Options Greeks Explained</h3>
         </div>
         <div className="card-body">
@@ -296,8 +300,8 @@ export default function OptionsChain() {
 
       {/* Chart for Selected Underlying */}
       {selectedUnderlying && selectedUnderlying !== 'ALL' && (
-        <div className="card">
-          <div className="card-header">
+        <div className="card shadow-md border-blue-200">
+          <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
             <h3 className="text-lg font-medium text-gray-900">
               {selectedUnderlying} Chart Analysis
               <a 
@@ -316,7 +320,8 @@ export default function OptionsChain() {
               width="100%"
               height={500}
               interval="D"
-              theme="light"
+              theme="light" 
+              studies={["RSI", "MACD", "Volume"]}
               style="candles"
               studies={["RSI", "MACD", "Volume"]}
             />

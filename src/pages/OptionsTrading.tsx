@@ -3,7 +3,7 @@ import { Search, TrendingUp, TrendingDown, Plus, Minus, Calculator, Share2, Aler
 import { useOptionsContext } from '../context/OptionsContext'
 import { PolygonService } from '../services/polygonService'
 import { CommunityService } from '../services/communityService'
-import TradingViewWidget from '../components/TradingViewWidget'
+import TradingViewWidget from '../components/TradingViewWidget' 
 import Disclaimer from '../components/Disclaimer'
 import type { OptionsContract } from '../types/options'
 
@@ -137,7 +137,7 @@ export default function OptionsTrading() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3"> 
       {/* Trading Disclaimer */}
       <div className="lg:col-span-3">
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
@@ -161,8 +161,8 @@ export default function OptionsTrading() {
       </div>
       
       {/* Options Contracts List */}
-      <div className="lg:col-span-2">
-        <div className="card">
+      <div className="lg:col-span-2"> 
+        <div className="card shadow-md border-blue-200">
           <div className="card-header">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-gray-900">Top Liquid Options Contracts</h3>
@@ -171,7 +171,7 @@ export default function OptionsTrading() {
               </div>
             </div>
           </div>
-          <div className="card-body">
+          <div className="card-body p-0">
             <div className="overflow-x-auto">
               <table className="table">
                 <thead>
@@ -191,7 +191,7 @@ export default function OptionsTrading() {
                 <tbody>
                   {contracts.map((contract) => (
                     <tr 
-                      key={contract.ticker}
+                      key={contract.ticker} 
                       className={selectedContract === contract.ticker ? 'bg-blue-50' : ''}
                     >
                       <td>
@@ -200,7 +200,7 @@ export default function OptionsTrading() {
                           <div className="text-sm text-gray-500 capitalize">{contract.contract_type}</div>
                         </div>
                       </td>
-                      <td className="font-medium">{contract.underlying_ticker}</td>
+                      <td className="font-medium text-blue-700">{contract.underlying_ticker}</td>
                       <td>{formatCurrency(contract.strike_price)}</td>
                       <td className="text-sm text-gray-500">{contract.expiration_date}</td>
                       <td>
@@ -210,7 +210,7 @@ export default function OptionsTrading() {
                       </td>
                       <td className="font-medium">{formatCurrency(contract.last)}</td>
                       <td>{formatPercent(contract.implied_volatility)}</td>
-                      <td className={contract.delta >= 0 ? 'text-green-600' : 'text-red-600'}>
+                      <td className={`font-mono ${contract.delta >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {contract.delta.toFixed(3)}
                       </td>
                       <td className="text-sm text-gray-500">
@@ -218,7 +218,7 @@ export default function OptionsTrading() {
                       </td>
                       <td>
                         <button
-                          onClick={() => setSelectedContract(contract.ticker)}
+                          onClick={() => setSelectedContract(contract.ticker)} 
                           className={`btn ${selectedContract === contract.ticker ? 'btn-primary' : 'btn-secondary'}`}
                         >
                           {selectedContract === contract.ticker ? 'Selected' : 'Select'}
@@ -235,8 +235,8 @@ export default function OptionsTrading() {
 
       {/* Trading Panel */}
       <div className="space-y-6">
-        {/* Order Form */}
-        <div className="card">
+        {/* Order Form with enhanced styling */}
+        <div className="card shadow-md border-blue-200">
           <div className="card-header">
             <h3 className="text-lg font-medium text-gray-900">Place Options Order</h3>
           </div>
@@ -246,7 +246,7 @@ export default function OptionsTrading() {
             ) : (
               <div className="space-y-4">
                 {/* Selected Contract Info */}
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium text-gray-900">{selectedContract}</h4>
@@ -265,7 +265,7 @@ export default function OptionsTrading() {
                 </div>
 
                 {/* Greeks Display */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Delta:</span>
                     <span className="font-medium">{selectedContractData?.delta.toFixed(3)}</span>
@@ -288,7 +288,7 @@ export default function OptionsTrading() {
                 <div className="form-group">
                   <label className="form-label">Trade Type</label>
                   <div className="flex space-x-2">
-                    <button
+                    <button 
                       onClick={() => setTradeType('buy_to_open')}
                       className={`flex-1 btn ${tradeType === 'buy_to_open' ? 'btn-success' : 'btn-secondary'}`}
                     >
@@ -296,7 +296,7 @@ export default function OptionsTrading() {
                       Buy to Open
                     </button>
                     <button
-                      onClick={() => setTradeType('sell_to_close')}
+                      onClick={() => setTradeType('sell_to_close')} 
                       className={`flex-1 btn ${tradeType === 'sell_to_close' ? 'btn-danger' : 'btn-secondary'}`}
                       disabled={!existingPosition}
                     >
@@ -355,7 +355,7 @@ export default function OptionsTrading() {
 
                 {/* Order Summary */}
                 {quantity && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
                     <h4 className="font-medium text-gray-900 mb-2 flex items-center">
                       <Calculator className="h-4 w-4 mr-2" />
                       Order Summary
@@ -389,7 +389,7 @@ export default function OptionsTrading() {
                 {/* Place Order Button */}
                 <button
                   onClick={handlePlaceOrder}
-                  disabled={!quantity || parseInt(quantity) <= 0 || (orderType !== 'market' && !limitPrice)}
+                  disabled={!quantity || parseInt(quantity) <= 0 || (orderType !== 'market' && !limitPrice)} 
                   className={`w-full btn ${tradeType === 'buy_to_open' ? 'btn-success' : 'btn-danger'}`}
                 >
                   Place {tradeType.replace('_', ' ').toUpperCase()} Order
@@ -407,8 +407,8 @@ export default function OptionsTrading() {
         </div>
 
         {/* Account Info */}
-        <div className="card">
-          <div className="card-header">
+        <div className="card shadow-md border-blue-200">
+          <div className="card-header bg-gradient-to-r from-gray-50 to-gray-100">
             <h3 className="text-lg font-medium text-gray-900">Account Info</h3>
           </div>
           <div className="card-body">
@@ -435,8 +435,8 @@ export default function OptionsTrading() {
 
         {/* Current Position */}
         {selectedContract && existingPosition && (
-          <div className="card">
-            <div className="card-header">
+          <div className="card shadow-md border-green-200">
+            <div className="card-header bg-gradient-to-r from-green-50 to-green-100">
               <h3 className="text-lg font-medium text-gray-900">Current Position</h3>
             </div>
             <div className="card-body">
@@ -466,8 +466,8 @@ export default function OptionsTrading() {
 
         {/* Underlying Chart */}
         {selectedContract && selectedContractData && (
-          <div className="card">
-            <div className="card-header">
+          <div className="card shadow-md border-blue-200">
+            <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
               <h3 className="text-lg font-medium text-gray-900">
                 {selectedContractData.underlying_ticker} Chart 
                 <a 
@@ -475,7 +475,7 @@ export default function OptionsTrading() {
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-sm text-blue-600 hover:underline ml-2"
-                >
+                > 
                   Open in TradingView
                 </a>
               </h3>
@@ -486,7 +486,8 @@ export default function OptionsTrading() {
                 width="100%"
                 height={300}
                 interval="D"
-                theme="light" 
+                theme="light"
+                studies={["RSI", "Volume"]}
                 style="area"
               />
             </div>

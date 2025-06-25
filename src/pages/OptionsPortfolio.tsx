@@ -5,6 +5,11 @@ import { useOptionsContext } from '../context/OptionsContext'
 import { format } from 'date-fns'
 
 const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
+const CHART_COLORS = {
+  positive: '#10b981',
+  negative: '#ef4444',
+  neutral: '#6b7280'
+}
 
 export default function OptionsPortfolio() {
   const { state } = useOptionsContext()
@@ -23,8 +28,8 @@ export default function OptionsPortfolio() {
   // Calculate portfolio allocation data for pie chart
   const allocationData = state.positions.map((position, index) => ({
     name: position.contractTicker,
-    value: position.totalValue,
-    color: COLORS[index % COLORS.length]
+    value: Math.abs(position.totalValue),
+    color: position.unrealizedPnL >= 0 ? CHART_COLORS.positive : CHART_COLORS.negative
   }))
 
   // Add cash allocation
@@ -32,7 +37,7 @@ export default function OptionsPortfolio() {
     allocationData.push({
       name: 'Cash',
       value: state.balance,
-      color: '#6b7280'
+      color: CHART_COLORS.neutral
     })
   }
 
@@ -40,7 +45,8 @@ export default function OptionsPortfolio() {
   const performanceData = state.positions.map(position => ({
     contract: position.contractTicker.split('240315')[0], // Simplified name
     unrealizedPnL: position.unrealizedPnL,
-    unrealizedPnLPercent: position.unrealizedPnLPercent
+    unrealizedPnLPercent: position.unrealizedPnLPercent,
+    fill: position.unrealizedPnL >= 0 ? CHART_COLORS.positive : CHART_COLORS.negative
   }))
 
   const totalUnrealizedPnL = state.positions.reduce((sum, pos) => sum + pos.unrealizedPnL, 0)
@@ -50,8 +56,8 @@ export default function OptionsPortfolio() {
   return (
     <div className="space-y-6">
       {/* Portfolio Summary */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -59,13 +65,14 @@ export default function OptionsPortfolio() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Value</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.totalValue)}</p>
+                <p className="text-3xl font-bold text-gray-900">{formatCurrency(state.totalValue)}</p>
+                <p className="text-xs text-gray-500 mt-1">Updated {new Date().toLocaleTimeString()}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -73,7 +80,7 @@ export default function OptionsPortfolio() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Unrealized P&L</p>
-                <p className={`text-2xl font-bold ${totalUnrealizedPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-3xl font-bold ${totalUnrealizedPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatCurrency(totalUnrealizedPnL)}
                 </p>
                 <p className={`text-sm ${totalUnrealizedPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -84,7 +91,7 @@ export default function OptionsPortfolio() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -92,14 +99,15 @@ export default function OptionsPortfolio() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Cash Balance</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(state.balance)}</p>
+                <p className="text-3xl font-bold text-gray-900">{formatCurrency(state.balance)}</p>
+                <p className="text-xs text-gray-500 mt-1">Available for trading</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
-          <div className="card-body">
+        <div className="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 shadow-md hover:shadow-lg transition-shadow">
+          <div className="card-body"> 
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Calculator className="h-8 w-8 text-orange-600" />
@@ -107,7 +115,8 @@ export default function OptionsPortfolio() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Options Invested</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {((totalInvested / state.totalValue) * 100).toFixed(1)}%
+                  {state.totalValue > 0 ? ((totalInvested / state.totalValue) * 100).toFixed(1) : '0.0'}%
+                  <span className="text-sm text-gray-500 ml-1">of portfolio</span>
                 </p>
                 <p className="text-sm text-gray-500">{formatCurrency(totalInvested)}</p>
               </div>
@@ -117,8 +126,8 @@ export default function OptionsPortfolio() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Portfolio Allocation */}
-        <div className="card">
+        {/* Portfolio Allocation with enhanced styling */}
+        <div className="card shadow-md border-blue-200">
           <div className="card-header">
             <h3 className="text-lg font-medium text-gray-900">Options Portfolio Allocation</h3>
           </div>
@@ -130,7 +139,7 @@ export default function OptionsPortfolio() {
                     data={allocationData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
+                    labelLine={true}
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
@@ -148,7 +157,7 @@ export default function OptionsPortfolio() {
         </div>
 
         {/* Position Performance */}
-        <div className="card">
+        <div className="card shadow-md border-blue-200">
           <div className="card-header">
             <h3 className="text-lg font-medium text-gray-900">Options Performance</h3>
           </div>
@@ -156,14 +165,19 @@ export default function OptionsPortfolio() {
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={performanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis dataKey="contract" />
-                  <YAxis tickFormatter={(value) => `${value.toFixed(0)}%`} />
+                  <YAxis 
+                    tickFormatter={(value) => `${value.toFixed(0)}%`} 
+                    domain={['auto', 'auto']}
+                    padding={{ top: 20, bottom: 20 }}
+                  />
                   <Tooltip 
                     formatter={(value: number, name: string) => [
                       name === 'unrealizedPnL' ? formatCurrency(value) : `${value.toFixed(2)}%`,
                       name === 'unrealizedPnL' ? 'P&L' : 'P&L %'
                     ]}
+                    contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', borderRadius: '6px', border: '1px solid #e5e7eb', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
                   />
                   <Bar 
                     dataKey="unrealizedPnLPercent" 
@@ -177,8 +191,8 @@ export default function OptionsPortfolio() {
       </div>
 
       {/* Options Positions Table */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Current Options Positions</h3>
         </div>
         <div className="card-body">
@@ -186,7 +200,7 @@ export default function OptionsPortfolio() {
             <div className="text-center py-8">
               <Calculator className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-2 text-sm font-medium text-gray-900">No options positions</h3>
-              <p className="mt-1 text-sm text-gray-500">Start trading options to build your portfolio.</p>
+              <p className="mt-1 text-sm text-gray-500">Start trading options to build your portfolio. <Link to="/trading" className="text-blue-600 hover:underline">Go to Trading</Link></p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -208,7 +222,7 @@ export default function OptionsPortfolio() {
                 <tbody>
                   {state.positions.map((position) => (
                     <tr key={position.id}>
-                      <td>
+                      <td className="border-l-4 border-blue-500">
                         <div>
                           <div className="font-medium text-gray-900">{position.contractTicker}</div>
                           <div className="text-sm text-gray-500 capitalize">{position.contractType}</div>
@@ -224,7 +238,7 @@ export default function OptionsPortfolio() {
                       <td className="font-medium">{position.quantity}</td>
                       <td>{formatCurrency(position.avgPrice)}</td>
                       <td>{formatCurrency(position.currentPrice)}</td>
-                      <td className="font-medium">{formatCurrency(position.totalValue)}</td>
+                      <td className="font-medium bg-gray-50">{formatCurrency(position.totalValue)}</td>
                       <td className={position.unrealizedPnL >= 0 ? 'text-green-600' : 'text-red-600'}>
                         <div className="font-medium">{formatCurrency(position.unrealizedPnL)}</div>
                         <div className="text-sm">

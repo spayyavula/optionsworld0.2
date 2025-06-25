@@ -76,7 +76,7 @@ export default function RegimeAnalysisPage() {
   return (
     <div className="space-y-6">
       {/* Analysis Disclaimer */}
-      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+      <div className="bg-gradient-to-r from-purple-50 to-purple-100 border border-purple-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
           <div className="flex-shrink-0">
             <AlertTriangle className="h-5 w-5 text-purple-600" />
@@ -96,8 +96,8 @@ export default function RegimeAnalysisPage() {
       </div>
       
       {/* Current Regime Overview */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h2 className="text-2xl font-bold text-gray-900">Market Regime Analysis</h2>
           <p className="text-gray-600 mt-2">
             Understanding market conditions to optimize your trading strategies
@@ -106,7 +106,7 @@ export default function RegimeAnalysisPage() {
         <div className="card-body">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Current Regime */}
-            <div className={`p-6 rounded-lg border-2 ${getRegimeColor(analysis.currentRegime.id)}`}>
+            <div className={`p-6 rounded-lg border-2 shadow-md ${getRegimeColor(analysis.currentRegime.id)}`}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold">{analysis.currentRegime.name}</h3>
                 <div className="flex items-center">
@@ -116,7 +116,7 @@ export default function RegimeAnalysisPage() {
                 </div>
               </div>
               <p className="text-sm mb-4">{analysis.currentRegime.description}</p>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">Confidence:</span>
                   <span className="text-sm font-bold">{formatPercent(analysis.confidence)}</span>
@@ -142,7 +142,7 @@ export default function RegimeAnalysisPage() {
             </div>
 
             {/* Market Indicators */}
-            <div className="p-6 bg-gray-50 rounded-lg">
+            <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-md border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <BarChart3 className="h-5 w-5 mr-2" />
                 Key Indicators
@@ -150,7 +150,7 @@ export default function RegimeAnalysisPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Price:</span>
-                  <span className="font-medium">{formatCurrency(marketData.price)}</span>
+                  <span className="font-medium bg-blue-50 px-2 py-1 rounded-md">{formatCurrency(marketData.price)}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">RSI:</span>
@@ -158,7 +158,7 @@ export default function RegimeAnalysisPage() {
                     marketData.rsi > 70 ? 'text-red-600' : 
                     marketData.rsi < 30 ? 'text-green-600' : 'text-gray-900'
                   }`}>
-                    {marketData.rsi.toFixed(1)}
+                    <span className="bg-gray-50 px-2 py-1 rounded-md">{marketData.rsi.toFixed(1)}</span>
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -167,7 +167,7 @@ export default function RegimeAnalysisPage() {
                     marketData.vix > 30 ? 'text-red-600' : 
                     marketData.vix < 15 ? 'text-green-600' : 'text-gray-900'
                   }`}>
-                    {marketData.vix.toFixed(1)}
+                    <span className="bg-gray-50 px-2 py-1 rounded-md">{marketData.vix.toFixed(1)}</span>
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -184,7 +184,7 @@ export default function RegimeAnalysisPage() {
             </div>
 
             {/* Warnings & Alerts */}
-            <div className="p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+            <div className="p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border border-yellow-200 shadow-md">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <AlertTriangle className="h-5 w-5 mr-2 text-yellow-600" />
                 Market Alerts
@@ -207,8 +207,8 @@ export default function RegimeAnalysisPage() {
       </div>
 
       {/* Regime Characteristics */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">What is a Market Regime?</h3>
         </div>
         <div className="card-body">
@@ -233,7 +233,7 @@ export default function RegimeAnalysisPage() {
               <h4 className="font-semibold text-gray-900 mb-3">Regime Transition Probabilities</h4>
               <div className="space-y-3">
                 {analysis.nextRegimeProb.map((regime, index) => (
-                  <div key={regime.regime.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={regime.regime.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200">
                     <div>
                       <span className="font-medium text-gray-900">{regime.regime.name}</span>
                       <p className="text-xs text-gray-500">{regime.regime.description}</p>
@@ -250,8 +250,8 @@ export default function RegimeAnalysisPage() {
       </div>
 
       {/* Recommended Strategies */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900 flex items-center">
             <Target className="h-5 w-5 mr-2" />
             Recommended Strategies for {analysis.currentRegime.name}
@@ -261,7 +261,7 @@ export default function RegimeAnalysisPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {analysis.recommendedStrategies.map((strategy) => (
               <div 
-                key={strategy.id} 
+                key={strategy.id}
                 className="p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => setSelectedStrategy(strategy)}
               >
@@ -273,7 +273,7 @@ export default function RegimeAnalysisPage() {
                 </div>
                 <p className="text-sm text-gray-600 mb-4">{strategy.description}</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
+                  <div className="bg-green-50 p-2 rounded-md">
                     <span className="text-gray-500">Expected Return:</span>
                     <div className="font-medium text-green-600">+{strategy.expectedReturn}%</div>
                   </div>
@@ -281,7 +281,7 @@ export default function RegimeAnalysisPage() {
                     <span className="text-gray-500">Win Rate:</span>
                     <div className="font-medium">{strategy.winRate}%</div>
                   </div>
-                  <div>
+                  <div className="bg-red-50 p-2 rounded-md">
                     <span className="text-gray-500">Max Drawdown:</span>
                     <div className="font-medium text-red-600">-{strategy.maxDrawdown}%</div>
                   </div>
@@ -290,7 +290,7 @@ export default function RegimeAnalysisPage() {
                     <div className="font-medium capitalize">{strategy.timeframe}</div>
                   </div>
                 </div>
-                <button className="w-full mt-4 btn btn-primary text-sm">
+                <button className="w-full mt-4 btn btn-primary text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
                   Learn Strategy
                 </button>
               </div>
@@ -442,8 +442,8 @@ export default function RegimeAnalysisPage() {
       )}
 
       {/* Market Chart Analysis */}
-      <div className="card">
-          <h3 className="text-lg font-medium text-gray-900">Market Chart Analysis</h3>
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <div>
               <a href={`https://www.tradingview.com/chart/?symbol=${chartSymbol}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
@@ -452,7 +452,7 @@ export default function RegimeAnalysisPage() {
               </a>
             </div>
             <div className="flex space-x-2">
-              <select
+              <select 
                 className="form-select text-sm"
                 defaultValue="AMEX:SPY"
                 id="tvSymbolSelector"
@@ -480,7 +480,8 @@ export default function RegimeAnalysisPage() {
               </select>
             </div>
           </div>
-        </div>
+        </div> 
+        
         <div className="card-body">
             <TradingViewWidget
               symbol={chartSymbol.includes(':') ? chartSymbol : `AMEX:${chartSymbol}`}
@@ -491,7 +492,7 @@ export default function RegimeAnalysisPage() {
               style="candles"
               studies={["RSI", "MACD", "Volume"]}
             />
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg">
             <h4 className="font-medium text-blue-900 mb-2 flex items-center">
               <TrendingUp className="h-4 w-4 mr-2" />
               Chart Analysis for {analysis.currentRegime.name} Regime
@@ -505,7 +506,7 @@ export default function RegimeAnalysisPage() {
               }
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="p-3 bg-white rounded-lg">
+              <div className="p-3 bg-white rounded-lg shadow-sm">
                 <h5 className="font-medium text-gray-900 mb-1">Key Support/Resistance</h5>
                 <ul className="space-y-1 text-gray-600">
                   <li>• Support: ${(marketData.price * 0.95).toFixed(2)}</li>
@@ -513,7 +514,7 @@ export default function RegimeAnalysisPage() {
                   <li>• 200-day MA: ${marketData.movingAverages.sma200.toFixed(2)}</li>
                 </ul>
               </div>
-              <div className="p-3 bg-white rounded-lg">
+              <div className="p-3 bg-white rounded-lg shadow-sm">
                 <h5 className="font-medium text-gray-900 mb-1">Momentum Indicators</h5>
                 <ul className="space-y-1 text-gray-600">
                   <li>• RSI: {marketData.rsi.toFixed(1)} ({marketData.rsi > 70 ? 'Overbought' : marketData.rsi < 30 ? 'Oversold' : 'Neutral'})</li>
@@ -521,7 +522,7 @@ export default function RegimeAnalysisPage() {
                   <li>• Volume: {(marketData.volume / 1000000).toFixed(1)}M ({marketData.volume > 1000000 ? 'High' : 'Low'})</li>
                 </ul>
               </div>
-              <div className="p-3 bg-white rounded-lg">
+              <div className="p-3 bg-white rounded-lg shadow-sm">
                 <h5 className="font-medium text-gray-900 mb-1">Volatility Metrics</h5>
                 <ul className="space-y-1 text-gray-600">
                   <li>• VIX: {marketData.vix.toFixed(1)} ({marketData.vix > 30 ? 'High' : marketData.vix < 15 ? 'Low' : 'Moderate'})</li>
@@ -535,8 +536,8 @@ export default function RegimeAnalysisPage() {
       </div>
 
       {/* Educational Content */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Trading Different Regimes</h3>
         </div>
         <div className="card-body">

@@ -43,7 +43,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       linkContainer.style.width = '100%' 
       linkContainer.style.height = '100%'
       linkContainer.style.display = 'flex'
-      linkContainer.style.flexDirection = 'column'
+      linkContainer.style.flexDirection = 'column' 
       linkContainer.style.alignItems = 'center'
       linkContainer.style.justifyContent = 'center'
       linkContainer.style.backgroundColor = theme === 'dark' ? '#1a1a1a' : '#f8f9fa'
@@ -54,8 +54,8 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create chart placeholder
       const chartPlaceholder = document.createElement('div')
       chartPlaceholder.style.width = '100%'
-      chartPlaceholder.style.height = '70%'
-      chartPlaceholder.style.backgroundColor = theme === 'dark' ? '#2a2a2a' : '#e9ecef'
+      chartPlaceholder.style.height = '70%' 
+      chartPlaceholder.style.backgroundColor = theme === 'dark' ? '#2a2a2a' : '#f1f5f9'
       chartPlaceholder.style.borderRadius = '0.5rem'
       chartPlaceholder.style.marginBottom = '1.5rem'
       chartPlaceholder.style.display = 'flex'
@@ -75,7 +75,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create message
       const message = document.createElement('div')
       message.style.marginBottom = '1rem'
-      message.style.fontSize = '16px'
+      message.style.fontSize = '18px' 
       message.style.fontWeight = '500'
       message.style.color = theme === 'dark' ? '#e0e0e0' : '#343a40'
       message.textContent = `View ${symbol} Chart on TradingView`
@@ -83,7 +83,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create description
       const description = document.createElement('div')
       description.style.marginBottom = '1.5rem'
-      description.style.fontSize = '14px'
+      description.style.fontSize = '14px' 
       description.style.color = theme === 'dark' ? '#adb5bd' : '#6c757d'
       description.textContent = 'Click the button below to access professional charting tools with TradingView'
       
@@ -117,7 +117,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create link button
       const linkButton = document.createElement('a')
       linkButton.href = `${baseUrl}/?${params.toString()}`
-      linkButton.target = '_blank'
+      linkButton.target = '_blank' 
       linkButton.rel = 'noopener noreferrer'
       linkButton.style.display = 'inline-flex'
       linkButton.style.alignItems = 'center'
@@ -129,7 +129,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       linkButton.style.fontWeight = '500'
       linkButton.style.textDecoration = 'none'
       linkButton.style.transition = 'background-color 150ms'
-      linkButton.textContent = 'Open Advanced Chart'
+      linkButton.textContent = 'Open Advanced Chart' 
       
       // Add hover effect
       linkButton.onmouseover = () => {
@@ -142,7 +142,7 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       // Create credentials info
       const credentialsInfo = document.createElement('div')
       credentialsInfo.style.marginTop = '1rem'
-      credentialsInfo.style.fontSize = '12px'
+      credentialsInfo.style.fontSize = '12px' 
       credentialsInfo.style.color = theme === 'dark' ? '#adb5bd' : '#6c757d'
       credentialsInfo.textContent = 'Use your own TradingView account credentials to log in'
       
@@ -173,8 +173,9 @@ const TradingViewDirectWidget: React.FC<TradingViewDirectWidgetProps> = ({
       style={{ 
         width: typeof width === 'number' ? `${width}px` : width, 
         height: typeof height === 'number' ? `${height}px` : height,
-        borderRadius: '0.5rem',
-        overflow: 'hidden'
+        borderRadius: '0.75rem',
+        overflow: 'hidden',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
       }}
     />
   )

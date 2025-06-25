@@ -165,7 +165,7 @@ export default function OptionsArbitrage() {
   return (
     <div className="space-y-6">
       {/* Arbitrage Disclaimer */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+      <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg p-4 mb-4 shadow-sm">
         <div className="flex">
           <div className="flex-shrink-0">
             <AlertTriangle className="h-5 w-5 text-yellow-600" />
@@ -187,8 +187,8 @@ export default function OptionsArbitrage() {
       </div>
       
       {/* Header */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Options Arbitrage Finder</h2>
@@ -202,8 +202,8 @@ export default function OptionsArbitrage() {
       </div>
 
       {/* Arbitrage Statistics */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -211,14 +211,15 @@ export default function OptionsArbitrage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Total Opportunities</p>
-                <p className="text-2xl font-bold text-gray-900">{arbitrageStats.totalOpportunities}</p>
+                <p className="text-3xl font-bold text-gray-900">{arbitrageStats.totalOpportunities}</p>
+                <p className="text-xs text-gray-500 mt-1">Potential arbitrage trades</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
-          <div className="card-body">
+        <div className="card bg-gradient-to-br from-green-50 to-green-100 border-green-200 shadow-md hover:shadow-lg transition-shadow">
+          <div className="card-body"> 
             <div className="flex items-center">
               <div className="flex-shrink-0">
                 <Check className="h-8 w-8 text-green-600" />
@@ -226,34 +227,37 @@ export default function OptionsArbitrage() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">High Confidence</p>
                 <p className="text-2xl font-bold text-gray-900">{arbitrageStats.highConfidence}</p>
+                <p className="text-xs text-gray-500 mt-1">Most reliable opportunities</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
-            <div className="flex items-center">
+            <div className="flex items-center"> 
               <div className="flex-shrink-0">
                 <Percent className="h-8 w-8 text-purple-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Avg Price Diff</p>
                 <p className="text-2xl font-bold text-gray-900">{formatCurrency(arbitrageStats.avgPriceDifference)}</p>
+                <p className="text-xs text-gray-500 mt-1">Average mispricing amount</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 shadow-md hover:shadow-lg transition-shadow">
           <div className="card-body">
-            <div className="flex items-center">
+            <div className="flex items-center"> 
               <div className="flex-shrink-0">
                 <DollarSign className="h-8 w-8 text-green-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Max Potential Profit</p>
                 <p className="text-2xl font-bold text-gray-900">{formatCurrency(arbitrageStats.maxProfit)}</p>
+                <p className="text-xs text-gray-500 mt-1">Highest profit opportunity</p>
               </div>
             </div>
           </div>
@@ -261,8 +265,8 @@ export default function OptionsArbitrage() {
       </div>
 
       {/* Controls */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Arbitrage Settings</h3>
         </div>
         <div className="card-body">
@@ -270,7 +274,7 @@ export default function OptionsArbitrage() {
             <div>
               <label className="form-label">Arbitrage Type</label>
               <select
-                className="form-select"
+                className="form-select border-blue-300 focus:border-blue-500"
                 value={arbitrageType}
                 onChange={(e) => setArbitrageType(e.target.value as any)}
               >
@@ -291,7 +295,7 @@ export default function OptionsArbitrage() {
             <div>
               <label className="form-label">Risk-Free Rate (%)</label>
               <input
-                type="number"
+                type="number" 
                 className="form-input"
                 value={riskFreeRate * 100}
                 onChange={(e) => setRiskFreeRate(parseFloat(e.target.value) / 100)}
@@ -307,7 +311,7 @@ export default function OptionsArbitrage() {
             <div>
               <label className="form-label">Min Price Difference (%)</label>
               <input
-                type="number"
+                type="number" 
                 className="form-input"
                 value={minPriceDifference * 100}
                 onChange={(e) => setMinPriceDifference(parseFloat(e.target.value) / 100)}
@@ -324,7 +328,7 @@ export default function OptionsArbitrage() {
               <div>
                 <label className="form-label">Historical Volatility (%)</label>
                 <input
-                  type="number"
+                  type="number" 
                   className="form-input"
                   value={historicalVolatility * 100}
                   onChange={(e) => setHistoricalVolatility(parseFloat(e.target.value) / 100)}
@@ -341,7 +345,7 @@ export default function OptionsArbitrage() {
             <div className="lg:col-span-3 flex justify-end">
               <button
                 onClick={loadArbitrageOpportunities}
-                disabled={loading}
+                disabled={loading} 
                 className="btn btn-primary"
               >
                 {loading ? (
@@ -357,7 +361,7 @@ export default function OptionsArbitrage() {
       </div>
 
       {/* Filters */}
-      <div className="card">
+      <div className="card shadow-md border-gray-200">
         <div className="card-body">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="relative">
@@ -396,8 +400,8 @@ export default function OptionsArbitrage() {
       </div>
 
       {/* Arbitrage Opportunities */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Arbitrage Opportunities</h3>
         </div>
         <div className="card-body">
@@ -415,7 +419,7 @@ export default function OptionsArbitrage() {
               <p className="mt-1 text-sm text-gray-500">
                 Try adjusting your filters or decreasing the minimum price difference.
               </p>
-            </div>
+            </div> 
           ) : (
             <div className="overflow-x-auto">
               <table className="table">
@@ -438,7 +442,7 @@ export default function OptionsArbitrage() {
                     <tr key={opportunity.contractTicker}>
                       <td>
                         <div>
-                          <div className="font-medium text-gray-900">{opportunity.contractTicker}</div>
+                          <div className="font-medium text-blue-700">{opportunity.contractTicker}</div>
                           <div className="text-sm text-gray-500">{opportunity.underlyingTicker}</div>
                         </div>
                       </td>
@@ -457,7 +461,7 @@ export default function OptionsArbitrage() {
                           <div className="text-sm text-gray-500">{opportunity.expirationDate}</div>
                         </div>
                       </td>
-                      <td className="font-medium">{formatCurrency(opportunity.marketPrice)}</td>
+                      <td className="font-medium bg-gray-50">{formatCurrency(opportunity.marketPrice)}</td>
                       <td className="font-medium">{formatCurrency(opportunity.theoreticalPrice)}</td>
                       <td className={opportunity.priceDifference >= 0 ? 'text-green-600' : 'text-red-600'}>
                         <div className="font-medium">{formatCurrency(opportunity.priceDifference)}</div>
@@ -468,10 +472,10 @@ export default function OptionsArbitrage() {
                           {opportunity.confidence}
                         </span>
                       </td>
-                      <td className="font-medium text-green-600">
+                      <td className="font-medium text-green-600 bg-green-50 px-2 py-1 rounded-md">
                         {formatCurrency(opportunity.expectedProfit)}
                       </td>
-                      <td className="font-medium">
+                      <td className="font-medium bg-blue-50 px-2 py-1 rounded-md">
                         {opportunity.riskRewardRatio.toFixed(2)}
                       </td>
                       <td>
@@ -480,7 +484,7 @@ export default function OptionsArbitrage() {
                             setSelectedOpportunity(opportunity)
                             setShowDetails(true)
                           }}
-                          className="btn btn-secondary text-sm"
+                          className="btn btn-secondary text-sm bg-gradient-to-r from-gray-50 to-gray-100 hover:from-white hover:to-gray-50"
                         >
                           Details
                         </button>
@@ -495,8 +499,8 @@ export default function OptionsArbitrage() {
       </div>
 
       {/* Educational Content */}
-      <div className="card">
-        <div className="card-header">
+      <div className="card shadow-md border-blue-200">
+        <div className="card-header bg-gradient-to-r from-blue-50 to-blue-100">
           <h3 className="text-lg font-medium text-gray-900">Understanding Options Arbitrage</h3>
         </div>
         <div className="card-body">

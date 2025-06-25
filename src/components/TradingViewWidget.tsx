@@ -21,7 +21,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   width = '100%',
   height = 500,
   interval = 'D',
-  theme = 'light',
+  theme = 'light', 
   style = 'candles',
   locale = 'en',
   toolbar_bg = '#f1f3f6',
@@ -29,7 +29,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
   allow_symbol_change = true,
   container_id,
   studies = [],
-  autosize = false
+  autosize = false 
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const scriptRef = useRef<HTMLScriptElement | null>(null)
@@ -62,8 +62,15 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       
       // Format symbol to ensure it has exchange prefix if needed
       const formattedSymbol = symbol.includes(':') ? symbol : 
-        symbol === 'SPY' ? 'AMEX:SPY' : 
-        `NASDAQ:${symbol}`
+        symbol === 'SPY' ? 'AMEX:SPY' :
+        symbol === 'QQQ' ? 'NASDAQ:QQQ' :
+        symbol === 'AAPL' ? 'NASDAQ:AAPL' :
+        symbol === 'MSFT' ? 'NASDAQ:MSFT' :
+        symbol === 'GOOGL' ? 'NASDAQ:GOOGL' :
+        symbol === 'AMZN' ? 'NASDAQ:AMZN' :
+        symbol === 'TSLA' ? 'NASDAQ:TSLA' :
+        symbol === 'NVDA' ? 'NASDAQ:NVDA' :
+        `NASDAQ:${symbol}` 
       
       // Create the script element with embedded JSON
       const script = document.createElement('script')
@@ -92,10 +99,11 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
         "hide_side_toolbar": false,
         "details": true,
         "hotlist": true,
-        "calendar": true,
+        "calendar": true, 
         "show_popup_button": true,
         "popup_width": "1000",
-        "popup_height": "650"
+        "popup_height": "650",
+        "container_id": containerId
       }
       
       script.innerHTML = JSON.stringify(widgetOptions)
@@ -119,8 +127,11 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
       id={containerId}
       className="tradingview-widget-container"
       style={{ 
-        width: typeof width === 'number' ? `${width}px` : width, 
-        height: typeof height === 'number' ? `${height}px` : height 
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+        borderRadius: '0.5rem',
+        overflow: 'hidden',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
       }}
     />
   )
